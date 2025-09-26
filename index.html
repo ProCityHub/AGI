@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GARVIS: Generative AI Research & Visualization</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1e1a3e">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --sol-bg-start: #0a081a;
+        --sol-bg-end: #1e1a3e;
+        --sol-panel-bg: rgba(20, 18, 42, 0.6);
+        --sol-panel-border: rgba(128, 128, 160, 0.25);
+        --sol-panel-border-active: rgba(236, 128, 255, 0.5);
+        --sol-accent-glow: rgba(236, 128, 255, 0.5);
+        --sol-text-primary: #e0e0ff;
+        --sol-text-secondary: #a0a0c0;
+        --sol-accent-orange: #ff8c42;
+        --sol-accent-pink: #ec80ff;
+        --sol-accent-cyan: #67e8f9;
+      }
+      
+      body {
+        font-family: 'Inter', 'Tahoma', sans-serif;
+        background-color: var(--sol-bg-start);
+        color: var(--sol-text-primary);
+        overflow: hidden;
+      }
+
+      #root {
+        position: relative;
+        z-index: 1;
+      }
+
+      .sol-desktop-bg {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, #1e1a3e, #2a2359, #4a3b8f, #2a2359, #1e1a3e);
+          background-size: 400% 400%;
+          animation: gradientBG 25s ease infinite;
+          z-index: -1;
+      }
+
+       .sol-desktop-bg::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: 
+              radial-gradient(circle at 20% 20%, rgba(236, 128, 255, 0.1) 0%, transparent 30%),
+              radial-gradient(circle at 80% 70%, rgba(103, 232, 249, 0.1) 0%, transparent 30%);
+          animation: float 35s ease-in-out infinite;
+      }
+
+      .sol-desktop-bg::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+            linear-gradient(to right, rgba(128, 128, 160, 0.1) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(128, 128, 160, 0.1) 1px, transparent 1px);
+        background-size: 40px 40px;
+        z-index: -1;
+        opacity: 0.5;
+      }
+
+
+      @keyframes gradientBG {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+      }
+      
+      @keyframes float {
+          0%, 100% { transform: translateY(0) translateX(0); }
+          25% { transform: translateY(20px) translateX(-30px); }
+          50% { transform: translateY(-20px) translateX(30px); }
+          75% { transform: translateY(10px) translateX(10px); }
+      }
+
+      /* Custom scrollbar for Sol OS */
+      ::-webkit-scrollbar {
+        width: 10px;
+        background-color: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: rgba(128, 128, 160, 0.3);
+        border-radius: 10px;
+      }
+       ::-webkit-scrollbar-track {
+         background-color: transparent;
+      }
+      
+      .glass-panel {
+        background: var(--sol-panel-bg);
+        border: 1px solid var(--sol-panel-border);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      }
+       .glass-panel:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        border: 1px solid transparent;
+        background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0)) border-box;
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+      }
+
+      .window-header {
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 8px;
+        flex-shrink: 0;
+        cursor: grab;
+      }
+      .window-header:active {
+        cursor: grabbing;
+      }
+      .window-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--sol-text-primary);
+        pointer-events: none; /* Allows dragging through text */
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .window-controls {
+        display: flex;
+        align-items: center;
+        -webkit-app-region: no-drag;
+        cursor: default;
+      }
+      .window-controls button {
+        width: 40px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--sol-text-secondary);
+        transition: background-color 0.15s ease;
+      }
+      .window-controls button:hover {
+        background-color: rgba(255,255,255,0.1);
+        color: var(--sol-text-primary);
+      }
+      .window-controls button.close-btn:hover {
+        background-color: rgba(255, 80, 80, 0.8);
+        color: white;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.98) translateY(10px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+      @keyframes glow {
+        0%, 100% { filter: drop-shadow(0 0 2px var(--sol-accent-cyan)) drop-shadow(0 0 4px var(--sol-accent-cyan)); }
+        50% { filter: drop-shadow(0 0 4px var(--sol-accent-cyan)) drop-shadow(0 0 8px var(--sol-accent-cyan)); }
+      }
+      .animate-glow {
+        animation: glow 2s ease-in-out infinite;
+      }
+      @keyframes pulse-once {
+        0% { transform: scale(1); }
+        50% { transform: scale(2.5); }
+        100% { transform: scale(1); }
+      }
+      .animate-pulse-once {
+        animation: pulse-once 0.6s ease-out forwards;
+      }
+
+      @keyframes openWindow {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      .animate-open-window {
+        animation: openWindow 0.15s ease-out forwards;
+      }
+      
+      .desktop-icon > span {
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+      }
+      .desktop-icon:focus > div {
+        background-color: rgba(103, 232, 249, 0.2);
+        outline: 1px solid rgba(103, 232, 249, 0.5);
+      }
+
+      /* Skeleton Loader Animation */
+      @keyframes shimmer {
+        100% {
+          transform: translateX(100%);
+        }
+      }
+      .animate-shimmer {
+        position: relative;
+        overflow: hidden;
+      }
+      .animate-shimmer::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+        background-image: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0,
+          rgba(255, 255, 255, 0.05) 20%,
+          rgba(255, 255, 255, 0.2) 60%,
+          rgba(255, 255, 255, 0)
+        );
+        animation: shimmer 2s infinite;
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.2.1",
+    "jspdf": "https://aistudiocdn.com/jspdf@^2.5.1",
+    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1"
+  }
+}
+</script>
+</head>
+<body class="text-[var(--sol-text-primary)]">
+    <div class="sol-desktop-bg"></div>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>

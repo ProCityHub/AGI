@@ -1,0 +1,23 @@
+{
+  "short_name": "GARVIS",
+  "name": "GARVIS: Generative AI Research, Visualization and Innovations System",
+  "description": "An AI-powered system that acts as 'Agent Prime', taking a project directive, assembling a cohort of specialized AI agents, and generating a comprehensive, structured strategic plan with synthesized information and data visualizations.",
+  "icons": [
+    {
+      "src": "https://storage.googleapis.com/garvis-static-assets/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://storage.googleapis.com/garvis-static-assets/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#1e1a3e",
+  "background_color": "#0a081a"
+}
