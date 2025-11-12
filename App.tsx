@@ -21,6 +21,8 @@ import CommandBar from './components/CommandBar';
 import BitcoinMiner from './components/BitcoinMiner';
 import Codex from './components/Codex';
 import AegisCommand from './components/AegisCommand';
+import VoidCascade from './components/VoidCascade';
+import { voidCascade } from './void-cascade';
 
 const App: React.FC = () => {
     const [windows, setWindows] = useState<WindowInstance[]>([]);
@@ -303,6 +305,8 @@ const App: React.FC = () => {
                 return <Codex />;
             case 'AegisCommand':
                 return <AegisCommand />;
+            case 'VoidCascade':
+                return <VoidCascade />;
             default:
                 return <div>Unknown window type</div>;
         }
@@ -387,6 +391,12 @@ const App: React.FC = () => {
                     icon={<BitcoinIcon />}
                     initialPosition={{ x: 30, y: 470 }}
                     onDoubleClick={() => openWindow('BitcoinMiner')}
+                />
+                <DesktopIcon
+                    label="Void Cascade"
+                    icon={<div style={{color: '#00ff41', fontSize: '24px'}}>🌌</div>}
+                    initialPosition={{ x: 140, y: 250 }}
+                    onDoubleClick={() => openWindow('VoidCascade')}
                 />
             </main>
 
