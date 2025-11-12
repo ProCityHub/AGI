@@ -1,6 +1,6 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { Directive, SavedDirective, WindowInstance, User, AppContext } from './types';
+import { agiHypercubeConnector, testHypercubeConnector } from './src/hypercube_connector';
 import { generateDirective } from './services/geminiService';
 import { getDirectives, saveDirective as saveDirectiveToStorage, deleteDirective as deleteDirectiveFromStorage, getUsers, saveUser } from './services/storageService';
 import Dashboard from './components/Dashboard';
@@ -63,6 +63,12 @@ const App: React.FC = () => {
         setCurrentUser(user);
         setIsLocked(false);
         setSavedDirectives(getDirectives());
+        
+        // Initialize hypercube network on login
+        console.log("🌌 Initializing AGI Hypercube Network...");
+        testHypercubeConnector();
+        agiHypercubeConnector.establishFullNetwork();
+        agiHypercubeConnector.startHeartbeat();
     };
 
     const handleLogout = () => {
