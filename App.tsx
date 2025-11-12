@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { Directive, SavedDirective, WindowInstance, User, AppContext } from './types';
 import { generateDirective } from './services/geminiService';
@@ -21,6 +20,11 @@ import CommandBar from './components/CommandBar';
 import BitcoinMiner from './components/BitcoinMiner';
 import Codex from './components/Codex';
 import AegisCommand from './components/AegisCommand';
+import AgentControlPanel from './components/AgentControlPanel';
+import { initializeAgentCore } from './services/agentCore';
+import { initializeMultiModalService } from './services/multiModalService';
+import { initializeReasoningEngine } from './services/reasoningEngine';
+import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
     const [windows, setWindows] = useState<WindowInstance[]>([]);
@@ -37,12 +41,75 @@ const App: React.FC = () => {
     
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isLocked, setIsLocked] = useState(true);
+    const [showAgentPanel, setShowAgentPanel] = useState(false);
 
     useEffect(() => {
         if (getUsers().length === 0) {
             saveUser({ username: 'Agent Prime', email: 'prime@garvis.ai', password: 'password' });
         }
+        
+        // Initialize advanced AI systems
+        initializeAdvancedAI();
     }, []);
+
+    const initializeAdvancedAI = async () => {
+        try {
+            // Initialize Agent Core with configuration
+            const agentConfig: AgentConfiguration = {
+                maxConcurrentTasks: 10,
+                memoryLimit: 1000000, // 1MB
+                learningRate: 0.1,
+                collaborationThreshold: 0.7,
+                personalityWeights: {
+                    creativity: 0.5,
+                    analytical: 0.7,
+                    collaborative: 0.8,
+                    risktaking: 0.3,
+                    empathy: 0.6
+                },
+                enabledCapabilities: ['text_processing', 'reasoning', 'collaboration', 'learning'],
+                securityLevel: 'medium',
+                auditLevel: 'standard'
+            };
+
+            const agentCore = initializeAgentCore(agentConfig);
+            agentCore.start();
+
+            // Initialize Multi-Modal Service
+            const apiKey = process.env.API_KEY || 'your-api-key-here';
+            initializeMultiModalService(apiKey);
+            initializeReasoningEngine(apiKey);
+
+            // Create some initial agents
+            await agentCore.createAgent('Alpha', 'analyst', {
+                creativity: 0.3,
+                analytical: 0.9,
+                collaborative: 0.7,
+                risktaking: 0.2,
+                empathy: 0.5
+            }, ['text_processing', 'reasoning']);
+
+            await agentCore.createAgent('Beta', 'creative', {
+                creativity: 0.9,
+                analytical: 0.4,
+                collaborative: 0.8,
+                risktaking: 0.7,
+                empathy: 0.8
+            }, ['text_processing', 'collaboration']);
+
+            await agentCore.createAgent('Gamma', 'coordinator', {
+                creativity: 0.5,
+                analytical: 0.6,
+                collaborative: 0.9,
+                risktaking: 0.4,
+                empathy: 0.9
+            }, ['collaboration', 'learning']);
+
+            console.log('🚀 Advanced AI System initialized successfully!');
+        } catch (error) {
+            console.error('❌ Failed to initialize Advanced AI System:', error);
+        }
+    };
 
     // Command Bar keyboard listener
     useEffect(() => {
@@ -382,6 +449,12 @@ const App: React.FC = () => {
                     initialPosition={{ x: 30, y: 470 }}
                     onDoubleClick={() => openWindow('BitcoinMiner')}
                 />
+                <DesktopIcon
+                    label="Agent Control"
+                    icon={<div className="text-2xl">🤖</div>}
+                    initialPosition={{ x: 140, y: 250 }}
+                    onDoubleClick={() => setShowAgentPanel(true)}
+                />
             </main>
 
             {windows.map(win => (
@@ -429,6 +502,10 @@ const App: React.FC = () => {
                 }}
                 activeWindowId={activeWindowId}
             />
+
+            {showAgentPanel && (
+                <AgentControlPanel onClose={() => setShowAgentPanel(false)} />
+            )}
         </div>
     );
 };
