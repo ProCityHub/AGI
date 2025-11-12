@@ -21,9 +21,11 @@ import BitcoinMiner from './components/BitcoinMiner';
 import Codex from './components/Codex';
 import AegisCommand from './components/AegisCommand';
 import AgentControlPanel from './components/AgentControlPanel';
+import ProCitySiteBuilder from './components/ProCitySiteBuilder';
 import { initializeAgentCore } from './services/agentCore';
 import { initializeMultiModalService } from './services/multiModalService';
 import { initializeReasoningEngine } from './services/reasoningEngine';
+import { initializeSiteBuilderService } from './services/siteBuilderService';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -42,6 +44,7 @@ const App: React.FC = () => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isLocked, setIsLocked] = useState(true);
     const [showAgentPanel, setShowAgentPanel] = useState(false);
+    const [showSiteBuilder, setShowSiteBuilder] = useState(false);
 
     useEffect(() => {
         if (getUsers().length === 0) {
@@ -79,6 +82,9 @@ const App: React.FC = () => {
             const apiKey = process.env.API_KEY || 'your-api-key-here';
             initializeMultiModalService(apiKey);
             initializeReasoningEngine(apiKey);
+            
+            // Initialize Site Builder Service
+            initializeSiteBuilderService();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
@@ -455,6 +461,12 @@ const App: React.FC = () => {
                     initialPosition={{ x: 140, y: 250 }}
                     onDoubleClick={() => setShowAgentPanel(true)}
                 />
+                <DesktopIcon
+                    label="Site Builder"
+                    icon={<div className="text-2xl">🌐</div>}
+                    initialPosition={{ x: 250, y: 250 }}
+                    onDoubleClick={() => setShowSiteBuilder(true)}
+                />
             </main>
 
             {windows.map(win => (
@@ -505,6 +517,10 @@ const App: React.FC = () => {
 
             {showAgentPanel && (
                 <AgentControlPanel onClose={() => setShowAgentPanel(false)} />
+            )}
+
+            {showSiteBuilder && (
+                <ProCitySiteBuilder onClose={() => setShowSiteBuilder(false)} />
             )}
         </div>
     );
