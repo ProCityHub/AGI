@@ -23,11 +23,13 @@ import AegisCommand from './components/AegisCommand';
 import AgentControlPanel from './components/AgentControlPanel';
 import ProCitySiteBuilder from './components/ProCitySiteBuilder';
 import ProCityBusinessHub from './components/ProCityBusinessHub';
+import ProsyncConsole from './components/ProsyncConsole';
 import { initializeAgentCore } from './services/agentCore';
 import { initializeMultiModalService } from './services/multiModalService';
 import { initializeReasoningEngine } from './services/reasoningEngine';
 import { initializeSiteBuilderService } from './services/siteBuilderService';
 import { initializeBusinessPlatformService } from './services/businessPlatformService';
+import { initializeProsyncEngine } from './services/prosyncEngine';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -48,6 +50,7 @@ const App: React.FC = () => {
     const [showAgentPanel, setShowAgentPanel] = useState(false);
     const [showSiteBuilder, setShowSiteBuilder] = useState(false);
     const [showBusinessHub, setShowBusinessHub] = useState(false);
+    const [showProsyncConsole, setShowProsyncConsole] = useState(false);
 
     useEffect(() => {
         if (getUsers().length === 0) {
@@ -91,6 +94,9 @@ const App: React.FC = () => {
             
             // Initialize Business Platform Service
             initializeBusinessPlatformService();
+            
+            // Initialize PROSYNC Trinity Engine
+            initializeProsyncEngine();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
@@ -479,6 +485,12 @@ const App: React.FC = () => {
                     initialPosition={{ x: 360, y: 250 }}
                     onDoubleClick={() => setShowBusinessHub(true)}
                 />
+                <DesktopIcon
+                    label="PROSYNC Console"
+                    icon={<div className="text-2xl">⬢</div>}
+                    initialPosition={{ x: 470, y: 250 }}
+                    onDoubleClick={() => setShowProsyncConsole(true)}
+                />
             </main>
 
             {windows.map(win => (
@@ -537,6 +549,10 @@ const App: React.FC = () => {
 
             {showBusinessHub && (
                 <ProCityBusinessHub onClose={() => setShowBusinessHub(false)} />
+            )}
+
+            {showProsyncConsole && (
+                <ProsyncConsole onClose={() => setShowProsyncConsole(false)} />
             )}
         </div>
     );
