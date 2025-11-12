@@ -1,5 +1,6 @@
 import React from 'react';
 export * from './siteBuilderTypes';
+export * from './businessTypes';
 
 export interface ChartDataPoint {
   name: string;

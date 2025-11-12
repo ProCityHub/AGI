@@ -22,10 +22,12 @@ import Codex from './components/Codex';
 import AegisCommand from './components/AegisCommand';
 import AgentControlPanel from './components/AgentControlPanel';
 import ProCitySiteBuilder from './components/ProCitySiteBuilder';
+import ProCityBusinessHub from './components/ProCityBusinessHub';
 import { initializeAgentCore } from './services/agentCore';
 import { initializeMultiModalService } from './services/multiModalService';
 import { initializeReasoningEngine } from './services/reasoningEngine';
 import { initializeSiteBuilderService } from './services/siteBuilderService';
+import { initializeBusinessPlatformService } from './services/businessPlatformService';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -45,6 +47,7 @@ const App: React.FC = () => {
     const [isLocked, setIsLocked] = useState(true);
     const [showAgentPanel, setShowAgentPanel] = useState(false);
     const [showSiteBuilder, setShowSiteBuilder] = useState(false);
+    const [showBusinessHub, setShowBusinessHub] = useState(false);
 
     useEffect(() => {
         if (getUsers().length === 0) {
@@ -85,6 +88,9 @@ const App: React.FC = () => {
             
             // Initialize Site Builder Service
             initializeSiteBuilderService();
+            
+            // Initialize Business Platform Service
+            initializeBusinessPlatformService();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
@@ -467,6 +473,12 @@ const App: React.FC = () => {
                     initialPosition={{ x: 250, y: 250 }}
                     onDoubleClick={() => setShowSiteBuilder(true)}
                 />
+                <DesktopIcon
+                    label="Business Hub"
+                    icon={<div className="text-2xl">🏢</div>}
+                    initialPosition={{ x: 360, y: 250 }}
+                    onDoubleClick={() => setShowBusinessHub(true)}
+                />
             </main>
 
             {windows.map(win => (
@@ -521,6 +533,10 @@ const App: React.FC = () => {
 
             {showSiteBuilder && (
                 <ProCitySiteBuilder onClose={() => setShowSiteBuilder(false)} />
+            )}
+
+            {showBusinessHub && (
+                <ProCityBusinessHub onClose={() => setShowBusinessHub(false)} />
             )}
         </div>
     );
