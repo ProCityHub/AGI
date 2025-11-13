@@ -1,0 +1,379 @@
+# Docker Compose for RoadRunner Bridge Gateway
+# Complete infrastructure for ProCityHub repository integration with Google Cloud
+
+version: '3.8'
+
+services:
+  # RoadRunner Bridge Gateway - Main service
+  roadrunner-bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: roadrunner-bridge-gateway
+    restart: unless-stopped
+    
+    ports:
+      - "8080:8080"   # HTTP API
+      - "9001:9001"   # gRPC
+      - "2112:2112"   # Metrics
+      - "2114:2114"   # Status/Health
+    
+    environment:
+      - BRIDGE_CONFIG_PATH=/app/config.json
+      - GOOGLE_APPLICATION_CREDENTIALS=/etc/google/credentials.json
+      - LOG_LEVEL=info
+      - JWT_SECRET=${JWT_SECRET:-default-secret-change-in-production}
+      - REDIS_URL=redis://redis:6379
+      - CONSUL_URL=consul:8500
+      - TEMPORAL_URL=temporal:7233
+    
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - ./credentials.json:/etc/google/credentials.json:ro
+      - ./logs:/var/log/roadrunner
+      - bridge-data:/app/data
+    
+    networks:
+      - bridge-network
+    
+    depends_on:
+      - redis
+      - consul
+      - temporal
+      - jaeger
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:2114/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+
+  # Redis for caching and rate limiting
+  redis:
+    image: redis:7.2-alpine
+    container_name: bridge-redis
+    restart: unless-stopped
+    
+    ports:
+      - "6379:6379"
+    
+    volumes:
+      - redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+    
+    networks:
+      - bridge-network
+    
+    command: redis-server /usr/local/etc/redis/redis.conf
+    
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Consul for service discovery
+  consul:
+    image: consul:1.16
+    container_name: bridge-consul
+    restart: unless-stopped
+    
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    
+    volumes:
+      - consul-data:/consul/data
+      - ./consul.json:/consul/config/consul.json:ro
+    
+    networks:
+      - bridge-network
+    
+    command: >
+      consul agent
+      -server
+      -bootstrap-expect=1
+      -data-dir=/consul/data
+      -config-dir=/consul/config
+      -ui-content-path=/ui/
+      -bind=0.0.0.0
+      -client=0.0.0.0
+    
+    healthcheck:
+      test: ["CMD", "consul", "members"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Temporal for workflow orchestration
+  temporal:
+    image: temporalio/auto-setup:1.22
+    container_name: bridge-temporal
+    restart: unless-stopped
+    
+    ports:
+      - "7233:7233"
+      - "8233:8233"
+    
+    environment:
+      - DB=postgresql
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal
+      - POSTGRES_SEEDS=postgres
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
+    
+    volumes:
+      - temporal-data:/etc/temporal
+    
+    networks:
+      - bridge-network
+    
+    depends_on:
+      - postgres
+    
+    healthcheck:
+      test: ["CMD", "tctl", "--address", "temporal:7233", "cluster", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # PostgreSQL for Temporal
+  postgres:
+    image: postgres:15-alpine
+    container_name: bridge-postgres
+    restart: unless-stopped
+    
+    environment:
+      - POSTGRES_DB=temporal
+      - POSTGRES_USER=temporal
+      - POSTGRES_PASSWORD=temporal
+    
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    
+    networks:
+      - bridge-network
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U temporal"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Jaeger for distributed tracing
+  jaeger:
+    image: jaegertracing/all-in-one:1.50
+    container_name: bridge-jaeger
+    restart: unless-stopped
+    
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "14268:14268"  # Jaeger collector
+    
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    
+    volumes:
+      - jaeger-data:/badger
+    
+    networks:
+      - bridge-network
+    
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:14269/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: bridge-prometheus
+    restart: unless-stopped
+    
+    ports:
+      - "9090:9090"
+    
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    
+    networks:
+      - bridge-network
+    
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Grafana for metrics visualization
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: bridge-grafana
+    restart: unless-stopped
+    
+    ports:
+      - "3000:3000"
+    
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    
+    networks:
+      - bridge-network
+    
+    depends_on:
+      - prometheus
+    
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx reverse proxy and load balancer
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: bridge-nginx
+    restart: unless-stopped
+    
+    ports:
+      - "80:80"
+      - "443:443"
+    
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - nginx-logs:/var/log/nginx
+    
+    networks:
+      - bridge-network
+    
+    depends_on:
+      - roadrunner-bridge
+    
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Repository simulators for testing
+  agi-simulator:
+    image: node:18-alpine
+    container_name: agi-service-simulator
+    restart: unless-stopped
+    
+    ports:
+      - "3001:3000"
+    
+    environment:
+      - NODE_ENV=development
+      - SERVICE_NAME=AGI
+      - SERVICE_TYPE=typescript
+    
+    volumes:
+      - ./simulators/agi:/app
+    
+    networks:
+      - bridge-network
+    
+    working_dir: /app
+    command: ["npm", "start"]
+    
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  garvis-simulator:
+    image: python:3.11-slim
+    container_name: garvis-service-simulator
+    restart: unless-stopped
+    
+    ports:
+      - "8001:8000"
+    
+    environment:
+      - PYTHONPATH=/app
+      - SERVICE_NAME=GARVIS
+      - SERVICE_TYPE=python
+    
+    volumes:
+      - ./simulators/garvis:/app
+    
+    networks:
+      - bridge-network
+    
+    working_dir: /app
+    command: ["python", "main.py"]
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# Networks
+networks:
+  bridge-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
+# Volumes for data persistence
+volumes:
+  bridge-data:
+    driver: local
+  redis-data:
+    driver: local
+  consul-data:
+    driver: local
+  temporal-data:
+    driver: local
+  postgres-data:
+    driver: local
+  jaeger-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  nginx-logs:
+    driver: local
+
+# Health check configuration
+x-healthcheck-config: &healthcheck-config
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 60s

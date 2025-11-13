@@ -1,0 +1,351 @@
+# RoadRunner Bridge Configuration
+# High-performance bridge for ProCityHub repositories and Google Cloud integration
+
+version: "3"
+
+# RoadRunner server configuration
+server:
+  command: "./bridge-gateway"
+  user: ""
+  group: ""
+  env:
+    - BRIDGE_CONFIG_PATH: "./config.json"
+    - GOOGLE_APPLICATION_CREDENTIALS: "/etc/google/credentials.json"
+    - LOG_LEVEL: "info"
+  relay: "pipes"
+  relay_timeout: "20s"
+
+# HTTP plugin configuration
+http:
+  address: "0.0.0.0:8080"
+  max_request_size: "50MB"
+  middleware: ["gzip", "headers"]
+  uploads:
+    forbid: [".php", ".exe", ".bat"]
+  trusted_subnets:
+    - "10.0.0.0/8"
+    - "127.0.0.0/8"
+    - "172.16.0.0/12"
+    - "192.168.0.0/16"
+    - "::1/128"
+    - "fc00::/7"
+    - "fe80::/10"
+  
+  headers:
+    cors:
+      allowed_origin: "*"
+      allowed_headers: "*"
+      allowed_methods: "GET,POST,PUT,DELETE,OPTIONS"
+      allow_credentials: true
+    response:
+      X-Powered-By: "RoadRunner Bridge"
+      Server: "ProCityHub Bridge Gateway"
+
+# gRPC plugin configuration for high-performance AI services
+grpc:
+  listen: "tcp://0.0.0.0:9001"
+  max_send_msg_size: 50
+  max_recv_msg_size: 50
+  max_connection_idle: "300s"
+  max_connection_age: "300s"
+  max_connection_age_grace: "300s"
+  max_concurrent_streams: 10
+  ping_time: "60s"
+  timeout: "60s"
+
+# Jobs plugin for asynchronous processing
+jobs:
+  num_pollers: 10
+  pipeline_size: 100000
+  pool:
+    num_workers: 10
+    max_jobs: 0
+    allocate_timeout: "60s"
+    destroy_timeout: "60s"
+  
+  pipelines:
+    # AGI consciousness processing pipeline
+    agi_processing:
+      driver: "memory"
+      config:
+        priority: 10
+        prefetch: 10000
+    
+    # GARVIS AI model pipeline
+    garvis_models:
+      driver: "memory"
+      config:
+        priority: 8
+        prefetch: 5000
+    
+    # Hypercube heartbeat pipeline
+    hypercube_pulse:
+      driver: "memory"
+      config:
+        priority: 9
+        prefetch: 1000
+    
+    # Google Cloud integration pipeline
+    google_integration:
+      driver: "memory"
+      config:
+        priority: 7
+        prefetch: 2000
+
+# Key-Value store for caching and session management
+kv:
+  default:
+    driver: "redis"
+    config:
+      addrs:
+        - "redis:6379"
+      master_name: ""
+      username: ""
+      password: ""
+      db: 0
+      dial_timeout: "5s"
+      read_timeout: "3s"
+      write_timeout: "3s"
+
+# Temporal plugin for workflow orchestration
+temporal:
+  address: "temporal:7233"
+  namespace: "procityhub-bridge"
+  activities:
+    num_workers: 5
+  
+  workflows:
+    # AI model training workflow
+    ai_training_pipeline:
+      task_queue: "ai-training"
+      num_workers: 3
+    
+    # Data processing workflow
+    data_pipeline:
+      task_queue: "data-processing"
+      num_workers: 5
+    
+    # Repository synchronization workflow
+    repo_sync:
+      task_queue: "repo-sync"
+      num_workers: 2
+
+# Metrics and monitoring
+metrics:
+  address: "0.0.0.0:2112"
+  path: "/metrics"
+
+# Logging configuration
+logs:
+  mode: "production"
+  level: "info"
+  file_logger_options:
+    log_output: "/var/log/roadrunner/bridge.log"
+    max_size: 100
+    max_age: 7
+    max_backups: 10
+    compress: true
+
+# Health checks
+status:
+  address: "0.0.0.0:2114"
+  path: "/status"
+
+# Service discovery and load balancing
+service:
+  discovery:
+    type: "consul"
+    config:
+      address: "consul:8500"
+      service_name: "roadrunner-bridge"
+      health_check:
+        interval: "30s"
+        timeout: "10s"
+        deregister_critical_service_after: "90s"
+
+# Rate limiting configuration
+ratelimit:
+  storage: "redis"
+  redis_config:
+    addr: "redis:6379"
+    db: 1
+  
+  rules:
+    # AGI repository rate limits
+    - path: "/bridge/AGI/*"
+      methods: ["POST", "PUT"]
+      limit: 1000
+      window: "1m"
+    
+    # GARVIS repository rate limits
+    - path: "/bridge/GARVIS/*"
+      methods: ["POST", "PUT"]
+      limit: 500
+      window: "1m"
+    
+    # Google services rate limits
+    - path: "/google/*"
+      methods: ["POST", "GET"]
+      limit: 2000
+      window: "1m"
+    
+    # General API rate limits
+    - path: "/bridge/*"
+      methods: ["GET"]
+      limit: 5000
+      window: "1m"
+
+# Security configuration
+security:
+  # JWT configuration for internal service authentication
+  jwt:
+    secret: "${JWT_SECRET}"
+    algorithm: "HS256"
+    ttl: "1h"
+  
+  # TLS configuration
+  tls:
+    cert: "/etc/ssl/certs/bridge.crt"
+    key: "/etc/ssl/private/bridge.key"
+    ca: "/etc/ssl/certs/ca.crt"
+  
+  # CORS configuration
+  cors:
+    allowed_origins:
+      - "https://*.procityhub.com"
+      - "https://console.cloud.google.com"
+    allowed_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    allowed_headers: ["*"]
+    allow_credentials: true
+    max_age: 86400
+
+# Repository-specific configurations
+repositories:
+  AGI:
+    url: "http://agi-service:3000"
+    type: "typescript"
+    health_check: "/health"
+    timeout: "30s"
+    retry_attempts: 3
+    circuit_breaker:
+      failure_threshold: 5
+      recovery_timeout: "30s"
+      half_open_max_calls: 3
+  
+  GARVIS:
+    url: "http://garvis-service:8000"
+    type: "python"
+    health_check: "/health"
+    timeout: "45s"
+    retry_attempts: 3
+    circuit_breaker:
+      failure_threshold: 5
+      recovery_timeout: "30s"
+      half_open_max_calls: 3
+  
+  adk-python:
+    url: "http://adk-python-service:8000"
+    type: "python"
+    health_check: "/health"
+    timeout: "30s"
+    retry_attempts: 3
+  
+  Memori:
+    url: "http://memori-service:8080"
+    type: "generic"
+    health_check: "/health"
+    timeout: "20s"
+    retry_attempts: 2
+  
+  milvus:
+    url: "http://milvus-service:19530"
+    type: "generic"
+    health_check: "/health"
+    timeout: "15s"
+    retry_attempts: 2
+  
+  hypercubeheartbeat:
+    url: "http://hypercube-service:8000"
+    type: "python"
+    health_check: "/health"
+    timeout: "10s"
+    retry_attempts: 3
+
+# Google Cloud service configurations
+google_services:
+  gemini:
+    endpoint: "https://generativelanguage.googleapis.com"
+    version: "v1"
+    timeout: "60s"
+    retry_attempts: 3
+  
+  cloud_ai:
+    endpoint: "https://aiplatform.googleapis.com"
+    version: "v1"
+    timeout: "120s"
+    retry_attempts: 2
+  
+  vision:
+    endpoint: "https://vision.googleapis.com"
+    version: "v1"
+    timeout: "30s"
+    retry_attempts: 3
+  
+  storage:
+    endpoint: "https://storage.googleapis.com"
+    version: "v1"
+    timeout: "60s"
+    retry_attempts: 2
+  
+  firestore:
+    endpoint: "https://firestore.googleapis.com"
+    version: "v1"
+    timeout: "30s"
+    retry_attempts: 3
+
+# Performance tuning
+performance:
+  # Worker pool configuration
+  workers:
+    min: 10
+    max: 100
+    scale_factor: 1.5
+    idle_timeout: "300s"
+  
+  # Connection pooling
+  connection_pool:
+    max_idle_conns: 100
+    max_open_conns: 200
+    conn_max_lifetime: "300s"
+    conn_max_idle_time: "90s"
+  
+  # Memory management
+  memory:
+    max_memory: "2GB"
+    gc_percent: 100
+    max_stack_size: "1MB"
+
+# Development and debugging
+debug:
+  enabled: false
+  profiler:
+    enabled: false
+    address: "0.0.0.0:6060"
+  
+  tracing:
+    enabled: true
+    jaeger:
+      endpoint: "http://jaeger:14268/api/traces"
+      service_name: "roadrunner-bridge"
+      sampler_type: "const"
+      sampler_param: 1
+
+# Reload configuration
+reload:
+  interval: "1s"
+  patterns: [".go", ".php", ".yaml", ".yml"]
+  services:
+    http:
+      recursive: true
+      ignore: [".git", "vendor"]
+      patterns: [".go"]
