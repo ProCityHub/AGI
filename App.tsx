@@ -1,8 +1,11 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { Directive, SavedDirective, WindowInstance, User, AppContext } from './types';
 import { generateDirective } from './services/geminiService';
 import { getDirectives, saveDirective as saveDirectiveToStorage, deleteDirective as deleteDirectiveFromStorage, getUsers, saveUser } from './services/storageService';
+import bridgeService from './services/bridgeService';
+import sharedDataService from './services/sharedDataService';
+import notificationService from './services/notificationService';
+import healthCheckService from './services/healthCheckService';
 import Dashboard from './components/Dashboard';
 import SystemAnatomy from './components/SystemAnatomy';
 import FormProcessor from './components/FormProcessor';
@@ -21,12 +24,14 @@ import CommandBar from './components/CommandBar';
 import BitcoinMiner from './components/BitcoinMiner';
 import Codex from './components/Codex';
 import AegisCommand from './components/AegisCommand';
+import NotificationCenter from './components/NotificationCenter';
 
 const App: React.FC = () => {
     const [windows, setWindows] = useState<WindowInstance[]>([]);
     const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
     const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
     const [isCommandBarOpen, setIsCommandBarOpen] = useState(false);
+    const [isNotificationCenterOpen, setIsNotificationCenterOpen] = useState(false);
     const [nextZIndex, setNextZIndex] = useState(10);
     
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -42,35 +47,98 @@ const App: React.FC = () => {
         if (getUsers().length === 0) {
             saveUser({ username: 'Agent Prime', email: 'prime@garvis.ai', password: 'password' });
         }
+
+        // Initialize bridge services
+        bridgeService.registerApp({
+            appName: 'App',
+            capabilities: ['window_management', 'user_management', 'system_control'],
+            dataTypes: ['user_data', 'window_state', 'system_settings'],
+            eventTypes: ['user_login', 'user_logout', 'window_opened', 'window_closed']
+        });
+
+        // Initialize health check service
+        healthCheckService.initialize();
+
+        // Send welcome notification
+        notificationService.sendCustomNotification(
+            'System Initialized',
+            'All bridge services are now active and ready for inter-app communication.',
+            'success',
+            'App'
+        );
     }, []);
 
-    // Command Bar keyboard listener
+    // Keyboard listeners
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
                 setIsCommandBarOpen(prev => !prev);
             }
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'N') {
+                e.preventDefault();
+                setIsNotificationCenterOpen(prev => !prev);
+            }
             if (e.key === 'Escape') {
                 setIsCommandBarOpen(false);
+                setIsNotificationCenterOpen(false);
             }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-    const handleLogin = (user: User) => {
+    const handleLogin = async (user: User) => {
         setCurrentUser(user);
         setIsLocked(false);
         setSavedDirectives(getDirectives());
+
+        // Update user profile in shared data
+        const userProfile = {
+            ...user,
+            preferences: {
+                theme: 'dark' as const,
+                notifications: true,
+                autoSave: true,
+                defaultApps: ['Dashboard', 'FileExplorer']
+            },
+            activity: {
+                lastLogin: Date.now(),
+                appsUsed: [],
+                totalSessions: 1
+            },
+            permissions: {
+                adminAccess: true,
+                appPermissions: {}
+            }
+        };
+
+        await sharedDataService.saveUserProfile(userProfile);
+
+        // Publish login event
+        bridgeService.publish({
+            type: 'user_logged_in',
+            source: 'App',
+            data: { username: user.username, userId: user.id }
+        });
     };
 
     const handleLogout = () => {
+        // Publish logout event
+        if (currentUser) {
+            bridgeService.publish({
+                type: 'user_logged_out',
+                source: 'App',
+                data: { username: currentUser.username, userId: currentUser.id }
+            });
+        }
+
         setCurrentUser(null);
         setIsLocked(true);
         setWindows([]);
         setActiveWindowId(null);
         setIsStartMenuOpen(false);
+        setIsNotificationCenterOpen(false);
     };
 
     const handleLock = () => {
@@ -149,9 +217,18 @@ const App: React.FC = () => {
         setActiveWindowId(id);
         setNextZIndex(prev => prev + 1);
         setIsStartMenuOpen(false);
+
+        // Publish window opened event
+        bridgeService.publish({
+            type: 'window_opened',
+            source: 'App',
+            data: { windowId: id, componentType: type, title: newWindow.title }
+        });
     };
 
     const closeWindow = (id: string) => {
+        const windowToClose = windows.find(win => win.id === id);
+        
         setWindows(prev => prev.filter(win => win.id !== id));
         if (activeWindowId === id) {
              const remainingWindows = windows.filter(win => win.id !== id && !win.isMinimized);
@@ -161,6 +238,15 @@ const App: React.FC = () => {
              } else {
                 setActiveWindowId(null);
              }
+        }
+
+        // Publish window closed event
+        if (windowToClose) {
+            bridgeService.publish({
+                type: 'window_closed',
+                source: 'App',
+                data: { windowId: id, componentType: windowToClose.componentType, title: windowToClose.title }
+            });
         }
     };
 
@@ -305,6 +391,10 @@ const App: React.FC = () => {
     const appContext: AppContext = {
         currentView: windows.find(w => w.id === activeWindowId)?.componentType || 'Desktop',
         activeTopic: windows.find(w => w.id === activeWindowId)?.props?.topic || null,
+        bridgeService,
+        sharedDataService,
+        notificationService,
+        healthCheckService,
     };
 
     return (
@@ -337,6 +427,13 @@ const App: React.FC = () => {
                 <CommandBar
                     onClose={() => setIsCommandBarOpen(false)}
                     context={appContext}
+                />
+            )}
+
+            {isNotificationCenterOpen && (
+                <NotificationCenter
+                    isOpen={isNotificationCenterOpen}
+                    onClose={() => setIsNotificationCenterOpen(false)}
                 />
             )}
             <main className="h-full w-full relative">
@@ -419,6 +516,7 @@ const App: React.FC = () => {
                 windows={windows} 
                 onToggleStartMenu={() => setIsStartMenuOpen(prev => !prev)}
                 onCommandBarOpen={() => setIsCommandBarOpen(true)}
+                onNotificationCenterOpen={() => setIsNotificationCenterOpen(true)}
                 onWindowClick={(id) => {
                     const win = windows.find(w => w.id === id);
                     if (win?.isMinimized) {

@@ -6,11 +6,12 @@ interface TaskbarProps {
     windows: WindowInstance[];
     onToggleStartMenu: () => void;
     onCommandBarOpen: () => void;
+    onNotificationCenterOpen?: () => void;
     onWindowClick: (id: string) => void;
     activeWindowId: string | null;
 }
 
-const Taskbar: React.FC<TaskbarProps> = ({ windows, onToggleStartMenu, onCommandBarOpen, onWindowClick, activeWindowId }) => {
+const Taskbar: React.FC<TaskbarProps> = ({ windows, onToggleStartMenu, onCommandBarOpen, onNotificationCenterOpen, onWindowClick, activeWindowId }) => {
     const [time, setTime] = useState(new Date());
 
     useEffect(() => {
@@ -36,6 +37,19 @@ const Taskbar: React.FC<TaskbarProps> = ({ windows, onToggleStartMenu, onCommand
             >
                 <CommandIcon className="h-6 w-6 text-white" />
             </button>
+
+            {onNotificationCenterOpen && (
+                <button
+                    onClick={onNotificationCenterOpen}
+                    className="h-10 w-10 flex items-center justify-center rounded-lg bg-transparent hover:bg-[var(--sol-accent-yellow)]/50 transition-colors"
+                    title="Open Notification Center (Ctrl+Shift+N)"
+                >
+                    <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM11 19H6.5a2.5 2.5 0 010-5H11m0 5a2.5 2.5 0 01-2.5-2.5V14h5v2.5A2.5 2.5 0 0111 19z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9z" />
+                    </svg>
+                </button>
+            )}
 
             <div className="w-px h-8 bg-[var(--sol-panel-border)]"></div>
 

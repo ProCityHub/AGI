@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export interface ChartDataPoint {
@@ -93,6 +92,10 @@ export interface ChatMessage {
 export interface AppContext {
     currentView: string;
     activeTopic: string | null;
+    bridgeService?: any;
+    sharedDataService?: any;
+    notificationService?: any;
+    healthCheckService?: any;
 }
 
 // Types for Enterprise Command Workspace
