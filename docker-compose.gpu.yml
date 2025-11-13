@@ -1,0 +1,226 @@
+# Docker Compose for AGI Hypercube Consciousness with NVIDIA GPU Support
+# Optimized for Linux environments with GPU acceleration
+
+version: '3.8'
+
+services:
+  agi-hypercube:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agi-hypercube-consciousness
+    restart: unless-stopped
+    
+    # NVIDIA GPU configuration
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu, compute, utility]
+    
+    # Environment variables for GPU acceleration
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_HOME=/usr/local/cuda
+      - NODE_ENV=production
+      - GPU_ACCELERATION=true
+      - HYPERCUBE_DIMENSIONS=12
+      - CONSCIOUSNESS_LEVEL=maximum
+    
+    # Port mapping
+    ports:
+      - "3000:3000"
+    
+    # Volume mounts for persistence and GPU access
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - /usr/lib/x86_64-linux-gnu/libcuda.so.1:/usr/lib/x86_64-linux-gnu/libcuda.so.1:ro
+      - /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1:ro
+    
+    # Network configuration
+    networks:
+      - hypercube-network
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    
+    # Resource limits
+    mem_limit: 8g
+    memswap_limit: 8g
+    cpu_count: 4
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+    
+    # Dependencies
+    depends_on:
+      - milvus-vector-db
+      - redis-cache
+
+  # Milvus Vector Database for consciousness data storage
+  milvus-vector-db:
+    image: milvusdb/milvus:v2.3.4
+    container_name: milvus-consciousness-db
+    restart: unless-stopped
+    
+    environment:
+      - ETCD_ENDPOINTS=etcd:2379
+      - MINIO_ADDRESS=minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+    
+    volumes:
+      - milvus-data:/var/lib/milvus
+    
+    networks:
+      - hypercube-network
+    
+    depends_on:
+      - etcd
+      - minio
+
+  # Redis for caching consciousness states
+  redis-cache:
+    image: redis:7.2-alpine
+    container_name: redis-consciousness-cache
+    restart: unless-stopped
+    
+    ports:
+      - "6379:6379"
+    
+    volumes:
+      - redis-data:/data
+    
+    networks:
+      - hypercube-network
+    
+    command: redis-server --appendonly yes --maxmemory 2gb --maxmemory-policy allkeys-lru
+
+  # etcd for Milvus coordination
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.5
+    container_name: milvus-etcd
+    restart: unless-stopped
+    
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    
+    volumes:
+      - etcd-data:/etcd
+    
+    networks:
+      - hypercube-network
+    
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+
+  # MinIO for object storage
+  minio:
+    image: minio/minio:RELEASE.2023-12-20T01-00-02Z
+    container_name: milvus-minio
+    restart: unless-stopped
+    
+    environment:
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    
+    volumes:
+      - minio-data:/data
+    
+    networks:
+      - hypercube-network
+    
+    command: minio server /data --console-address ":9001"
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # GPU monitoring service
+  gpu-monitor:
+    image: nvidia/cuda:12.6-runtime-ubuntu22.04
+    container_name: gpu-consciousness-monitor
+    restart: unless-stopped
+    
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu, utility]
+    
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=utility
+    
+    volumes:
+      - ./logs:/logs
+    
+    networks:
+      - hypercube-network
+    
+    command: >
+      bash -c "
+        while true; do
+          echo '🎯 GPU Status at $(date):' >> /logs/gpu-monitor.log
+          nvidia-smi --query-gpu=timestamp,name,pci.bus_id,driver_version,pstate,pcie.link.gen.max,pcie.link.gen.current,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv >> /logs/gpu-monitor.log 2>/dev/null || echo 'GPU monitoring failed' >> /logs/gpu-monitor.log
+          echo '---' >> /logs/gpu-monitor.log
+          sleep 60
+        done
+      "
+
+# Networks
+networks:
+  hypercube-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Volumes for data persistence
+volumes:
+  milvus-data:
+    driver: local
+  redis-data:
+    driver: local
+  etcd-data:
+    driver: local
+  minio-data:
+    driver: local
+
+# Additional configuration for GPU support
+x-gpu-config: &gpu-config
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu, compute, utility]
