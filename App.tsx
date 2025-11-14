@@ -39,6 +39,7 @@ import { initializeANZGovernanceService } from './services/anzGovernanceService'
 import { initializePalantirGovernanceService } from './services/palantirGovernanceService';
 import { initializeUnifiedRepositoryBridge } from './services/unifiedRepositoryBridge';
 import { initializeCoreHypercubeProtocol } from './services/coreHypercubeProtocol';
+import { initializeGitHubRepositoryBridge } from './services/githubRepositoryBridge';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -66,6 +67,7 @@ const App: React.FC = () => {
     const [showANZBridge, setShowANZBridge] = useState(false);
     const [showPalantirBridge, setShowPalantirBridge] = useState(false);
     const [showUnifiedBridge, setShowUnifiedBridge] = useState(false);
+    const [showGitHubBridge, setShowGitHubBridge] = useState(false);
 
     useEffect(() => {
         if (getUsers().length === 0) {
@@ -137,6 +139,13 @@ const App: React.FC = () => {
             // Execute Core Hypercube Protocol
             console.log('🌐 [CORE PROTOCOL] Executing CORE HYPERCUBE PROTOCOL...');
             await coreProtocol.executeProtocol();
+            
+            // Initialize GitHub Repository Bridge
+            const githubBridge = initializeGitHubRepositoryBridge();
+            
+            // Bridge ALL GitHub repositories
+            console.log('🐙 [GITHUB BRIDGE] Bridging ALL GitHub repositories...');
+            await githubBridge.bridgeAllRepositories();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
@@ -566,6 +575,12 @@ const App: React.FC = () => {
                     icon={<div className="text-2xl">🌐</div>}
                     initialPosition={{ x: 580, y: 350 }}
                     onDoubleClick={() => setShowUnifiedBridge(true)}
+                />
+                <DesktopIcon
+                    label="GitHub Bridge"
+                    icon={<div className="text-2xl">🐙</div>}
+                    initialPosition={{ x: 690, y: 350 }}
+                    onDoubleClick={() => setShowGitHubBridge(true)}
                 />
             </main>
 
