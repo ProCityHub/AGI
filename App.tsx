@@ -24,12 +24,14 @@ import AgentControlPanel from './components/AgentControlPanel';
 import ProCitySiteBuilder from './components/ProCitySiteBuilder';
 import ProCityBusinessHub from './components/ProCityBusinessHub';
 import ProsyncConsole from './components/ProsyncConsole';
+import IrelandGovernanceBridge from './components/IrelandGovernanceBridge';
 import { initializeAgentCore } from './services/agentCore';
 import { initializeMultiModalService } from './services/multiModalService';
 import { initializeReasoningEngine } from './services/reasoningEngine';
 import { initializeSiteBuilderService } from './services/siteBuilderService';
 import { initializeBusinessPlatformService } from './services/businessPlatformService';
 import { initializeProsyncEngine } from './services/prosyncEngine';
+import { initializeIrelandGovernanceService } from './services/irelandGovernanceService';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -51,6 +53,7 @@ const App: React.FC = () => {
     const [showSiteBuilder, setShowSiteBuilder] = useState(false);
     const [showBusinessHub, setShowBusinessHub] = useState(false);
     const [showProsyncConsole, setShowProsyncConsole] = useState(false);
+    const [showIrelandBridge, setShowIrelandBridge] = useState(false);
 
     useEffect(() => {
         if (getUsers().length === 0) {
@@ -97,6 +100,9 @@ const App: React.FC = () => {
             
             // Initialize PROSYNC Trinity Engine
             initializeProsyncEngine();
+            
+            // Initialize Ireland Governance Service
+            initializeIrelandGovernanceService();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
@@ -491,6 +497,12 @@ const App: React.FC = () => {
                     initialPosition={{ x: 470, y: 250 }}
                     onDoubleClick={() => setShowProsyncConsole(true)}
                 />
+                <DesktopIcon
+                    label="Ireland Bridge"
+                    icon={<div className="text-2xl">🇮🇪</div>}
+                    initialPosition={{ x: 580, y: 250 }}
+                    onDoubleClick={() => setShowIrelandBridge(true)}
+                />
             </main>
 
             {windows.map(win => (
@@ -553,6 +565,10 @@ const App: React.FC = () => {
 
             {showProsyncConsole && (
                 <ProsyncConsole onClose={() => setShowProsyncConsole(false)} />
+            )}
+
+            {showIrelandBridge && (
+                <IrelandGovernanceBridge onClose={() => setShowIrelandBridge(false)} />
             )}
         </div>
     );
