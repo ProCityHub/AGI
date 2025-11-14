@@ -4,6 +4,7 @@ import { ProvincialGovernmentBridge } from './bridges/ProvincialGovernmentBridge
 import { PoliticalPartyBridge } from './bridges/PoliticalPartyBridge';
 import { ElectoralDataBridge } from './bridges/ElectoralDataBridge';
 import { TreatyAndInternationalLawBridge } from './bridges/TreatyAndInternationalLawBridge';
+import { GovernmentDepartmentsBridge } from './bridges/GovernmentDepartmentsBridge';
 import { AIAnalysisEngine } from './AIAnalysisEngine';
 import { DataAggregator } from './DataAggregator';
 import { CacheManager } from '../utils/CacheManager';
@@ -22,6 +23,7 @@ export class BridgeOrchestrator {
   private politicalPartyBridge: PoliticalPartyBridge;
   private electoralDataBridge: ElectoralDataBridge;
   private treatyInternationalLawBridge: TreatyAndInternationalLawBridge;
+  private governmentDepartmentsBridge: GovernmentDepartmentsBridge;
   private aiEngine: AIAnalysisEngine;
   private dataAggregator: DataAggregator;
   private cacheManager: CacheManager;
@@ -33,6 +35,7 @@ export class BridgeOrchestrator {
     this.politicalPartyBridge = new PoliticalPartyBridge();
     this.electoralDataBridge = new ElectoralDataBridge();
     this.treatyInternationalLawBridge = new TreatyAndInternationalLawBridge();
+    this.governmentDepartmentsBridge = new GovernmentDepartmentsBridge();
     this.aiEngine = new AIAnalysisEngine();
     this.dataAggregator = new DataAggregator();
     this.cacheManager = new CacheManager();
@@ -51,7 +54,8 @@ export class BridgeOrchestrator {
         this.provincialBridge.initialize(),
         this.politicalPartyBridge.initialize(),
         this.electoralDataBridge.initialize(),
-        this.treatyInternationalLawBridge.initialize()
+        this.treatyInternationalLawBridge.initialize(),
+        this.governmentDepartmentsBridge.initialize()
       ]);
 
       // Initialize AI engine
@@ -516,5 +520,161 @@ export class BridgeOrchestrator {
     logger.info(`Indigenous rights violation reported: ${reportId}`);
 
     return report;
+  }
+
+  // Government Departments Methods
+  async getGovernmentDepartmentsData(category?: string, filters?: any): Promise<any> {
+    return await this.governmentDepartmentsBridge.getData(category, filters);
+  }
+
+  async getFederalDepartments(type?: string): Promise<any> {
+    return await this.governmentDepartmentsBridge.getDepartments(type);
+  }
+
+  async getFederalDepartment(departmentId: string): Promise<any> {
+    const departments = await this.governmentDepartmentsBridge.getDepartments();
+    return departments.find((dept: any) => dept.id === departmentId);
+  }
+
+  async getVeteranServices(category?: string): Promise<any> {
+    return await this.governmentDepartmentsBridge.getVeteranServices(category);
+  }
+
+  async getNaturalResources(type?: string): Promise<any> {
+    return await this.governmentDepartmentsBridge.getNaturalResources(type);
+  }
+
+  async searchGovernmentDepartments(query: string, filters?: any): Promise<any> {
+    return await this.governmentDepartmentsBridge.search(query, filters);
+  }
+
+  async getDepartmentServices(department?: string): Promise<any> {
+    // This would return services for specific department or all departments
+    const data = await this.governmentDepartmentsBridge.getData('departments');
+    if (department) {
+      const dept = data.find((d: any) => d.id === department || d.name.toLowerCase().includes(department.toLowerCase()));
+      return dept ? dept.services : [];
+    }
+    return data.flatMap((dept: any) => dept.services);
+  }
+
+  async getDepartmentLaws(department?: string, type?: string, status?: string): Promise<any> {
+    // This would return laws for specific department or all departments
+    const data = await this.governmentDepartmentsBridge.getData('departments');
+    let laws = data.flatMap((dept: any) => dept.laws);
+    
+    if (department) {
+      const dept = data.find((d: any) => d.id === department || d.name.toLowerCase().includes(department.toLowerCase()));
+      laws = dept ? dept.laws : [];
+    }
+    
+    if (type) {
+      laws = laws.filter((law: any) => law.type === type);
+    }
+    
+    if (status) {
+      laws = laws.filter((law: any) => law.status === status);
+    }
+    
+    return laws;
+  }
+
+  async getITProjects(department?: string, status?: string): Promise<any> {
+    // This would return IT projects for specific department or all departments
+    const data = await this.governmentDepartmentsBridge.getData('departments');
+    let projects = data.flatMap((dept: any) => dept.itProjects);
+    
+    if (department) {
+      const dept = data.find((d: any) => d.id === department || d.name.toLowerCase().includes(department.toLowerCase()));
+      projects = dept ? dept.itProjects : [];
+    }
+    
+    if (status) {
+      projects = projects.filter((project: any) => project.status === status);
+    }
+    
+    return projects;
+  }
+
+  async getDepartmentPerformance(department?: string, metric?: string, year?: string): Promise<any> {
+    // This would return performance metrics for departments
+    return {
+      department: department || 'all',
+      metric: metric || 'all',
+      year: year || '2025',
+      performance: {
+        serviceDelivery: 85,
+        digitalMaturity: 72,
+        citizenSatisfaction: 78,
+        budgetEfficiency: 82
+      },
+      trends: {
+        improving: ['Digital services adoption', 'Online service availability'],
+        declining: ['Processing times for some services'],
+        stable: ['Overall satisfaction ratings']
+      }
+    };
+  }
+
+  async getDepartmentRepositories(department?: string): Promise<any> {
+    const repositories = this.governmentDepartmentsBridge.getRelatedRepositories();
+    
+    if (department) {
+      const deptKey = Object.keys(repositories).find(key => 
+        key.includes(department.toLowerCase()) || 
+        repositories[key as keyof typeof repositories].some((repo: string) => 
+          repo.toLowerCase().includes(department.toLowerCase())
+        )
+      );
+      return deptKey ? { [deptKey]: repositories[deptKey as keyof typeof repositories] } : {};
+    }
+    
+    return repositories;
+  }
+
+  async getDigitalServices(department?: string, status?: string, accessibility?: string): Promise<any> {
+    // This would return digital services data
+    const data = await this.governmentDepartmentsBridge.getData('departments');
+    let digitalServices = data.flatMap((dept: any) => dept.digitalServices);
+    
+    if (department) {
+      const dept = data.find((d: any) => d.id === department || d.name.toLowerCase().includes(department.toLowerCase()));
+      digitalServices = dept ? dept.digitalServices : [];
+    }
+    
+    if (status) {
+      digitalServices = digitalServices.filter((service: any) => service.status === status);
+    }
+    
+    if (accessibility) {
+      digitalServices = digitalServices.filter((service: any) => service.accessibility === accessibility);
+    }
+    
+    return digitalServices;
+  }
+
+  async getOpenDatasets(department?: string, format?: string, license?: string): Promise<any> {
+    // This would return open datasets information
+    const data = await this.governmentDepartmentsBridge.getData('departments');
+    
+    const datasets = data.map((dept: any) => ({
+      department: dept.name,
+      departmentId: dept.id,
+      totalDatasets: dept.openDatasets,
+      githubRepositories: dept.repositories.length,
+      dataPortals: dept.digitalServices.filter((service: any) => 
+        service.name.toLowerCase().includes('data') || 
+        service.name.toLowerCase().includes('portal')
+      ).length
+    }));
+    
+    if (department) {
+      return datasets.filter((dataset: any) => 
+        dataset.departmentId === department || 
+        dataset.department.toLowerCase().includes(department.toLowerCase())
+      );
+    }
+    
+    return datasets;
   }
 }

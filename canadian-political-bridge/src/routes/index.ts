@@ -5,6 +5,7 @@ import { provincialRoutes } from './provincial';
 import { politicalPartyRoutes } from './politicalParties';
 import { electoralRoutes } from './electoral';
 import { treatyInternationalLawRoutes } from './treatyInternationalLaw';
+import { governmentDepartmentsRoutes } from './governmentDepartments';
 import { analysisRoutes } from './analysis';
 import { searchRoutes } from './search';
 import { statusRoutes } from './status';
@@ -19,6 +20,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
   politicalPartyRoutes(app, orchestrator, apiBase);
   electoralRoutes(app, orchestrator, apiBase);
   treatyInternationalLawRoutes(app, orchestrator, apiBase);
+  governmentDepartmentsRoutes(app, orchestrator, apiBase);
   analysisRoutes(app, orchestrator, apiBase);
   searchRoutes(app, orchestrator, apiBase);
   statusRoutes(app, orchestrator, apiBase);
@@ -35,6 +37,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         politicalParties: `${apiBase}/political-parties`,
         electoral: `${apiBase}/electoral`,
         treatyInternationalLaw: `${apiBase}/treaty-international-law`,
+        governmentDepartments: `${apiBase}/government-departments`,
         analysis: `${apiBase}/analysis`,
         search: `${apiBase}/search`,
         status: `${apiBase}/status`
@@ -55,7 +58,15 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         'International Law (UN, ICCPR, UNDRIP)',
         'Residential Schools Database',
         'Indigenous Cultural Heritage',
-        'Religious Freedom Documentation'
+        'Religious Freedom Documentation',
+        'Veterans Affairs Canada (VAC)',
+        'Natural Resources Canada (NRCan)',
+        'Statistics Canada (StatCan)',
+        'Health Canada',
+        'Environment and Climate Change Canada',
+        'All Federal Departments and Agencies',
+        'Government Services and Operations',
+        'IT Projects and Digital Services'
       ]
     });
   });
@@ -71,6 +82,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         `${apiBase}/political-parties`,
         `${apiBase}/electoral`,
         `${apiBase}/treaty-international-law`,
+        `${apiBase}/government-departments`,
         `${apiBase}/analysis`,
         `${apiBase}/search`,
         `${apiBase}/status`
