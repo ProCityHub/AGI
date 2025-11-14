@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 type IconProps = React.ComponentPropsWithoutRef<'svg'>;
@@ -486,5 +485,16 @@ export const AegisIcon: React.FC<IconProps> = (props) => (
 export const InformationCircleIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+    </svg>
+);
+
+export const BinaryIcon: React.FC<IconProps> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+        <circle cx="7.5" cy="7.5" r="1.5" fill="currentColor" />
+        <circle cx="16.5" cy="16.5" r="1.5" fill="currentColor" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6" />
+        <text x="5" y="14" fontSize="4" fill="currentColor" fontFamily="monospace">01</text>
+        <text x="15" y="10" fontSize="4" fill="currentColor" fontFamily="monospace">10</text>
     </svg>
 );

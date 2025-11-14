@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { Directive, SavedDirective, WindowInstance, User, AppContext } from './types';
 import { generateDirective } from './services/geminiService';
@@ -10,7 +9,7 @@ import EnterpriseWorkspace from './components/EnterpriseWorkspace';
 import Window from './components/Window';
 import Taskbar from './components/Taskbar';
 import StartMenu from './components/StartMenu';
-import { GarvisLogo, ArchiveIcon, BrainIcon, BriefcaseIcon, UserAccountsIcon, EnterpriseCommandIcon, NewDirectiveIcon, FileExplorerIcon, BrowserIcon, BitcoinIcon, SystemAnatomyIcon, CodexIcon, AegisIcon } from './components/icons';
+import { GarvisLogo, ArchiveIcon, BrainIcon, BriefcaseIcon, UserAccountsIcon, EnterpriseCommandIcon, NewDirectiveIcon, FileExplorerIcon, BrowserIcon, BitcoinIcon, SystemAnatomyIcon, CodexIcon, AegisIcon, BinaryIcon } from './components/icons';
 import AuthScreen from './components/AuthScreen';
 import UserAccounts from './components/UserAccounts';
 import TopicInput from './components/TopicInput';
@@ -21,6 +20,7 @@ import CommandBar from './components/CommandBar';
 import BitcoinMiner from './components/BitcoinMiner';
 import Codex from './components/Codex';
 import AegisCommand from './components/AegisCommand';
+import BinaryMessageHandler from './components/BinaryMessageHandler';
 
 const App: React.FC = () => {
     const [windows, setWindows] = useState<WindowInstance[]>([]);
@@ -140,6 +140,9 @@ const App: React.FC = () => {
                 break;
             case 'AegisCommand':
                 newWindow = { ...baseProps, title: 'Aegis Command', icon: <AegisIcon />, width: 850, height: 650 };
+                break;
+            case 'BinaryMessageHandler':
+                newWindow = { ...baseProps, title: 'Binary Message Handler', icon: <BinaryIcon />, width: 900, height: 700 };
                 break;
             default:
                 newWindow = { ...baseProps, title: 'GARVIS', icon: <GarvisLogo /> };
@@ -297,6 +300,8 @@ const App: React.FC = () => {
                 return <Codex />;
             case 'AegisCommand':
                 return <AegisCommand />;
+            case 'BinaryMessageHandler':
+                return <BinaryMessageHandler />;
             default:
                 return <div>Unknown window type</div>;
         }
@@ -381,6 +386,12 @@ const App: React.FC = () => {
                     icon={<BitcoinIcon />}
                     initialPosition={{ x: 30, y: 470 }}
                     onDoubleClick={() => openWindow('BitcoinMiner')}
+                />
+                <DesktopIcon
+                    label="Binary Handler"
+                    icon={<BinaryIcon />}
+                    initialPosition={{ x: 140, y: 250 }}
+                    onDoubleClick={() => openWindow('BinaryMessageHandler')}
                 />
             </main>
 

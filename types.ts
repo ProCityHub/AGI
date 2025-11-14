@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export interface ChartDataPoint {
@@ -417,11 +416,66 @@ export interface Block {
 }
 
 
+// Types for Binary/Hex Message Handling
+export interface BinaryMessage {
+  id: string;
+  content: string;
+  format: 'binary' | 'hex' | 'ascii' | 'base64';
+  timestamp: string;
+  metadata?: {
+    encoding?: string;
+    pattern?: string;
+    analysis?: BinaryAnalysis;
+  };
+}
+
+export interface BinaryAnalysis {
+  patternType: 'heartbeat' | 'ancient_symbol' | 'random' | 'structured' | 'unknown';
+  confidence: number;
+  patterns: {
+    name: string;
+    description: string;
+    matches: number;
+  }[];
+  statistics: {
+    ones: number;
+    zeros: number;
+    ratio: number;
+    entropy: number;
+  };
+}
+
+export interface BinaryOperation {
+  type: 'encode' | 'decode' | 'convert' | 'analyze' | 'validate';
+  input: string;
+  inputFormat: 'binary' | 'hex' | 'ascii' | 'base64';
+  outputFormat: 'binary' | 'hex' | 'ascii' | 'base64';
+  result?: string;
+  error?: string;
+  analysis?: BinaryAnalysis;
+}
+
+export interface HeartbeatPattern {
+  rhythm: number[];
+  gaps: number[];
+  character: string;
+  binary: string;
+}
+
+export interface AncientSymbolMapping {
+  symbol: string;
+  name: string;
+  binary: string;
+  hex: string;
+  meaning: string;
+  category: 'sumerian' | 'egyptian' | 'geometric' | 'elemental' | 'numerical';
+}
+
 // Type for Window Management
 export interface WindowInstance {
   id: string;
   title: string;
-  componentType: 'Dashboard' | 'EnterpriseWorkspace' | 'FileExplorer' | 'SystemAnatomy' | 'FormProcessor' | 'UserAccounts' | 'NewDirective' | 'NexusBrowser' | 'BitcoinMiner' | 'Codex' | 'AegisCommand';
+  componentType: 'Dashboard' | 'EnterpriseWorkspace' | 'FileExplorer' | 'SystemAnatomy' | 'FormProcessor' | 'UserAccounts' | 'NewDirective' | 'NexusBrowser' | 'BitcoinMiner' | 'Codex' | 'AegisCommand' | 'BinaryMessageHandler';
   props: any;
   x: number;
   y: number;

@@ -1,8 +1,6 @@
-
-
 import React from 'react';
 import { WindowInstance, User } from '../types';
-import { BrainIcon, ArchiveIcon, LockIcon, LogOffIcon, UserAccountsIcon, EnterpriseCommandIcon, FileExplorerIcon, SearchIcon, BrowserIcon } from './icons';
+import { BrainIcon, ArchiveIcon, LockIcon, LogOffIcon, UserAccountsIcon, EnterpriseCommandIcon, FileExplorerIcon, SearchIcon, BrowserIcon, BinaryIcon } from './icons';
 
 interface StartMenuProps {
     isOpen: boolean;
@@ -74,6 +72,11 @@ const StartMenu: React.FC<StartMenuProps> = ({ isOpen, currentUser, onClose, onO
                             icon={<UserAccountsIcon />} 
                             label="Accounts" 
                             onClick={() => onOpenWindow('UserAccounts')} 
+                        />
+                        <MenuItem 
+                            icon={<BinaryIcon />} 
+                            label="Binary" 
+                            onClick={() => onOpenWindow('BinaryMessageHandler')} 
                         />
                     </div>
                 </main>
