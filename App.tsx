@@ -37,6 +37,7 @@ import { initializeIsraelGovernanceService } from './services/israelGovernanceSe
 import { initializeChinaGovernanceService } from './services/chinaGovernanceService';
 import { initializeANZGovernanceService } from './services/anzGovernanceService';
 import { initializePalantirGovernanceService } from './services/palantirGovernanceService';
+import { initializeUnifiedRepositoryBridge } from './services/unifiedRepositoryBridge';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -63,6 +64,7 @@ const App: React.FC = () => {
     const [showChinaBridge, setShowChinaBridge] = useState(false);
     const [showANZBridge, setShowANZBridge] = useState(false);
     const [showPalantirBridge, setShowPalantirBridge] = useState(false);
+    const [showUnifiedBridge, setShowUnifiedBridge] = useState(false);
 
     useEffect(() => {
         if (getUsers().length === 0) {
@@ -124,6 +126,9 @@ const App: React.FC = () => {
             
             // Initialize Palantir Governance Service
             initializePalantirGovernanceService();
+            
+            // Initialize Unified Repository Bridge
+            initializeUnifiedRepositoryBridge();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
@@ -547,6 +552,12 @@ const App: React.FC = () => {
                     icon={<div className="text-2xl">🏢</div>}
                     initialPosition={{ x: 1020, y: 250 }}
                     onDoubleClick={() => setShowPalantirBridge(true)}
+                />
+                <DesktopIcon
+                    label="Unified Bridge"
+                    icon={<div className="text-2xl">🌐</div>}
+                    initialPosition={{ x: 580, y: 350 }}
+                    onDoubleClick={() => setShowUnifiedBridge(true)}
                 />
             </main>
 
