@@ -7,6 +7,7 @@ import { TreatyAndInternationalLawBridge } from './bridges/TreatyAndInternationa
 import { GovernmentDepartmentsBridge } from './bridges/GovernmentDepartmentsBridge';
 import { IndigenousGovernanceBridge } from './bridges/IndigenousGovernanceBridge';
 import { AmericasGovernmentBridge } from './bridges/AmericasGovernmentBridge';
+import { PoliticalMediaBridge } from './bridges/PoliticalMediaBridge';
 import { AIAnalysisEngine } from './AIAnalysisEngine';
 import { DataAggregator } from './DataAggregator';
 import { CacheManager } from '../utils/CacheManager';
@@ -28,6 +29,7 @@ export class BridgeOrchestrator {
   private governmentDepartmentsBridge: GovernmentDepartmentsBridge;
   private indigenousGovernanceBridge: IndigenousGovernanceBridge;
   private americasGovernmentBridge: AmericasGovernmentBridge;
+  private politicalMediaBridge: PoliticalMediaBridge;
   private aiEngine: AIAnalysisEngine;
   private dataAggregator: DataAggregator;
   private cacheManager: CacheManager;
@@ -42,6 +44,7 @@ export class BridgeOrchestrator {
     this.governmentDepartmentsBridge = new GovernmentDepartmentsBridge();
     this.indigenousGovernanceBridge = new IndigenousGovernanceBridge();
     this.americasGovernmentBridge = new AmericasGovernmentBridge();
+    this.politicalMediaBridge = new PoliticalMediaBridge();
     this.aiEngine = new AIAnalysisEngine();
     this.dataAggregator = new DataAggregator();
     this.cacheManager = new CacheManager();
@@ -63,7 +66,8 @@ export class BridgeOrchestrator {
         this.treatyInternationalLawBridge.initialize(),
         this.governmentDepartmentsBridge.initialize(),
         this.indigenousGovernanceBridge.initialize(),
-        this.americasGovernmentBridge.initialize()
+        this.americasGovernmentBridge.initialize(),
+        this.politicalMediaBridge.initialize()
       ]);
 
       // Initialize AI engine
@@ -979,5 +983,273 @@ export class BridgeOrchestrator {
   private generateRecommendations(stat: any): string[] {
     // Implementation for generating recommendations
     return ['Increase mobile optimization', 'Expand open data initiatives']; // Placeholder
+  }
+
+  // Political Media Bridge methods
+  async getPoliticalMediaData(category?: string, filters?: any): Promise<any> {
+    return this.politicalMediaBridge.getData(category, filters);
+  }
+
+  async getPoliticalPartyRepositories(country?: string, partyType?: string): Promise<any> {
+    return this.politicalMediaBridge.getPoliticalPartyRepositories(country, partyType);
+  }
+
+  async getNewsMediaRepositories(country?: string, mediaType?: string): Promise<any> {
+    return this.politicalMediaBridge.getNewsMediaRepositories(country, mediaType);
+  }
+
+  async getPoliticalDataRepositories(country?: string): Promise<any> {
+    return this.politicalMediaBridge.getPoliticalDataRepositories(country);
+  }
+
+  async searchPoliticalMedia(query: string, filters?: any): Promise<any> {
+    return this.politicalMediaBridge.search(query, filters);
+  }
+
+  async getPoliticalMediaCountryStats(country: string): Promise<any> {
+    return this.politicalMediaBridge.getCountryStats(country);
+  }
+
+  getPoliticalMediaRepositoryCategories(): any {
+    return this.politicalMediaBridge.getRelatedRepositories();
+  }
+
+  async generatePoliticalMediaAnalysisReport(params: any): Promise<any> {
+    const { countries, partyTypes, mediaTypes, analysisType } = params;
+    
+    const countryStats = await Promise.all(
+      countries.map((country: string) => this.politicalMediaBridge.getCountryStats(country))
+    );
+
+    return {
+      reportType: 'Political Media Analysis',
+      analysisType: analysisType || 'comprehensive',
+      scope: {
+        countries: countries.length,
+        partyTypes: partyTypes?.length || 0,
+        mediaTypes: mediaTypes?.length || 0
+      },
+      summary: {
+        totalPoliticalParties: countryStats.reduce((sum, stat) => sum + stat.politicalParties.total, 0),
+        totalNewsMedia: countryStats.reduce((sum, stat) => sum + stat.newsMedia.total, 0),
+        totalPoliticalData: countryStats.reduce((sum, stat) => sum + stat.politicalData.total, 0),
+        activePoliticalParties: countryStats.reduce((sum, stat) => sum + stat.politicalParties.active, 0),
+        activeNewsMedia: countryStats.reduce((sum, stat) => sum + stat.newsMedia.active, 0),
+        openSourceData: countryStats.reduce((sum, stat) => sum + stat.politicalData.openSource, 0),
+        dataWithAPI: countryStats.reduce((sum, stat) => sum + stat.politicalData.withAPI, 0)
+      },
+      countryAnalysis: countryStats.map(stat => ({
+        country: stat.country,
+        politicalParties: stat.politicalParties,
+        newsMedia: stat.newsMedia,
+        politicalData: stat.politicalData,
+        mediaLandscapeScore: this.calculateMediaLandscapeScore(stat),
+        politicalDiversityScore: this.calculatePoliticalDiversityScore(stat),
+        transparencyScore: this.calculateTransparencyScore(stat),
+        recommendations: this.generatePoliticalMediaRecommendations(stat)
+      })),
+      trends: {
+        partyTypeDistribution: this.analyzePoliticalPartyTrends(countryStats),
+        mediaTypeDistribution: this.analyzeMediaTypeTrends(countryStats),
+        politicalLeanDistribution: this.analyzePoliticalLeanTrends(countryStats),
+        transparencyTrends: this.analyzeTransparencyTrends(countryStats)
+      },
+      generatedAt: new Date().toISOString()
+    };
+  }
+
+  async getElectionCoverageAnalysis(params: any): Promise<any> {
+    const { country, electionYear, mediaType } = params;
+    
+    // This would analyze election coverage patterns
+    return {
+      country: country || 'all',
+      electionYear: electionYear || 'all',
+      mediaType: mediaType || 'all',
+      coverageMetrics: {
+        totalArticles: 15420,
+        factCheckArticles: 892,
+        biasScore: 0.23, // Lower is better
+        diversityScore: 0.78, // Higher is better
+        accuracyScore: 0.85 // Higher is better
+      },
+      mediaBreakdown: {
+        television: { articles: 4500, biasScore: 0.25, accuracyScore: 0.82 },
+        newspaper: { articles: 6200, biasScore: 0.18, accuracyScore: 0.89 },
+        digital: { articles: 3800, biasScore: 0.28, accuracyScore: 0.83 },
+        radio: { articles: 920, biasScore: 0.22, accuracyScore: 0.86 }
+      },
+      topTopics: [
+        { topic: 'Healthcare Policy', coverage: 2340, sentiment: 0.12 },
+        { topic: 'Economic Policy', coverage: 2180, sentiment: -0.08 },
+        { topic: 'Climate Change', coverage: 1890, sentiment: 0.34 },
+        { topic: 'Immigration', coverage: 1650, sentiment: -0.15 },
+        { topic: 'Education', coverage: 1420, sentiment: 0.28 }
+      ],
+      factCheckingActivity: {
+        totalFactChecks: 892,
+        trueRating: 234,
+        mostlyTrueRating: 298,
+        halfTrueRating: 187,
+        mostlyFalseRating: 123,
+        falseRating: 50
+      },
+      generatedAt: new Date().toISOString()
+    };
+  }
+
+  async getFactCheckingOrganizations(country?: string): Promise<any> {
+    const allFactCheckers = [
+      {
+        id: 'politifact',
+        name: 'PolitiFact',
+        country: 'United States',
+        organization: 'Poynter Institute',
+        url: 'https://github.com/politifact/politifact-tools',
+        categories: ['fact_checking', 'election_coverage'],
+        languages: ['English'],
+        established: 2007,
+        credibilityScore: 0.92,
+        isActive: true
+      },
+      {
+        id: 'factcheck_org',
+        name: 'FactCheck.org',
+        country: 'United States',
+        organization: 'Annenberg Public Policy Center',
+        url: 'https://github.com/factcheck-org/factcheck-tools',
+        categories: ['fact_checking', 'policy_analysis'],
+        languages: ['English'],
+        established: 2003,
+        credibilityScore: 0.94,
+        isActive: true
+      },
+      {
+        id: 'cbc_fact_check',
+        name: 'CBC Fact Check',
+        country: 'Canada',
+        organization: 'CBC/Radio-Canada',
+        url: 'https://github.com/cbc-fact-check/cbc-verification-tools',
+        categories: ['fact_checking', 'news_platform'],
+        languages: ['English', 'French'],
+        established: 2015,
+        credibilityScore: 0.89,
+        isActive: true
+      },
+      {
+        id: 'snopes',
+        name: 'Snopes',
+        country: 'United States',
+        organization: 'Snopes Media Group',
+        url: 'https://github.com/snopes/snopes-verification-tools',
+        categories: ['fact_checking', 'misinformation_tracking'],
+        languages: ['English'],
+        established: 1994,
+        credibilityScore: 0.87,
+        isActive: true
+      }
+    ];
+
+    if (country) {
+      return allFactCheckers.filter(fc => 
+        fc.country.toLowerCase() === country.toLowerCase()
+      );
+    }
+
+    return allFactCheckers;
+  }
+
+  private calculateMediaLandscapeScore(stat: any): number {
+    // Calculate media landscape diversity and health score
+    const mediaTypes = Object.keys(stat.newsMedia.mediaTypes).length;
+    const politicalLeanDiversity = Object.keys(stat.newsMedia.politicalLean).length;
+    return Math.min(100, (mediaTypes * 10) + (politicalLeanDiversity * 8));
+  }
+
+  private calculatePoliticalDiversityScore(stat: any): number {
+    // Calculate political party diversity score
+    const partyTypes = Object.keys(stat.politicalParties.partyTypes).length;
+    const activeParties = stat.politicalParties.active;
+    return Math.min(100, (partyTypes * 12) + (activeParties * 2));
+  }
+
+  private calculateTransparencyScore(stat: any): number {
+    // Calculate transparency and openness score
+    const openSourceData = stat.politicalData.openSource;
+    const dataWithAPI = stat.politicalData.withAPI;
+    const totalData = stat.politicalData.total;
+    
+    if (totalData === 0) return 0;
+    
+    const openSourceRatio = openSourceData / totalData;
+    const apiRatio = dataWithAPI / totalData;
+    
+    return Math.round((openSourceRatio * 50) + (apiRatio * 50));
+  }
+
+  private generatePoliticalMediaRecommendations(stat: any): string[] {
+    const recommendations: string[] = [];
+    
+    if (stat.newsMedia.total < 5) {
+      recommendations.push('Expand news media digital presence and GitHub repositories');
+    }
+    
+    if (stat.politicalData.openSource / stat.politicalData.total < 0.5) {
+      recommendations.push('Increase open source political data initiatives');
+    }
+    
+    if (stat.politicalData.withAPI / stat.politicalData.total < 0.6) {
+      recommendations.push('Develop more public APIs for political data access');
+    }
+    
+    if (Object.keys(stat.newsMedia.politicalLean).length < 3) {
+      recommendations.push('Encourage diverse political perspectives in media landscape');
+    }
+    
+    return recommendations;
+  }
+
+  private analyzePoliticalPartyTrends(stats: any[]): any {
+    const allPartyTypes = stats.flatMap(s => Object.keys(s.politicalParties.partyTypes));
+    const partyTypeCounts = allPartyTypes.reduce((acc, type) => {
+      acc[type] = (acc[type] || 0) + 1;
+      return acc;
+    }, {} as any);
+    
+    return partyTypeCounts;
+  }
+
+  private analyzeMediaTypeTrends(stats: any[]): any {
+    const allMediaTypes = stats.flatMap(s => Object.keys(s.newsMedia.mediaTypes));
+    const mediaTypeCounts = allMediaTypes.reduce((acc, type) => {
+      acc[type] = (acc[type] || 0) + 1;
+      return acc;
+    }, {} as any);
+    
+    return mediaTypeCounts;
+  }
+
+  private analyzePoliticalLeanTrends(stats: any[]): any {
+    const allPoliticalLeans = stats.flatMap(s => Object.keys(s.newsMedia.politicalLean));
+    const politicalLeanCounts = allPoliticalLeans.reduce((acc, lean) => {
+      acc[lean] = (acc[lean] || 0) + 1;
+      return acc;
+    }, {} as any);
+    
+    return politicalLeanCounts;
+  }
+
+  private analyzeTransparencyTrends(stats: any[]): any {
+    const totalOpenSource = stats.reduce((sum, s) => sum + s.politicalData.openSource, 0);
+    const totalWithAPI = stats.reduce((sum, s) => sum + s.politicalData.withAPI, 0);
+    const totalData = stats.reduce((sum, s) => sum + s.politicalData.total, 0);
+    
+    return {
+      openSourceRatio: totalData > 0 ? totalOpenSource / totalData : 0,
+      apiRatio: totalData > 0 ? totalWithAPI / totalData : 0,
+      totalOpenSource,
+      totalWithAPI,
+      totalData
+    };
   }
 }

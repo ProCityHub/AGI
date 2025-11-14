@@ -8,6 +8,7 @@ import { treatyInternationalLawRoutes } from './treatyInternationalLaw';
 import { governmentDepartmentsRoutes } from './governmentDepartments';
 import { indigenousGovernanceRoutes } from './indigenousGovernance';
 import { americasGovernmentRoutes } from './americasGovernment';
+import { politicalMediaRoutes } from './politicalMedia';
 import { analysisRoutes } from './analysis';
 import { searchRoutes } from './search';
 import { statusRoutes } from './status';
@@ -25,6 +26,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
   governmentDepartmentsRoutes(app, orchestrator, apiBase);
   indigenousGovernanceRoutes(app, orchestrator, apiBase);
   americasGovernmentRoutes(app, orchestrator, apiBase);
+  politicalMediaRoutes(app, orchestrator, apiBase);
   analysisRoutes(app, orchestrator, apiBase);
   searchRoutes(app, orchestrator, apiBase);
   statusRoutes(app, orchestrator, apiBase);
@@ -44,6 +46,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         governmentDepartments: `${apiBase}/government-departments`,
         indigenousGovernance: `${apiBase}/indigenous-governance`,
         americasGovernment: `${apiBase}/americas-government`,
+        politicalMedia: `${apiBase}/political-media`,
         analysis: `${apiBase}/analysis`,
         search: `${apiBase}/search`,
         status: `${apiBase}/status`
@@ -83,7 +86,12 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         'Digital Government Services Across Americas',
         'Government Transparency Initiatives',
         'Open Data Portals and API Services',
-        'Digital Maturity Assessment Tools'
+        'Digital Maturity Assessment Tools',
+        'Political Party GitHub Repositories (USA & Canada)',
+        'News Media Organization GitHub Integration',
+        'Political Data and Research Organizations',
+        'Fact-Checking and Verification Tools',
+        'Election Coverage and Media Analysis'
       ]
     });
   });
@@ -102,6 +110,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         `${apiBase}/government-departments`,
         `${apiBase}/indigenous-governance`,
         `${apiBase}/americas-government`,
+        `${apiBase}/political-media`,
         `${apiBase}/analysis`,
         `${apiBase}/search`,
         `${apiBase}/status`
