@@ -3,6 +3,7 @@ import { FederalGovernmentBridge } from './bridges/FederalGovernmentBridge';
 import { ProvincialGovernmentBridge } from './bridges/ProvincialGovernmentBridge';
 import { PoliticalPartyBridge } from './bridges/PoliticalPartyBridge';
 import { ElectoralDataBridge } from './bridges/ElectoralDataBridge';
+import { TreatyAndInternationalLawBridge } from './bridges/TreatyAndInternationalLawBridge';
 import { AIAnalysisEngine } from './AIAnalysisEngine';
 import { DataAggregator } from './DataAggregator';
 import { CacheManager } from '../utils/CacheManager';
@@ -20,6 +21,7 @@ export class BridgeOrchestrator {
   private provincialBridge: ProvincialGovernmentBridge;
   private politicalPartyBridge: PoliticalPartyBridge;
   private electoralDataBridge: ElectoralDataBridge;
+  private treatyInternationalLawBridge: TreatyAndInternationalLawBridge;
   private aiEngine: AIAnalysisEngine;
   private dataAggregator: DataAggregator;
   private cacheManager: CacheManager;
@@ -30,6 +32,7 @@ export class BridgeOrchestrator {
     this.provincialBridge = new ProvincialGovernmentBridge();
     this.politicalPartyBridge = new PoliticalPartyBridge();
     this.electoralDataBridge = new ElectoralDataBridge();
+    this.treatyInternationalLawBridge = new TreatyAndInternationalLawBridge();
     this.aiEngine = new AIAnalysisEngine();
     this.dataAggregator = new DataAggregator();
     this.cacheManager = new CacheManager();
@@ -47,7 +50,8 @@ export class BridgeOrchestrator {
         this.federalBridge.initialize(),
         this.provincialBridge.initialize(),
         this.politicalPartyBridge.initialize(),
-        this.electoralDataBridge.initialize()
+        this.electoralDataBridge.initialize(),
+        this.treatyInternationalLawBridge.initialize()
       ]);
 
       // Initialize AI engine
@@ -96,7 +100,8 @@ export class BridgeOrchestrator {
       await this.federalBridge.getStatus(),
       await this.provincialBridge.getStatus(),
       await this.politicalPartyBridge.getStatus(),
-      await this.electoralDataBridge.getStatus()
+      await this.electoralDataBridge.getStatus(),
+      await this.treatyInternationalLawBridge.getStatus()
     ];
   }
 
@@ -259,5 +264,78 @@ export class BridgeOrchestrator {
 
   isReady(): boolean {
     return this.isInitialized;
+  }
+
+  // Treaty and International Law Bridge Methods
+  async getTreatyInternationalLawData(category?: string, filters?: any): Promise<any> {
+    const cacheKey = `treaty_intl_law_${category || 'all'}_${JSON.stringify(filters || {})}`;
+    
+    let data = await this.cacheManager.get(cacheKey);
+    if (!data) {
+      data = await this.treatyInternationalLawBridge.getData(category, filters);
+      await this.cacheManager.set(cacheKey, data, 600); // 10 minutes cache for treaty data
+    }
+    
+    return data;
+  }
+
+  async getTreaties(type?: string): Promise<any> {
+    return await this.treatyInternationalLawBridge.getTreaties(type);
+  }
+
+  async getTreaty(treatyId: string): Promise<any> {
+    const treaties = await this.treatyInternationalLawBridge.getTreaties();
+    return treaties.find((treaty: any) => treaty.id === treatyId);
+  }
+
+  async getResidentialSchools(province?: string): Promise<any> {
+    return await this.treatyInternationalLawBridge.getResidentialSchools(province);
+  }
+
+  async getIndigenousSymbols(nation?: string): Promise<any> {
+    return await this.treatyInternationalLawBridge.getIndigenousSymbols(nation);
+  }
+
+  async getIndigenousSymbol(symbolId: string): Promise<any> {
+    const symbols = await this.treatyInternationalLawBridge.getIndigenousSymbols();
+    return symbols.find((symbol: any) => symbol.id === symbolId);
+  }
+
+  async getTruthAndReconciliationData(): Promise<any> {
+    return await this.treatyInternationalLawBridge.getTruthAndReconciliationData();
+  }
+
+  async getInternationalLaws(): Promise<any> {
+    const data = await this.treatyInternationalLawBridge.getData('internationalLaws');
+    return data;
+  }
+
+  async getReligiousFreedoms(): Promise<any> {
+    const data = await this.treatyInternationalLawBridge.getData('religiousFreedoms');
+    return data;
+  }
+
+  async searchTreatyInternationalLaw(query: string, filters?: any): Promise<any> {
+    return await this.treatyInternationalLawBridge.search(query, filters);
+  }
+
+  async getTreatyRelatedRepositories(): Promise<any> {
+    return this.treatyInternationalLawBridge.getRelatedRepositories();
+  }
+
+  async getCeremonialTruths(nation?: string, ceremony?: string): Promise<any> {
+    // This would return ceremonial and cultural truth data
+    const symbols = await this.treatyInternationalLawBridge.getIndigenousSymbols(nation);
+    const religiousFreedoms = await this.treatyInternationalLawBridge.getData('religiousFreedoms');
+    
+    return {
+      symbols: symbols.filter((symbol: any) => 
+        !ceremony || symbol.name.toLowerCase().includes(ceremony.toLowerCase())
+      ),
+      spiritualPractices: religiousFreedoms.filter((freedom: any) => 
+        freedom.type === 'indigenous_spirituality'
+      ),
+      culturalNote: 'Ceremonial truths are sacred knowledge shared with respect for Indigenous protocols'
+    };
   }
 }

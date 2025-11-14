@@ -4,6 +4,7 @@ import { federalRoutes } from './federal';
 import { provincialRoutes } from './provincial';
 import { politicalPartyRoutes } from './politicalParties';
 import { electoralRoutes } from './electoral';
+import { treatyInternationalLawRoutes } from './treatyInternationalLaw';
 import { analysisRoutes } from './analysis';
 import { searchRoutes } from './search';
 import { statusRoutes } from './status';
@@ -17,6 +18,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
   provincialRoutes(app, orchestrator, apiBase);
   politicalPartyRoutes(app, orchestrator, apiBase);
   electoralRoutes(app, orchestrator, apiBase);
+  treatyInternationalLawRoutes(app, orchestrator, apiBase);
   analysisRoutes(app, orchestrator, apiBase);
   searchRoutes(app, orchestrator, apiBase);
   statusRoutes(app, orchestrator, apiBase);
@@ -32,6 +34,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         provincial: `${apiBase}/provincial`,
         politicalParties: `${apiBase}/political-parties`,
         electoral: `${apiBase}/electoral`,
+        treatyInternationalLaw: `${apiBase}/treaty-international-law`,
         analysis: `${apiBase}/analysis`,
         search: `${apiBase}/search`,
         status: `${apiBase}/status`
@@ -45,7 +48,14 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         'Government of Ontario (ongov)',
         'PollsterAudit API',
         'OpenNorth Electoral Data',
-        'All Major Canadian Political Parties'
+        'All Major Canadian Political Parties',
+        'Treaty Relations Commission',
+        'Truth and Reconciliation Commission',
+        'Indigenous Rights Framework',
+        'International Law (UN, ICCPR, UNDRIP)',
+        'Residential Schools Database',
+        'Indigenous Cultural Heritage',
+        'Religious Freedom Documentation'
       ]
     });
   });
@@ -60,6 +70,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         `${apiBase}/provincial`,
         `${apiBase}/political-parties`,
         `${apiBase}/electoral`,
+        `${apiBase}/treaty-international-law`,
         `${apiBase}/analysis`,
         `${apiBase}/search`,
         `${apiBase}/status`
