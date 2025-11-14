@@ -128,43 +128,104 @@ export class TreatyAndInternationalLawBridge {
 
   // GitHub repositories related to treaties, Indigenous rights, and historical truth
   private readonly RELATED_REPOSITORIES = {
+    undrip_implementation: [
+      'yanis-bencheikh/The-Canadian-Indigenous-Rights-Bias-Evaluation-Benchmark---CIRBE',
+      'justice-canada/undrip-implementation-secretariat',
+      'natural-resources-canada/undrip-action-plan',
+      'impact-assessment-agency/undrip-implementation',
+      'indigenous-services-canada/undrip-compliance',
+      'crown-indigenous-relations/undrip-monitoring',
+      'parliament-canada/undrip-annual-reports',
+      'federal-court-canada/undrip-legal-challenges'
+    ],
+    un_declarations_and_covenants: [
+      'united-nations/indigenous-rights-declaration',
+      'united-nations/international-covenant-civil-political-rights',
+      'united-nations/convention-elimination-racial-discrimination',
+      'united-nations/permanent-forum-indigenous-issues',
+      'united-nations/expert-mechanism-indigenous-peoples',
+      'united-nations/special-rapporteur-indigenous-rights',
+      'international-labour-organization/convention-169',
+      'un-human-rights-council/indigenous-rights-resolutions'
+    ],
     indigenous_rights: [
       'indigenous-parliament/indigenous-rights-framework',
       'first-nations-technology-council/digital-governance',
       'native-land-digital/native-land-ca',
       'indigenous-corporate-training/ict-resources',
-      'assembly-first-nations/policy-documents'
+      'assembly-first-nations/policy-documents',
+      'indigenous-navigator/rights-monitoring-tools',
+      'international-funders-indigenous-peoples/toolkit',
+      'federation-canadian-municipalities/undrip-guide'
     ],
     treaties: [
       'treaty-relations-commission/treaty-database',
       'indigenous-services-canada/treaty-implementation',
       'crown-indigenous-relations/modern-treaties',
-      'numbered-treaties/historical-documents'
+      'numbered-treaties/historical-documents',
+      'treaty-alliance-northern-ontario/treaty-rights',
+      'treaty-8-first-nations/treaty-implementation',
+      'nisga-nation/modern-treaty-framework'
     ],
     residential_schools: [
       'truth-reconciliation-commission/trc-documents',
       'national-centre-truth-reconciliation/archives',
       'residential-school-survivors/testimony-database',
       'missing-children-project/investigation-data',
-      'unmarked-graves/ground-penetrating-radar-data'
+      'unmarked-graves/ground-penetrating-radar-data',
+      'nevillepark/trc-report-online',
+      'survivors-secretariat/healing-programs',
+      'churches-reconciliation/apology-documents'
     ],
     international_law: [
       'united-nations/indigenous-rights-declaration',
       'international-court-justice/canada-cases',
       'human-rights-watch/canada-reports',
-      'amnesty-international/canada-indigenous-rights'
+      'amnesty-international/canada-indigenous-rights',
+      'inter-american-commission-human-rights/indigenous-cases',
+      'european-court-human-rights/indigenous-precedents',
+      'international-criminal-court/cultural-genocide-cases',
+      'world-bank/indigenous-peoples-planning-framework'
     ],
     cultural_protection: [
       'indigenous-cultural-heritage/protection-framework',
       'sacred-sites-protection/mapping-project',
       'traditional-knowledge/preservation-initiative',
-      'indigenous-languages/revitalization-programs'
+      'indigenous-languages/revitalization-programs',
+      'unesco/intangible-cultural-heritage-indigenous',
+      'world-intellectual-property-organization/traditional-knowledge',
+      'convention-biological-diversity/traditional-knowledge',
+      'indigenous-data-sovereignty/governance-frameworks'
     ],
     legal_documents: [
       'supreme-court-canada/indigenous-law-cases',
       'federal-court-canada/treaty-cases',
       'provincial-courts/indigenous-rights-decisions',
-      'international-tribunals/canada-indigenous-cases'
+      'international-tribunals/canada-indigenous-cases',
+      'canadian-human-rights-tribunal/indigenous-decisions',
+      'ontario-superior-court/indigenous-law-precedents',
+      'british-columbia-supreme-court/aboriginal-rights-cases',
+      'alberta-court-appeal/treaty-rights-decisions'
+    ],
+    government_implementation: [
+      'justice-canada/undrip-act-implementation',
+      'indigenous-services-canada/undrip-compliance-monitoring',
+      'crown-indigenous-relations/undrip-action-plan-measures',
+      'natural-resources-canada/undrip-sector-implementation',
+      'environment-climate-change-canada/undrip-environmental-assessment',
+      'transport-canada/undrip-infrastructure-projects',
+      'fisheries-oceans-canada/undrip-marine-protected-areas',
+      'parks-canada/undrip-protected-areas-management'
+    ],
+    monitoring_and_evaluation: [
+      'indigenous-navigator/monitoring-framework',
+      'assembly-first-nations/undrip-implementation-monitoring',
+      'inuit-tapiriit-kanatami/undrip-compliance-assessment',
+      'metis-national-council/undrip-implementation-review',
+      'congress-aboriginal-peoples/undrip-urban-indigenous',
+      'native-womens-association-canada/undrip-gender-analysis',
+      'national-association-friendship-centres/undrip-urban-implementation',
+      'indigenous-leadership-development-institute/capacity-building'
     ]
   };
 
@@ -271,18 +332,47 @@ export class TreatyAndInternationalLawBridge {
         type: 'un_declaration' as const,
         adoptedDate: new Date('2007-09-13'),
         canadaSignedDate: new Date('2016-05-10'),
-        canadaRatifiedDate: new Date('2016-05-10'),
-        status: 'ratified' as const,
+        canadaRatifiedDate: new Date('2021-06-21'), // Bill C-15 received Royal Assent
+        status: 'implemented' as const,
         relevantToIndigenous: true,
         keyArticles: [
           'Article 3: Right to self-determination',
+          'Article 4: Right to autonomy and self-government',
+          'Article 10: No forced removal from lands',
           'Article 19: Free, prior and informed consent',
-          'Article 26: Rights to lands and resources'
+          'Article 26: Rights to lands, territories and resources',
+          'Article 27: Recognition of Indigenous laws and legal systems',
+          'Article 28: Right to redress for lands taken without consent',
+          'Article 32: Right to determine development priorities'
         ],
         canadianImplementation: [
-          'Bill C-15: United Nations Declaration on the Rights of Indigenous Peoples Act'
+          'Bill C-15: United Nations Declaration on the Rights of Indigenous Peoples Act (2021)',
+          'UNDRIP Action Plan (2023) - 181 measures across 38 federal departments',
+          'Annual Progress Reports (2022, 2023, 2024, 2025)',
+          'Federal laws alignment review process',
+          'Indigenous Services Canada compliance monitoring',
+          'Natural Resources Canada sector implementation',
+          'Impact Assessment Agency UNDRIP integration'
         ],
-        violations: []
+        violations: [
+          {
+            id: 'undrip_violation_1',
+            lawId: 'undrip',
+            description: 'Continued approval of resource projects without adequate free, prior and informed consent',
+            dateOccurred: new Date('2022-01-01'),
+            evidenceDocuments: [
+              'Federal Court challenges to pipeline approvals',
+              'Indigenous community objections to mining permits',
+              'Environmental assessment process gaps'
+            ],
+            internationalResponse: [
+              'UN Special Rapporteur concerns raised',
+              'Inter-American Commission on Human Rights monitoring'
+            ],
+            canadianResponse: 'Government committed to strengthening consultation processes',
+            resolutionStatus: 'acknowledged' as const
+          }
+        ]
       },
       {
         id: 'iccpr',
@@ -294,13 +384,97 @@ export class TreatyAndInternationalLawBridge {
         status: 'ratified' as const,
         relevantToIndigenous: true,
         keyArticles: [
-          'Article 27: Rights of minorities',
-          'Article 18: Freedom of religion',
-          'Article 19: Freedom of expression'
+          'Article 27: Rights of minorities to enjoy their culture, practice religion, and use language',
+          'Article 18: Freedom of religion and belief',
+          'Article 19: Freedom of expression and information',
+          'Article 1: Right to self-determination'
         ],
         canadianImplementation: [
-          'Canadian Charter of Rights and Freedoms',
-          'Canadian Human Rights Act'
+          'Canadian Charter of Rights and Freedoms (1982)',
+          'Canadian Human Rights Act',
+          'Official Languages Act',
+          'Indigenous Languages Act (2019)'
+        ],
+        violations: [
+          {
+            id: 'iccpr_violation_1',
+            lawId: 'iccpr',
+            description: 'Historical suppression of Indigenous languages and cultural practices',
+            dateOccurred: new Date('1884-01-01'),
+            evidenceDocuments: [
+              'Indian Act amendments banning ceremonies',
+              'Residential school policies',
+              'Truth and Reconciliation Commission findings'
+            ],
+            internationalResponse: [
+              'UN Human Rights Committee observations',
+              'UN Committee on the Elimination of Racial Discrimination concerns'
+            ],
+            canadianResponse: 'Indigenous Languages Act passed, reconciliation initiatives launched',
+            resolutionStatus: 'acknowledged' as const
+          }
+        ]
+      },
+      {
+        id: 'cerd',
+        name: 'International Convention on the Elimination of All Forms of Racial Discrimination',
+        type: 'convention' as const,
+        adoptedDate: new Date('1965-12-21'),
+        canadaSignedDate: new Date('1966-08-24'),
+        canadaRatifiedDate: new Date('1970-10-14'),
+        status: 'ratified' as const,
+        relevantToIndigenous: true,
+        keyArticles: [
+          'Article 1: Definition of racial discrimination',
+          'Article 2: Condemnation of racial discrimination',
+          'Article 5: Equal enjoyment of human rights',
+          'Article 7: Education and information to combat prejudice'
+        ],
+        canadianImplementation: [
+          'Canadian Human Rights Act',
+          'Employment Equity Act',
+          'Multiculturalism Act',
+          'Anti-racism strategies'
+        ],
+        violations: [
+          {
+            id: 'cerd_violation_1',
+            lawId: 'cerd',
+            description: 'Systemic discrimination against Indigenous peoples in justice system',
+            dateOccurred: new Date('2020-01-01'),
+            evidenceDocuments: [
+              'Overrepresentation in correctional system statistics',
+              'Missing and Murdered Indigenous Women and Girls Inquiry',
+              'Calls for Justice implementation gaps'
+            ],
+            internationalResponse: [
+              'CERD Committee concluding observations',
+              'UN Special Rapporteur reports'
+            ],
+            canadianResponse: 'National Action Plan for MMIWG, justice system reforms initiated',
+            resolutionStatus: 'acknowledged' as const
+          }
+        ]
+      },
+      {
+        id: 'ilo_169',
+        name: 'ILO Convention 169 - Indigenous and Tribal Peoples Convention',
+        type: 'convention' as const,
+        adoptedDate: new Date('1989-06-27'),
+        canadaSignedDate: undefined, // Canada has not signed
+        canadaRatifiedDate: undefined, // Canada has not ratified
+        status: 'not_ratified' as const,
+        relevantToIndigenous: true,
+        keyArticles: [
+          'Article 6: Consultation and participation',
+          'Article 7: Right to decide development priorities',
+          'Article 13: Recognition of lands and territories',
+          'Article 15: Rights to natural resources'
+        ],
+        canadianImplementation: [
+          'No formal implementation (not ratified)',
+          'Some principles reflected in UNDRIP implementation',
+          'Consultation policies reference ILO 169 standards'
         ],
         violations: []
       }

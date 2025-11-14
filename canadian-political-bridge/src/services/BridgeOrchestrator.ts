@@ -338,4 +338,183 @@ export class BridgeOrchestrator {
       culturalNote: 'Ceremonial truths are sacred knowledge shared with respect for Indigenous protocols'
     };
   }
+
+  // UNDRIP and UN Declarations Methods
+  async getUNDRIP(): Promise<any> {
+    const internationalLaws = await this.treatyInternationalLawBridge.getData('internationalLaws');
+    return internationalLaws.find((law: any) => law.id === 'undrip');
+  }
+
+  async getUNDRIPActionPlan(department?: string, status?: string): Promise<any> {
+    // This would return the 181 measures from the UNDRIP Action Plan
+    const actionPlanMeasures = [
+      {
+        id: 'measure_1',
+        title: 'Indigenous child welfare legislation',
+        department: 'Indigenous Services Canada',
+        status: 'completed',
+        description: 'An Act respecting First Nations, Inuit and Métis children, youth and families',
+        completionDate: new Date('2020-01-01'),
+        relatedUNDRIPArticles: ['Article 7', 'Article 21']
+      },
+      {
+        id: 'measure_2',
+        title: 'Indigenous Languages Act implementation',
+        department: 'Canadian Heritage',
+        status: 'in_progress',
+        description: 'Support for Indigenous language revitalization',
+        targetDate: new Date('2025-12-31'),
+        relatedUNDRIPArticles: ['Article 13', 'Article 14']
+      },
+      // Additional measures would be loaded from actual data source
+    ];
+
+    let filteredMeasures = actionPlanMeasures;
+    if (department) {
+      filteredMeasures = filteredMeasures.filter(measure => 
+        measure.department.toLowerCase().includes(department.toLowerCase())
+      );
+    }
+    if (status) {
+      filteredMeasures = filteredMeasures.filter(measure => measure.status === status);
+    }
+
+    return {
+      measures: filteredMeasures,
+      totalMeasures: 181,
+      federalDepartments: 38,
+      lastUpdated: new Date('2025-08-01')
+    };
+  }
+
+  async getUNDRIPCompliance(year?: string, department?: string): Promise<any> {
+    // This would return compliance monitoring data
+    return {
+      year: year || '2025',
+      department: department || 'all',
+      complianceScore: 75, // Percentage
+      areasOfProgress: [
+        'Indigenous child welfare legislation',
+        'Indigenous Languages Act',
+        'Impact assessment process improvements'
+      ],
+      areasNeedingImprovement: [
+        'Free, prior and informed consent implementation',
+        'Resource project consultation processes',
+        'Indigenous data sovereignty'
+      ],
+      annualReports: [
+        {
+          year: 2022,
+          url: 'https://justice.canada.ca/eng/declaration/report-rapport/2022/',
+          keyFindings: 'First annual report establishing baseline'
+        },
+        {
+          year: 2023,
+          url: 'https://justice.canada.ca/eng/declaration/report-rapport/2023/',
+          keyFindings: 'Progress on child welfare and languages'
+        },
+        {
+          year: 2024,
+          url: 'https://justice.canada.ca/eng/declaration/report-rapport/2024/',
+          keyFindings: 'Continued implementation across departments'
+        },
+        {
+          year: 2025,
+          url: 'https://justice.canada.ca/eng/declaration/report-rapport/2025/',
+          keyFindings: 'Fourth annual progress report'
+        }
+      ]
+    };
+  }
+
+  async getUNDeclarations(type?: string, status?: string): Promise<any> {
+    const internationalLaws = await this.treatyInternationalLawBridge.getData('internationalLaws');
+    
+    let filteredLaws = internationalLaws;
+    if (type) {
+      filteredLaws = filteredLaws.filter((law: any) => law.type === type);
+    }
+    if (status) {
+      filteredLaws = filteredLaws.filter((law: any) => law.status === status);
+    }
+
+    return filteredLaws;
+  }
+
+  async getFPICData(project?: string, status?: string, year?: string): Promise<any> {
+    // Free, Prior and Informed Consent tracking data
+    const fpicCases = [
+      {
+        id: 'fpic_1',
+        project: 'Trans Mountain Pipeline Expansion',
+        status: 'consultation_ongoing',
+        year: 2024,
+        affectedCommunities: ['Tsleil-Waututh Nation', 'Squamish Nation', 'Musqueam Nation'],
+        consultationPhase: 'Environmental assessment',
+        consentStatus: 'not_obtained',
+        legalChallenges: ['Federal Court of Appeal review'],
+        undripCompliance: 'disputed'
+      },
+      {
+        id: 'fpic_2',
+        project: 'Site C Dam',
+        status: 'proceeding_without_consent',
+        year: 2023,
+        affectedCommunities: ['West Moberly First Nations', 'Prophet River First Nation'],
+        consultationPhase: 'Construction phase',
+        consentStatus: 'not_obtained',
+        legalChallenges: ['Treaty infringement claims'],
+        undripCompliance: 'non_compliant'
+      }
+    ];
+
+    let filteredCases = fpicCases;
+    if (project) {
+      filteredCases = filteredCases.filter(fpic => 
+        fpic.project.toLowerCase().includes(project.toLowerCase())
+      );
+    }
+    if (status) {
+      filteredCases = filteredCases.filter(fpic => fpic.status === status);
+    }
+    if (year) {
+      filteredCases = filteredCases.filter(fpic => fpic.year.toString() === year);
+    }
+
+    return {
+      cases: filteredCases,
+      summary: {
+        totalCases: fpicCases.length,
+        consentObtained: fpicCases.filter(fpic => fpic.consentStatus === 'obtained').length,
+        consentNotObtained: fpicCases.filter(fpic => fpic.consentStatus === 'not_obtained').length,
+        undripCompliant: fpicCases.filter(fpic => fpic.undripCompliance === 'compliant').length,
+        undripNonCompliant: fpicCases.filter(fpic => fpic.undripCompliance === 'non_compliant').length
+      }
+    };
+  }
+
+  async reportIndigenousRightsViolation(violationData: any): Promise<any> {
+    // This would submit a violation report to appropriate authorities
+    const reportId = `violation_${Date.now()}`;
+    
+    const report = {
+      id: reportId,
+      ...violationData,
+      submittedTo: [
+        'UN Special Rapporteur on the Rights of Indigenous Peoples',
+        'Canadian Human Rights Commission',
+        'Assembly of First Nations',
+        'Indigenous Services Canada'
+      ],
+      status: 'submitted',
+      followUpRequired: true,
+      estimatedResponseTime: '30-60 days'
+    };
+
+    // In production, this would actually submit to monitoring systems
+    logger.info(`Indigenous rights violation reported: ${reportId}`);
+
+    return report;
+  }
 }

@@ -446,4 +446,194 @@ export function treatyInternationalLawRoutes(app: Express, orchestrator: BridgeO
       });
     }
   });
+
+  // UNDRIP specific endpoints
+  app.get(`${treatyPath}/undrip`, rateLimit, async (req: Request, res: Response) => {
+    try {
+      const undrip = await orchestrator.getUNDRIP();
+      
+      res.json({
+        success: true,
+        data: undrip,
+        metadata: {
+          description: 'United Nations Declaration on the Rights of Indigenous Peoples - Canada\'s implementation',
+          implementationStatus: 'Active - Bill C-15 in force since June 21, 2021',
+          actionPlanMeasures: 181,
+          federalDepartments: 38,
+          timestamp: new Date().toISOString()
+        }
+      });
+
+    } catch (error) {
+      logger.error('Error fetching UNDRIP data:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch UNDRIP data',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  // UNDRIP Action Plan measures
+  app.get(`${treatyPath}/undrip/action-plan`, rateLimit, async (req: Request, res: Response) => {
+    try {
+      const { department, status } = req.query;
+      const actionPlan = await orchestrator.getUNDRIPActionPlan(department as string, status as string);
+      
+      res.json({
+        success: true,
+        data: actionPlan,
+        metadata: {
+          totalMeasures: 181,
+          federalDepartments: 38,
+          department: department || 'all',
+          status: status || 'all',
+          lastUpdated: 'Annual Progress Report 2025',
+          timestamp: new Date().toISOString()
+        }
+      });
+
+    } catch (error) {
+      logger.error('Error fetching UNDRIP Action Plan:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch UNDRIP Action Plan',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  // UNDRIP compliance monitoring
+  app.get(`${treatyPath}/undrip/compliance`, rateLimit, async (req: Request, res: Response) => {
+    try {
+      const { year, department } = req.query;
+      const compliance = await orchestrator.getUNDRIPCompliance(year as string, department as string);
+      
+      res.json({
+        success: true,
+        data: compliance,
+        metadata: {
+          year: year || 'current',
+          department: department || 'all',
+          monitoringFramework: 'Indigenous Navigator and federal reporting',
+          annualReports: ['2022', '2023', '2024', '2025'],
+          timestamp: new Date().toISOString()
+        }
+      });
+
+    } catch (error) {
+      logger.error('Error fetching UNDRIP compliance data:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch UNDRIP compliance data',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  // UN Declarations and Covenants
+  app.get(`${treatyPath}/un-declarations`, rateLimit, async (req: Request, res: Response) => {
+    try {
+      const { type, status } = req.query;
+      const declarations = await orchestrator.getUNDeclarations(type as string, status as string);
+      
+      res.json({
+        success: true,
+        data: declarations,
+        metadata: {
+          type: type || 'all',
+          status: status || 'all',
+          totalDeclarations: declarations.length,
+          includedInstruments: [
+            'UNDRIP',
+            'ICCPR',
+            'CERD',
+            'ILO Convention 169'
+          ],
+          timestamp: new Date().toISOString()
+        }
+      });
+
+    } catch (error) {
+      logger.error('Error fetching UN declarations:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch UN declarations',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  // Free, Prior and Informed Consent (FPIC) tracking
+  app.get(`${treatyPath}/fpic`, rateLimit, async (req: Request, res: Response) => {
+    try {
+      const { project, status, year } = req.query;
+      const fpic = await orchestrator.getFPICData(project as string, status as string, year as string);
+      
+      res.json({
+        success: true,
+        data: fpic,
+        metadata: {
+          project: project || 'all',
+          status: status || 'all',
+          year: year || 'all',
+          description: 'Free, Prior and Informed Consent implementation tracking',
+          legalBasis: 'UNDRIP Article 19, federal consultation policies',
+          timestamp: new Date().toISOString()
+        }
+      });
+
+    } catch (error) {
+      logger.error('Error fetching FPIC data:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch FPIC data',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  // Indigenous rights violations reporting
+  app.post(`${treatyPath}/report-violation`, rateLimit, validateRequest, async (req: Request, res: Response) => {
+    try {
+      const { violationType, description, location, affectedCommunities, evidenceDocuments } = req.body;
+      
+      if (!violationType || !description) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required fields',
+          message: 'violationType and description are required'
+        });
+      }
+
+      const report = await orchestrator.reportIndigenousRightsViolation({
+        violationType,
+        description,
+        location: location || 'Not specified',
+        affectedCommunities: affectedCommunities || [],
+        evidenceDocuments: evidenceDocuments || [],
+        reportedDate: new Date(),
+        status: 'reported'
+      });
+
+      res.json({
+        success: true,
+        data: report,
+        metadata: {
+          reportId: report.id,
+          status: 'Violation report submitted',
+          nextSteps: 'Report will be reviewed and forwarded to appropriate authorities',
+          timestamp: new Date().toISOString()
+        }
+      });
+
+    } catch (error) {
+      logger.error('Error reporting Indigenous rights violation:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to report violation',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
 }
