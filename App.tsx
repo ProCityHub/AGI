@@ -34,6 +34,8 @@ import { initializeBusinessPlatformService } from './services/businessPlatformSe
 import { initializeProsyncEngine } from './services/prosyncEngine';
 import { initializeIrelandGovernanceService } from './services/irelandGovernanceService';
 import { initializeIsraelGovernanceService } from './services/israelGovernanceService';
+import { initializeChinaGovernanceService } from './services/chinaGovernanceService';
+import { initializeANZGovernanceService } from './services/anzGovernanceService';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -57,6 +59,8 @@ const App: React.FC = () => {
     const [showProsyncConsole, setShowProsyncConsole] = useState(false);
     const [showIrelandBridge, setShowIrelandBridge] = useState(false);
     const [showIsraelBridge, setShowIsraelBridge] = useState(false);
+    const [showChinaBridge, setShowChinaBridge] = useState(false);
+    const [showANZBridge, setShowANZBridge] = useState(false);
 
     useEffect(() => {
         if (getUsers().length === 0) {
@@ -109,6 +113,12 @@ const App: React.FC = () => {
             
             // Initialize Israel Governance Service
             initializeIsraelGovernanceService();
+            
+            // Initialize China Governance Service
+            initializeChinaGovernanceService();
+            
+            // Initialize ANZ Governance Service
+            initializeANZGovernanceService();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
@@ -514,6 +524,18 @@ const App: React.FC = () => {
                     icon={<div className="text-2xl">🇮🇱</div>}
                     initialPosition={{ x: 690, y: 250 }}
                     onDoubleClick={() => setShowIsraelBridge(true)}
+                />
+                <DesktopIcon
+                    label="China Bridge"
+                    icon={<div className="text-2xl">🇨🇳</div>}
+                    initialPosition={{ x: 800, y: 250 }}
+                    onDoubleClick={() => setShowChinaBridge(true)}
+                />
+                <DesktopIcon
+                    label="ANZ Bridge"
+                    icon={<div className="text-2xl">🇦🇺🇳🇿</div>}
+                    initialPosition={{ x: 910, y: 250 }}
+                    onDoubleClick={() => setShowANZBridge(true)}
                 />
             </main>
 
