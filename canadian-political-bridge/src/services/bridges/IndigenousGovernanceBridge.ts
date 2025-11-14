@@ -108,25 +108,30 @@ export class IndigenousGovernanceBridge {
   private lastSync: Date | null = null;
   private isInitialized: boolean = false;
 
-  // GitHub repositories related to Indigenous governance and decolonization
+  // GitHub repositories related to Indigenous governance and decolonization across the Americas
   private readonly RELATED_REPOSITORIES = {
-    indigenous_governance: [
+    // CANADA - Indigenous Governance
+    canada_indigenous_governance: [
       'assembly-first-nations/governance-framework',
       'inuit-tapiriit-kanatami/self-government-models',
       'metis-national-council/governance-structures',
       'congress-aboriginal-peoples/urban-governance',
       'indigenous-bar-association/legal-frameworks',
-      'national-indigenous-economic-development-board/governance-economics'
+      'national-indigenous-economic-development-board/governance-economics',
+      'first-nations-technology-council/digital-governance',
+      'indigenous-services-canada/policy-frameworks',
+      'crown-indigenous-relations/nation-to-nation',
+      'indigenous-leadership-development/capacity-building'
     ],
-    decolonization: [
+    
+    // CANADA - Decolonization & Indian Act
+    canada_decolonization: [
       'decolonizing-canada/legal-frameworks',
       'indigenous-law-research-unit/decolonization-strategies',
       'truth-reconciliation-commission/decolonization-recommendations',
       'calls-to-action-implementation/decolonization-tracking',
       'indigenous-governance-institute/best-practices',
-      'first-nations-governance-centre/capacity-building'
-    ],
-    indian_act_analysis: [
+      'first-nations-governance-centre/capacity-building',
       'indian-act-analysis/colonial-provisions',
       'indigenous-rights-coalition/indian-act-critique',
       'legal-scholars-collective/indian-act-replacement',
@@ -134,29 +139,268 @@ export class IndigenousGovernanceBridge {
       'decolonial-legal-clinic/indian-act-challenges',
       'indigenous-constitutional-law/indian-act-alternatives'
     ],
-    self_government_agreements: [
-      'nisga-nation/self-government-agreement',
-      'nunavut-government/territorial-government',
-      'yukon-first-nations/self-government-agreements',
-      'bc-treaty-commission/modern-treaties',
-      'comprehensive-land-claims/self-government-provisions',
-      'sectoral-self-government/education-health-agreements'
+
+    // UNITED STATES - Tribal Sovereignty & Federal Recognition
+    usa_tribal_sovereignty: [
+      'national-congress-american-indians/tribal-sovereignty',
+      'native-american-rights-fund/legal-advocacy',
+      'bureau-indian-affairs/federal-recognition',
+      'indian-law-resource-center/international-advocacy',
+      'native-american-finance-officers/tribal-finance',
+      'national-indian-gaming-association/economic-development',
+      'american-indian-higher-education/education-sovereignty',
+      'native-american-journalists-association/media-sovereignty',
+      'inter-tribal-council/cooperative-governance',
+      'indigenous-peoples-law-policy/legal-frameworks',
+      'tribal-climate-change-guide/environmental-sovereignty',
+      'native-land-digital/territorial-acknowledgment',
+      'first-nations-development-institute/economic-empowerment',
+      'national-urban-indian-family-coalition/urban-indigenous',
+      'indigenous-wellness-research-institute/health-sovereignty'
     ],
-    indigenous_legal_systems: [
-      'indigenous-law-lodge/legal-traditions',
-      'indigenous-legal-orders/customary-law',
-      'first-nations-courts/indigenous-justice',
-      'indigenous-legal-education/law-schools',
-      'indigenous-bar-association/legal-practitioners',
-      'indigenous-legal-research/comparative-systems'
+
+    // UNITED STATES - Native American Legal Systems
+    usa_native_legal_systems: [
+      'tribal-court-clearinghouse/judicial-systems',
+      'national-american-indian-court-judges/justice-systems',
+      'indigenous-peacemaking/restorative-justice',
+      'tribal-law-policy-institute/legal-education',
+      'native-american-constitution-project/constitutional-law',
+      'indigenous-values-initiative/traditional-governance',
+      'center-world-indigenous-studies/comparative-law',
+      'american-indian-law-center/legal-research',
+      'native-american-bar-association/legal-practitioners',
+      'tribal-supreme-court-project/appellate-systems'
     ],
-    constitutional_reform: [
-      'constitutional-reform-indigenous/section-35-enhancement',
-      'indigenous-constitutional-convention/new-frameworks',
-      'federal-indigenous-relations/constitutional-dialogue',
-      'indigenous-rights-constitutional/amendment-proposals',
-      'constitutional-scholars/indigenous-governance',
-      'indigenous-constitutional-law/reform-proposals'
+
+    // MEXICO - Indigenous Rights & Autonomy
+    mexico_indigenous_rights: [
+      'congreso-nacional-indigena/autonomia-indigena',
+      'instituto-nacional-pueblos-indigenas/derechos-colectivos',
+      'coordinadora-pueblos-indigenas/libre-determinacion',
+      'asamblea-nacional-indigena/gobiernos-autonomos',
+      'red-mexicana-organizaciones-indigenas/participacion-politica',
+      'centro-derechos-humanos-montaña/defensa-territorial',
+      'consejo-guerrerense-500-años/resistencia-indigena',
+      'enlace-continental-mujeres-indigenas/liderazgo-femenino',
+      'alianza-biodiversidad/conocimientos-tradicionales',
+      'red-indigena-turismo/desarrollo-sustentable'
+    ],
+
+    // GUATEMALA - Maya Rights & Self-Determination
+    guatemala_maya_rights: [
+      'coordinadora-organizaciones-pueblo-maya/autodeterminacion',
+      'academia-lenguas-mayas/revitalizacion-linguistica',
+      'consejo-pueblos-mayas/sistema-juridico-maya',
+      'defensoria-maya/derechos-colectivos',
+      'fundacion-rigoberta-menchu/paz-justicia',
+      'comite-unidad-campesina/derechos-territoriales',
+      'asociacion-desarrollo-integral/educacion-maya',
+      'red-mujeres-mayas/participacion-politica',
+      'consejo-ancianos-mayas/sabiduria-ancestral',
+      'movimiento-tzuk-kim-pop/resistencia-cultural'
+    ],
+
+    // PERU - Quechua & Amazonian Indigenous Rights
+    peru_indigenous_rights: [
+      'interethnic-association-rainforest/amazonian-rights',
+      'confederacion-nacionalidades-amazonicas/territorial-defense',
+      'organizacion-regional-aidesep/indigenous-governance',
+      'centro-culturas-indigenas/cultural-preservation',
+      'instituto-bien-comun/territorial-mapping',
+      'servindi-comunicacion/indigenous-media',
+      'chirapaq-centro-culturas/andean-rights',
+      'coordinadora-organizaciones-indigenas/political-participation',
+      'programa-democracia-gobernabilidad/indigenous-governance',
+      'red-interamericana-lideres-indigenas/continental-advocacy'
+    ],
+
+    // BOLIVIA - Plurinational State & Indigenous Governance
+    bolivia_plurinational: [
+      'estado-plurinacional-bolivia/constitucion-indigena',
+      'confederacion-pueblos-indigenas/autonomias-indigenas',
+      'consejo-nacional-ayllus-markas/gobierno-originario',
+      'coordinadora-pueblos-etnias/libre-determinacion',
+      'fundacion-tierra/derechos-territoriales',
+      'centro-estudios-juridicos/pluralismo-juridico',
+      'asamblea-pueblo-guarani/autonomia-guarani',
+      'confederacion-mujeres-bartolina-sisa/liderazgo-femenino',
+      'movimiento-sin-tierra/reforma-agraria',
+      'red-comunicacion-indigena/medios-comunitarios'
+    ],
+
+    // ECUADOR - Plurinational Constitution & Kichwa Rights
+    ecuador_plurinational: [
+      'confederacion-nacionalidades-indigenas/conaie-governance',
+      'pachakutik-movimiento-plurinacional/political-participation',
+      'ecuarunari-confederacion-kichwa/andean-governance',
+      'confeniae-amazonia/amazonian-rights',
+      'coica-coordinadora-indigenas/continental-advocacy',
+      'fundacion-pachamama/environmental-rights',
+      'instituto-ciencias-indigenas/education-intercultural',
+      'red-mujeres-indigenas/gender-equality',
+      'consejo-pueblos-montubios/coastal-rights',
+      'fundacion-kawsay/buen-vivir-philosophy'
+    ],
+
+    // COLOMBIA - Indigenous Territorial Entities
+    colombia_indigenous_territories: [
+      'organizacion-nacional-indigenas/onic-governance',
+      'consejo-regional-indigena-cauca/territorial-autonomy',
+      'organizacion-indigenas-amazonia/opiac-rights',
+      'autoridades-indigenas-colombia/aico-political',
+      'mesa-permanente-concertacion/dialogue-mechanisms',
+      'fundacion-gaia-amazonas/territorial-defense',
+      'centro-cooperacion-indigena/capacity-building',
+      'asociacion-cabildos-norte-cauca/regional-governance',
+      'consejo-territorial-reintegration/peace-processes',
+      'red-mujeres-indigenas-colombia/women-leadership'
+    ],
+
+    // VENEZUELA - Indigenous Peoples & Habitat Rights
+    venezuela_indigenous_habitat: [
+      'consejo-nacional-indio-venezuela/conive-advocacy',
+      'organizacion-regional-pueblos-indigenas/orpia-amazonia',
+      'federacion-indigenas-estado-bolivar/territorial-rights',
+      'asociacion-yanomami/cultural-preservation',
+      'consejo-pueblos-warao/delta-governance',
+      'fundacion-etnollano/plains-indigenous',
+      'red-organizaciones-indigenas-guayana/regional-coordination',
+      'centro-estudios-indigenas/research-advocacy',
+      'programa-venezolano-educacion/indigenous-education',
+      'coordinadora-mujeres-indigenas/gender-participation'
+    ],
+
+    // BRAZIL - Indigenous Territories & FUNAI
+    brazil_indigenous_territories: [
+      'articulacao-povos-indigenas-brasil/apib-advocacy',
+      'coordenacao-organizacoes-indigenas-amazonia/coiab-rights',
+      'instituto-socioambiental/territorial-monitoring',
+      'conselho-indigenista-missionario/cimi-support',
+      'fundacao-nacional-indio/funai-policies',
+      'hutukara-associacao-yanomami/territorial-defense',
+      'instituto-raoni/environmental-protection',
+      'coordenacao-povos-indigenas-acre/acre-governance',
+      'federacao-organizacoes-indigenas-rio-negro/foirn-rights',
+      'associacao-terra-indigena-xingu/atix-conservation',
+      'movimento-mulheres-indigenas/women-leadership',
+      'rede-jovens-indigenas/youth-activism',
+      'observatorio-direitos-humanos-indigenas/human-rights',
+      'centro-trabalho-indigenista/cti-advocacy',
+      'comissao-pro-indio-sao-paulo/legal-support'
+    ],
+
+    // CHILE - Mapuche Rights & Territorial Recovery
+    chile_mapuche_rights: [
+      'consejo-todas-tierras/territorial-recovery',
+      'coordinadora-arauco-malleco/resistance-movement',
+      'identidad-lafkenche/coastal-mapuche',
+      'corporacion-nacional-desarrollo-indigena/conadi-policies',
+      'fundacion-instituto-indigena/cultural-preservation',
+      'centro-estudios-interculturales/research-advocacy',
+      'red-mujeres-mapuche/women-leadership',
+      'asociacion-municipalidades-territorio-lafkenche/local-governance',
+      'consejo-lonkos/traditional-authorities',
+      'wallmapuwen-partido-mapuche/political-participation'
+    ],
+
+    // ARGENTINA - Indigenous Peoples & Land Rights
+    argentina_indigenous_lands: [
+      'encuentro-nacional-organizaciones-territoriales/enotpo-advocacy',
+      'instituto-nacional-asuntos-indigenas/inai-policies',
+      'coordinadora-organizaciones-mapuche/territorial-rights',
+      'asamblea-pueblo-guarani/guarani-governance',
+      'consejo-participacion-indigena/cpi-dialogue',
+      'fundacion-desde-america/indigenous-support',
+      'red-puna-organizaciones/andean-rights',
+      'asociacion-interetnica-desarrollo-selva/aidis-amazonia',
+      'movimiento-mujeres-indigenas/women-participation',
+      'centro-estudios-legales-sociales/cels-advocacy'
+    ],
+
+    // PARAGUAY - Guarani Rights & Bilingual Education
+    paraguay_guarani_rights: [
+      'coordinadora-lideres-indigenas/cli-advocacy',
+      'federacion-asociaciones-guarani/territorial-rights',
+      'instituto-paraguayo-indigena/indi-policies',
+      'centro-estudios-antropologicos/indigenous-research',
+      'fundacion-tierraviva/environmental-rights',
+      'asociacion-indigenas-paraguay/aip-coordination',
+      'consejo-nacional-educacion-indigena/bilingual-education',
+      'red-mujeres-rurales-indigenas/women-empowerment',
+      'organizacion-payipie-ichadie/guarani-culture',
+      'centro-documentacion-estudios/indigenous-documentation'
+    ],
+
+    // URUGUAY - Charrua Heritage & Recognition
+    uruguay_charrua_heritage: [
+      'consejo-nacion-charrua/cultural-revival',
+      'asociacion-descendientes-charrua/heritage-preservation',
+      'centro-estudios-indigenas-uruguay/research-advocacy',
+      'fundacion-charrua/identity-recovery',
+      'red-organizaciones-indigenas-uruguay/coordination',
+      'museo-indigena-tacuarembo/cultural-preservation',
+      'instituto-investigacion-etnologica/academic-support',
+      'movimiento-identidad-charrua/political-recognition',
+      'coordinadora-pueblos-originarios/indigenous-rights',
+      'centro-cultural-indigena/community-development'
+    ],
+
+    // PAN-AMERICAN Indigenous Networks
+    pan_american_indigenous: [
+      'coordinadora-organizaciones-indigenas-cuenca-amazonica/coica-continental',
+      'enlace-continental-mujeres-indigenas/ecmi-women',
+      'fondo-desarrollo-pueblos-indigenas/fund-development',
+      'consejo-continental-nacion-guarani/guarani-nation',
+      'red-continental-comunicacion-indigena/media-network',
+      'alianza-territorial-mapuche/transnational-mapuche',
+      'confederacion-pueblos-kichwa/andean-confederation',
+      'red-juventudes-indigenas-americas/youth-network',
+      'consejo-indigena-centroamerica/central-american-council',
+      'foro-permanente-cuestiones-indigenas/un-forum',
+      'grupo-trabajo-asuntos-indigenas/oas-working-group',
+      'red-investigadores-indigenas/academic-network',
+      'alianza-pueblos-indigenas-islas/island-peoples',
+      'coordinadora-andina-organizaciones-indigenas/caoi-andean',
+      'consejo-mundial-pueblos-indigenas/world-council'
+    ],
+
+    // Digital Sovereignty & Technology
+    indigenous_digital_sovereignty: [
+      'indigenous-protocol-ai/artificial-intelligence',
+      'native-land-digital/territorial-mapping',
+      'first-nations-technology-council/digital-infrastructure',
+      'indigenous-futures-collective/technology-sovereignty',
+      'decolonising-digital-platforms/platform-governance',
+      'indigenous-data-sovereignty-network/data-governance',
+      'native-bioscience/traditional-knowledge-protection',
+      'indigenous-language-technology/language-preservation',
+      'tribal-digital-village/connectivity-solutions',
+      'indigenous-innovation-initiative/tech-entrepreneurship',
+      'native-cdfi-network/financial-technology',
+      'indigenous-mapping-network/geospatial-sovereignty',
+      'first-nations-gaming-enterprises/digital-economy',
+      'indigenous-media-freedom-alliance/communication-rights',
+      'native-renewable-energy/sustainable-technology'
+    ],
+
+    // Climate Change & Environmental Justice
+    indigenous_climate_justice: [
+      'indigenous-environmental-network/climate-advocacy',
+      'amazon-conservation-association/rainforest-protection',
+      'arctic-council-indigenous-peoples/arctic-governance',
+      'pacific-indigenous-climate-prediction/ocean-knowledge',
+      'indigenous-fire-management/traditional-burning',
+      'native-renewable-energy-alliance/clean-energy',
+      'indigenous-seed-keepers-network/agricultural-sovereignty',
+      'first-nations-fisheries-council/marine-stewardship',
+      'indigenous-carbon-credits/environmental-economics',
+      'native-plant-society/biodiversity-conservation',
+      'indigenous-water-rights-coalition/water-sovereignty',
+      'traditional-ecological-knowledge/climate-adaptation',
+      'indigenous-permaculture-network/sustainable-agriculture',
+      'native-forest-restoration/ecosystem-recovery',
+      'indigenous-climate-science/traditional-weather-knowledge'
     ]
   };
 
@@ -260,9 +504,10 @@ export class IndigenousGovernanceBridge {
 
   private async initializeIndigenousGovernmentModels(): Promise<void> {
     const governmentModels = [
+      // CANADA - First Nations Inherent Governance
       {
         id: 'first_nations_inherent_governance',
-        name: 'First Nations Inherent Governance Model',
+        name: 'First Nations Inherent Governance Model (Canada)',
         type: 'nation_based' as const,
         jurisdiction: [
           'Citizenship and membership',
@@ -329,77 +574,375 @@ export class IndigenousGovernanceBridge {
           }
         ]
       },
+
+      // USA - Tribal Sovereignty Model
       {
-        id: 'inuit_territorial_governance',
-        name: 'Inuit Territorial Governance Model',
+        id: 'usa_tribal_sovereignty',
+        name: 'US Tribal Sovereignty Model',
+        type: 'nation_based' as const,
+        jurisdiction: [
+          'Tribal membership determination',
+          'Tribal courts and justice systems',
+          'Gaming and economic development',
+          'Natural resource management',
+          'Environmental regulation',
+          'Taxation within reservation',
+          'Cultural preservation',
+          'Education and language programs',
+          'Health and social services',
+          'Housing and infrastructure'
+        ],
+        constitutionalBasis: [
+          'US Constitution Commerce Clause',
+          'Federal trust responsibility',
+          'Treaty rights',
+          'Indian Self-Determination Act',
+          'Tribal Self-Governance Act'
+        ],
+        selfGovernmentAgreements: [
+          'Self-governance compacts',
+          'Gaming compacts',
+          'Co-management agreements',
+          'Federal recognition processes'
+        ],
+        lawMakingPowers: [
+          'Inherent sovereignty',
+          'Federal recognition authority',
+          'Tribal constitutions',
+          'Tribal codes and ordinances'
+        ],
+        fiscalArrangements: [
+          {
+            id: 'usa_fiscal_1',
+            type: 'federal_transfer',
+            amount: 0,
+            conditions: ['Bureau of Indian Affairs funding', 'Indian Health Service', 'Gaming revenue'],
+            accountabilityMechanisms: ['Federal oversight', 'Tribal audits', 'Community accountability']
+          }
+        ],
+        intergovernmentalRelations: [
+          {
+            id: 'usa_igr_1',
+            level: 'federal',
+            agreementType: 'Government-to-government relationship',
+            areas: ['Trust responsibility', 'Treaty implementation', 'Federal programs'],
+            disputeResolution: ['Federal courts', 'Tribal courts', 'Alternative dispute resolution']
+          }
+        ],
+        citizenshipCriteria: [
+          'Tribal enrollment requirements',
+          'Blood quantum (varies by tribe)',
+          'Lineal descent',
+          'Adoption procedures',
+          'Tribal citizenship laws'
+        ],
+        institutions: [
+          {
+            id: 'usa_inst_1',
+            name: 'Tribal Council',
+            type: 'legislative',
+            mandate: 'Tribal governance and law-making',
+            powers: ['Enact tribal laws', 'Manage tribal resources', 'Represent tribe'],
+            accountabilityMechanisms: ['Tribal elections', 'Community meetings', 'Traditional governance'],
+            traditionalGovernanceElements: ['Clan systems', 'Traditional councils', 'Elder advisory']
+          }
+        ]
+      },
+
+      // BOLIVIA - Plurinational State Model
+      {
+        id: 'bolivia_plurinational',
+        name: 'Bolivia Plurinational State Model',
+        type: 'nation_based' as const,
+        jurisdiction: [
+          'Indigenous autonomies (Autonomías Indígenas)',
+          'Original indigenous jurisdiction',
+          'Natural resource co-management',
+          'Cultural and linguistic rights',
+          'Traditional justice systems',
+          'Territorial management',
+          'Economic development planning',
+          'Environmental protection',
+          'Education in native languages',
+          'Health with traditional medicine'
+        ],
+        constitutionalBasis: [
+          'Plurinational Constitution of Bolivia (2009)',
+          'Indigenous autonomy framework',
+          'Original indigenous nations recognition',
+          'Collective rights provisions',
+          'Territorial rights'
+        ],
+        selfGovernmentAgreements: [
+          'Indigenous autonomy statutes',
+          'Territorial conversion processes',
+          'Self-governance charters',
+          'Resource management agreements'
+        ],
+        lawMakingPowers: [
+          'Indigenous jurisdiction',
+          'Traditional law application',
+          'Territorial governance',
+          'Cultural norm enforcement'
+        ],
+        fiscalArrangements: [
+          {
+            id: 'bolivia_fiscal_1',
+            type: 'resource_revenue_sharing',
+            amount: 0,
+            conditions: ['Hydrocarbon revenues', 'Mining royalties', 'Municipal transfers'],
+            accountabilityMechanisms: ['Community assemblies', 'Traditional accountability', 'State oversight']
+          }
+        ],
+        intergovernmentalRelations: [
+          {
+            id: 'bolivia_igr_1',
+            level: 'federal',
+            agreementType: 'Plurinational coordination',
+            areas: ['Autonomy implementation', 'Resource sharing', 'Cultural recognition'],
+            disputeResolution: ['Constitutional Tribunal', 'Indigenous justice', 'Mediation']
+          }
+        ],
+        citizenshipCriteria: [
+          'Indigenous nation membership',
+          'Territorial belonging',
+          'Cultural identity',
+          'Community recognition',
+          'Traditional criteria'
+        ],
+        institutions: [
+          {
+            id: 'bolivia_inst_1',
+            name: 'Indigenous Assembly',
+            type: 'legislative',
+            mandate: 'Indigenous self-governance',
+            powers: ['Indigenous laws', 'Territory management', 'Cultural preservation'],
+            accountabilityMechanisms: ['Community assemblies', 'Traditional authorities', 'Consensus decision-making'],
+            traditionalGovernanceElements: ['Ayllu system', 'Mallku leadership', 'Rotational authority']
+          }
+        ]
+      },
+
+      // ECUADOR - Plurinational Constitution Model
+      {
+        id: 'ecuador_plurinational',
+        name: 'Ecuador Plurinational Constitution Model',
+        type: 'nation_based' as const,
+        jurisdiction: [
+          'Indigenous territorial circumscriptions',
+          'Collective rights exercise',
+          'Traditional justice systems',
+          'Intercultural education',
+          'Traditional medicine practices',
+          'Natural resource consultation',
+          'Cultural patrimony protection',
+          'Language preservation',
+          'Environmental stewardship',
+          'Economic development planning'
+        ],
+        constitutionalBasis: [
+          'Constitution of Ecuador (2008)',
+          'Plurinational state recognition',
+          'Collective rights (Articles 56-60)',
+          'Territorial rights',
+          'Cultural diversity protection'
+        ],
+        selfGovernmentAgreements: [
+          'Territorial circumscription creation',
+          'Consultation protocols',
+          'Co-management agreements',
+          'Cultural preservation pacts'
+        ],
+        lawMakingPowers: [
+          'Traditional justice application',
+          'Internal governance norms',
+          'Cultural regulation',
+          'Territorial management'
+        ],
+        fiscalArrangements: [
+          {
+            id: 'ecuador_fiscal_1',
+            type: 'federal_transfer',
+            amount: 0,
+            conditions: ['Constitutional budget allocation', 'Development project funding', 'Cultural preservation funds'],
+            accountabilityMechanisms: ['Community oversight', 'Traditional accountability', 'State monitoring']
+          }
+        ],
+        intergovernmentalRelations: [
+          {
+            id: 'ecuador_igr_1',
+            level: 'federal',
+            agreementType: 'Plurinational coordination',
+            areas: ['Rights implementation', 'Territorial recognition', 'Cultural protection'],
+            disputeResolution: ['Constitutional Court', 'Indigenous justice', 'Intercultural dialogue']
+          }
+        ],
+        citizenshipCriteria: [
+          'Indigenous nationality membership',
+          'Cultural identity',
+          'Territorial connection',
+          'Community recognition',
+          'Traditional belonging'
+        ],
+        institutions: [
+          {
+            id: 'ecuador_inst_1',
+            name: 'Indigenous Council',
+            type: 'executive',
+            mandate: 'Indigenous governance and representation',
+            powers: ['Traditional justice', 'Territory management', 'Cultural decisions'],
+            accountabilityMechanisms: ['Community assemblies', 'Traditional authorities', 'Consensus processes'],
+            traditionalGovernanceElements: ['Minga collective work', 'Taita/Mama leadership', 'Circular decision-making']
+          }
+        ]
+      },
+
+      // BRAZIL - Indigenous Territory Model
+      {
+        id: 'brazil_indigenous_territories',
+        name: 'Brazil Indigenous Territory Model',
         type: 'territorial' as const,
         jurisdiction: [
-          'Public government serving Inuit majority',
-          'Land and resource management',
-          'Education in Inuktitut',
-          'Health and social services',
-          'Justice system',
-          'Economic development',
-          'Environmental protection'
-        ],
-        constitutionalBasis: [
-          'Nunavut Act',
-          'Nunavut Land Claims Agreement',
-          'Section 35 rights',
-          'Territorial jurisdiction'
-        ],
-        selfGovernmentAgreements: [
-          'Nunavut Land Claims Agreement',
-          'Devolution agreements',
-          'Co-management agreements'
-        ],
-        lawMakingPowers: [
-          'Territorial legislative powers',
-          'Co-management authority',
-          'Inuit Qaujimajatuqangit integration'
-        ],
-        fiscalArrangements: [],
-        intergovernmentalRelations: [],
-        citizenshipCriteria: [
-          'Territorial residency',
-          'Inuit beneficiary status',
-          'Cultural and linguistic connection'
-        ],
-        institutions: []
-      },
-      {
-        id: 'metis_settlements_governance',
-        name: 'Métis Settlements Governance Model',
-        type: 'metis_settlements' as const,
-        jurisdiction: [
-          'Settlement lands management',
-          'Natural resource development',
+          'Indigenous territory management',
+          'Traditional resource use',
           'Cultural preservation',
-          'Economic development',
-          'Local government services'
+          'Environmental protection',
+          'Traditional governance systems',
+          'Language maintenance',
+          'Traditional medicine',
+          'Sustainable development',
+          'Education in native languages',
+          'Territorial surveillance'
         ],
         constitutionalBasis: [
-          'Métis Settlements Act (Alberta)',
-          'Section 35 rights',
-          'Métis Settlement General Council Act'
+          'Brazilian Constitution (1988) Articles 231-232',
+          'Indigenous territory recognition',
+          'FUNAI (National Indigenous Foundation)',
+          'Traditional occupation rights',
+          'Cultural protection guarantees'
         ],
         selfGovernmentAgreements: [
-          'Métis Settlements Accord',
-          'Framework Agreement'
+          'Territory demarcation processes',
+          'Management plans',
+          'Surveillance agreements',
+          'Cultural preservation protocols'
         ],
         lawMakingPowers: [
-          'By-law making powers',
-          'Land use planning',
-          'Resource management'
+          'Traditional governance',
+          'Internal organization',
+          'Cultural norms',
+          'Territory management rules'
         ],
-        fiscalArrangements: [],
-        intergovernmentalRelations: [],
+        fiscalArrangements: [
+          {
+            id: 'brazil_fiscal_1',
+            type: 'federal_transfer',
+            amount: 0,
+            conditions: ['FUNAI funding', 'Health service funding', 'Education support'],
+            accountabilityMechanisms: ['FUNAI oversight', 'Community control', 'Traditional accountability']
+          }
+        ],
+        intergovernmentalRelations: [
+          {
+            id: 'brazil_igr_1',
+            level: 'federal',
+            agreementType: 'Constitutional protection',
+            areas: ['Territory demarcation', 'Rights protection', 'Service delivery'],
+            disputeResolution: ['Federal courts', 'Traditional justice', 'FUNAI mediation']
+          }
+        ],
         citizenshipCriteria: [
-          'Métis ancestry',
-          'Settlement membership',
-          'Cultural connection'
+          'Indigenous ethnicity',
+          'Community recognition',
+          'Cultural identity',
+          'Territorial connection',
+          'Traditional belonging'
         ],
-        institutions: []
+        institutions: [
+          {
+            id: 'brazil_inst_1',
+            name: 'Traditional Leadership',
+            type: 'executive',
+            mandate: 'Community governance and representation',
+            powers: ['Traditional decisions', 'Territory protection', 'Cultural leadership'],
+            accountabilityMechanisms: ['Community consensus', 'Traditional accountability', 'Elder guidance'],
+            traditionalGovernanceElements: ['Cacique leadership', 'Pajé spiritual guidance', 'Community assemblies']
+          }
+        ]
+      },
+
+      // MEXICO - Indigenous Autonomy Model
+      {
+        id: 'mexico_indigenous_autonomy',
+        name: 'Mexico Indigenous Autonomy Model',
+        type: 'nation_based' as const,
+        jurisdiction: [
+          'Indigenous municipality governance',
+          'Traditional justice systems',
+          'Cultural and linguistic rights',
+          'Traditional territory management',
+          'Customary law application',
+          'Community development planning',
+          'Natural resource management',
+          'Traditional medicine practices',
+          'Indigenous education systems',
+          'Cultural patrimony protection'
+        ],
+        constitutionalBasis: [
+          'Mexican Constitution Article 2',
+          'Indigenous rights recognition',
+          'San Andrés Accords principles',
+          'ILO Convention 169 ratification',
+          'Cultural diversity protection'
+        ],
+        selfGovernmentAgreements: [
+          'Indigenous municipality recognition',
+          'Autonomy agreements',
+          'Traditional justice protocols',
+          'Cultural preservation pacts'
+        ],
+        lawMakingPowers: [
+          'Traditional governance systems',
+          'Customary law application',
+          'Internal organization',
+          'Cultural norm enforcement'
+        ],
+        fiscalArrangements: [
+          {
+            id: 'mexico_fiscal_1',
+            type: 'federal_transfer',
+            amount: 0,
+            conditions: ['Municipal transfers', 'Indigenous development funds', 'Cultural preservation funding'],
+            accountabilityMechanisms: ['Community assemblies', 'Traditional accountability', 'Municipal oversight']
+          }
+        ],
+        intergovernmentalRelations: [
+          {
+            id: 'mexico_igr_1',
+            level: 'federal',
+            agreementType: 'Constitutional recognition',
+            areas: ['Rights implementation', 'Autonomy recognition', 'Cultural protection'],
+            disputeResolution: ['Federal courts', 'Traditional justice', 'Human rights commissions']
+          }
+        ],
+        citizenshipCriteria: [
+          'Indigenous community membership',
+          'Cultural identity',
+          'Community recognition',
+          'Traditional belonging',
+          'Linguistic connection'
+        ],
+        institutions: [
+          {
+            id: 'mexico_inst_1',
+            name: 'Traditional Assembly',
+            type: 'legislative',
+            mandate: 'Community governance and decision-making',
+            powers: ['Traditional laws', 'Community decisions', 'Cultural preservation'],
+            accountabilityMechanisms: ['Community assemblies', 'Traditional authorities', 'Consensus decision-making'],
+            traditionalGovernanceElements: ['Tequio collective work', 'Cargo system', 'Elder councils']
+          }
+        ]
       }
     ];
 
@@ -502,25 +1045,120 @@ export class IndigenousGovernanceBridge {
 
   private async initializeIndigenousLegalSystems(): Promise<void> {
     const legalSystems = [
+      // NORTH AMERICA - Canada/USA
       {
         id: 'haudenosaunee_law',
-        nation: 'Haudenosaunee (Six Nations)',
-        legalTradition: 'Great Law of Peace',
-        lawSources: ['Oral tradition', 'Wampum records', 'Clan mothers\' teachings'],
-        disputeResolution: ['Clan councils', 'Traditional mediation', 'Longhouse ceremonies'],
-        enforcement: ['Community sanctions', 'Restoration', 'Banishment (rare)'],
+        nation: 'Haudenosaunee (Six Nations) - Canada/USA',
+        legalTradition: 'Great Law of Peace (Gayanashagowa)',
+        lawSources: ['Oral tradition', 'Wampum records', 'Clan mothers\' teachings', 'Longhouse protocols'],
+        disputeResolution: ['Clan councils', 'Traditional mediation', 'Longhouse ceremonies', 'Peacemaking circles'],
+        enforcement: ['Community sanctions', 'Restoration', 'Banishment (rare)', 'Spiritual consequences'],
         integrationWithCanadianLaw: 'Parallel system with coordination mechanisms',
         recognitionStatus: 'partially_recognized' as const
       },
       {
         id: 'anishinaabe_law',
-        nation: 'Anishinaabe',
-        legalTradition: 'Seven Fires teachings',
-        lawSources: ['Oral teachings', 'Ceremonial law', 'Clan responsibilities'],
-        disputeResolution: ['Circle processes', 'Elder mediation', 'Healing ceremonies'],
-        enforcement: ['Community healing', 'Restoration', 'Teaching'],
+        nation: 'Anishinaabe (Ojibwe/Chippewa) - Canada/USA',
+        legalTradition: 'Seven Fires teachings (Nizhwaaswi-mishomis)',
+        lawSources: ['Oral teachings', 'Ceremonial law', 'Clan responsibilities', 'Midewiwin teachings'],
+        disputeResolution: ['Circle processes', 'Elder mediation', 'Healing ceremonies', 'Talking circles'],
+        enforcement: ['Community healing', 'Restoration', 'Teaching', 'Ceremonial cleansing'],
         integrationWithCanadianLaw: 'Restorative justice integration',
         recognitionStatus: 'under_negotiation' as const
+      },
+      {
+        id: 'navajo_law',
+        nation: 'Diné (Navajo Nation) - USA',
+        legalTradition: 'Diné Fundamental Law (Diné bi beenahaz\'áanii)',
+        lawSources: ['Traditional teachings', 'Clan law', 'Ceremonial instructions', 'Holy People guidance'],
+        disputeResolution: ['Peacemaking (Hózhóójí naat\'aanii)', 'Clan mediation', 'Traditional courts', 'Talking things out'],
+        enforcement: ['Restoration of harmony', 'Community service', 'Ceremonial healing', 'Compensation'],
+        integrationWithCanadianLaw: 'Tribal court system with traditional elements',
+        recognitionStatus: 'fully_recognized' as const
+      },
+      {
+        id: 'cherokee_law',
+        nation: 'Cherokee Nation - USA',
+        legalTradition: 'Cherokee Traditional Law',
+        lawSources: ['Ancient teachings', 'Clan law', 'Stomp dance protocols', 'Medicine teachings'],
+        disputeResolution: ['Clan justice', 'Community councils', 'Traditional mediation', 'Stomp ground resolution'],
+        enforcement: ['Community accountability', 'Restoration', 'Spiritual consequences', 'Clan sanctions'],
+        integrationWithCanadianLaw: 'Tribal courts with traditional law integration',
+        recognitionStatus: 'partially_recognized' as const
+      },
+      // MESOAMERICA
+      {
+        id: 'maya_law',
+        nation: 'Maya Peoples - Mexico/Guatemala',
+        legalTradition: 'Maya Customary Law (Derecho Consuetudinario Maya)',
+        lawSources: ['Ancestral teachings', 'Community assemblies', 'Elder councils', 'Sacred calendar guidance'],
+        disputeResolution: ['Community assemblies', 'Elder mediation', 'Ceremonial resolution', 'Consensus building'],
+        enforcement: ['Community service', 'Restoration', 'Spiritual cleansing', 'Public acknowledgment'],
+        integrationWithCanadianLaw: 'Constitutional recognition with limited application',
+        recognitionStatus: 'partially_recognized' as const
+      },
+      // SOUTH AMERICA - Andean
+      {
+        id: 'aymara_law',
+        nation: 'Aymara Nation - Bolivia/Peru',
+        legalTradition: 'Aymara Indigenous Justice (Justicia Indígena Aymara)',
+        lawSources: ['Ancestral norms', 'Ayllu regulations', 'Community assemblies', 'Traditional authorities'],
+        disputeResolution: ['Community assemblies', 'Mallku mediation', 'Traditional trials', 'Consensus processes'],
+        enforcement: ['Community work', 'Public apology', 'Restoration', 'Temporary exile'],
+        integrationWithCanadianLaw: 'Constitutional recognition with parallel jurisdiction',
+        recognitionStatus: 'fully_recognized' as const
+      },
+      {
+        id: 'quechua_law',
+        nation: 'Quechua Peoples - Bolivia/Peru/Ecuador',
+        legalTradition: 'Quechua Traditional Justice (Justicia Tradicional Quechua)',
+        lawSources: ['Ancestral wisdom', 'Ayllu norms', 'Community decisions', 'Traditional authorities'],
+        disputeResolution: ['Community assemblies', 'Elder councils', 'Traditional mediation', 'Ritual resolution'],
+        enforcement: ['Community service', 'Public recognition', 'Restoration', 'Spiritual cleansing'],
+        integrationWithCanadianLaw: 'Plurinational constitution recognition',
+        recognitionStatus: 'fully_recognized' as const
+      },
+      // SOUTH AMERICA - Amazonian
+      {
+        id: 'shuar_law',
+        nation: 'Shuar Nation - Ecuador',
+        legalTradition: 'Shuar Traditional Law',
+        lawSources: ['Ancestral teachings', 'Shamanic guidance', 'Community norms', 'Traditional councils'],
+        disputeResolution: ['Community assemblies', 'Shamanic mediation', 'Traditional councils', 'Ritual processes'],
+        enforcement: ['Community service', 'Restoration', 'Spiritual healing', 'Traditional sanctions'],
+        integrationWithCanadianLaw: 'Plurinational constitution with indigenous jurisdiction',
+        recognitionStatus: 'partially_recognized' as const
+      },
+      {
+        id: 'kayapo_law',
+        nation: 'Kayapó People - Brazil',
+        legalTradition: 'Kayapó Traditional Governance',
+        lawSources: ['Ancestral teachings', 'Age-grade societies', 'Ceremonial protocols', 'Traditional leadership'],
+        disputeResolution: ['Community assemblies', 'Elder councils', 'Traditional mediation', 'Ceremonial resolution'],
+        enforcement: ['Community accountability', 'Traditional sanctions', 'Restoration', 'Spiritual consequences'],
+        integrationWithCanadianLaw: 'Constitutional protection with traditional governance',
+        recognitionStatus: 'partially_recognized' as const
+      },
+      // SOUTH AMERICA - Southern Cone
+      {
+        id: 'mapuche_law',
+        nation: 'Mapuche Nation - Chile/Argentina',
+        legalTradition: 'Mapuche Traditional Law (Az Mapu)',
+        lawSources: ['Az Mapu (traditional law)', 'Lonko authority', 'Community assemblies', 'Ancestral teachings'],
+        disputeResolution: ['Community assemblies', 'Lonko mediation', 'Traditional councils', 'Consensus building'],
+        enforcement: ['Community service', 'Public acknowledgment', 'Restoration', 'Traditional sanctions'],
+        integrationWithCanadianLaw: 'Limited recognition with ongoing negotiations',
+        recognitionStatus: 'under_negotiation' as const
+      },
+      {
+        id: 'guarani_law',
+        nation: 'Guaraní People - Paraguay/Brazil/Argentina',
+        legalTradition: 'Guaraní Traditional Law (Teko Porã)',
+        lawSources: ['Teko Porã (good living)', 'Community assemblies', 'Traditional authorities', 'Ancestral wisdom'],
+        disputeResolution: ['Community assemblies', 'Traditional mediation', 'Elder councils', 'Consensus building'],
+        enforcement: ['Community service', 'Restoration', 'Public acknowledgment', 'Traditional sanctions'],
+        integrationWithCanadianLaw: 'Constitutional bilingualism with traditional law recognition',
+        recognitionStatus: 'partially_recognized' as const
       }
     ];
 
