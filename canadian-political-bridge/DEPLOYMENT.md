@@ -298,8 +298,8 @@ NODE_ENV=production
 PORT=3000
 
 # Database
-MONGODB_URI=mongodb://username:password@host:port/database
-REDIS_URL=redis://username:password@host:port
+MONGODB_URI=mongodb://[username]:[password]@[host]:[port]/[database]
+REDIS_URL=redis://[username]:[password]@[host]:[port]
 
 # API Keys (use secrets management in production)
 OPENAI_API_KEY=your-openai-key
