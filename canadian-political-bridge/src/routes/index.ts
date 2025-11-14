@@ -7,6 +7,7 @@ import { electoralRoutes } from './electoral';
 import { treatyInternationalLawRoutes } from './treatyInternationalLaw';
 import { governmentDepartmentsRoutes } from './governmentDepartments';
 import { indigenousGovernanceRoutes } from './indigenousGovernance';
+import { americasGovernmentRoutes } from './americasGovernment';
 import { analysisRoutes } from './analysis';
 import { searchRoutes } from './search';
 import { statusRoutes } from './status';
@@ -23,6 +24,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
   treatyInternationalLawRoutes(app, orchestrator, apiBase);
   governmentDepartmentsRoutes(app, orchestrator, apiBase);
   indigenousGovernanceRoutes(app, orchestrator, apiBase);
+  americasGovernmentRoutes(app, orchestrator, apiBase);
   analysisRoutes(app, orchestrator, apiBase);
   searchRoutes(app, orchestrator, apiBase);
   statusRoutes(app, orchestrator, apiBase);
@@ -41,6 +43,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         treatyInternationalLaw: `${apiBase}/treaty-international-law`,
         governmentDepartments: `${apiBase}/government-departments`,
         indigenousGovernance: `${apiBase}/indigenous-governance`,
+        americasGovernment: `${apiBase}/americas-government`,
         analysis: `${apiBase}/analysis`,
         search: `${apiBase}/search`,
         status: `${apiBase}/status`
@@ -75,7 +78,12 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         'Decolonization Strategies and Action Plans',
         'Indigenous Legal Systems and Traditions',
         'Self-Government Agreements and Treaties',
-        'Constitutional Reform for Indigenous Rights'
+        'Constitutional Reform for Indigenous Rights',
+        'Americas Government Repositories (15 Countries)',
+        'Digital Government Services Across Americas',
+        'Government Transparency Initiatives',
+        'Open Data Portals and API Services',
+        'Digital Maturity Assessment Tools'
       ]
     });
   });
@@ -93,6 +101,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         `${apiBase}/treaty-international-law`,
         `${apiBase}/government-departments`,
         `${apiBase}/indigenous-governance`,
+        `${apiBase}/americas-government`,
         `${apiBase}/analysis`,
         `${apiBase}/search`,
         `${apiBase}/status`

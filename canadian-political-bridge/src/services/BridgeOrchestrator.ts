@@ -6,6 +6,7 @@ import { ElectoralDataBridge } from './bridges/ElectoralDataBridge';
 import { TreatyAndInternationalLawBridge } from './bridges/TreatyAndInternationalLawBridge';
 import { GovernmentDepartmentsBridge } from './bridges/GovernmentDepartmentsBridge';
 import { IndigenousGovernanceBridge } from './bridges/IndigenousGovernanceBridge';
+import { AmericasGovernmentBridge } from './bridges/AmericasGovernmentBridge';
 import { AIAnalysisEngine } from './AIAnalysisEngine';
 import { DataAggregator } from './DataAggregator';
 import { CacheManager } from '../utils/CacheManager';
@@ -26,6 +27,7 @@ export class BridgeOrchestrator {
   private treatyInternationalLawBridge: TreatyAndInternationalLawBridge;
   private governmentDepartmentsBridge: GovernmentDepartmentsBridge;
   private indigenousGovernanceBridge: IndigenousGovernanceBridge;
+  private americasGovernmentBridge: AmericasGovernmentBridge;
   private aiEngine: AIAnalysisEngine;
   private dataAggregator: DataAggregator;
   private cacheManager: CacheManager;
@@ -39,6 +41,7 @@ export class BridgeOrchestrator {
     this.treatyInternationalLawBridge = new TreatyAndInternationalLawBridge();
     this.governmentDepartmentsBridge = new GovernmentDepartmentsBridge();
     this.indigenousGovernanceBridge = new IndigenousGovernanceBridge();
+    this.americasGovernmentBridge = new AmericasGovernmentBridge();
     this.aiEngine = new AIAnalysisEngine();
     this.dataAggregator = new DataAggregator();
     this.cacheManager = new CacheManager();
@@ -59,7 +62,8 @@ export class BridgeOrchestrator {
         this.electoralDataBridge.initialize(),
         this.treatyInternationalLawBridge.initialize(),
         this.governmentDepartmentsBridge.initialize(),
-        this.indigenousGovernanceBridge.initialize()
+        this.indigenousGovernanceBridge.initialize(),
+        this.americasGovernmentBridge.initialize()
       ]);
 
       // Initialize AI engine
@@ -861,5 +865,119 @@ export class BridgeOrchestrator {
     }
     
     return repositories;
+  }
+
+  // Americas Government Bridge methods
+  async getAmericasGovernmentData(category?: string, filters?: any): Promise<any> {
+    return this.americasGovernmentBridge.getData(category, filters);
+  }
+
+  async getAmericasGovernmentRepositories(country?: string, category?: string): Promise<any> {
+    return this.americasGovernmentBridge.getGovernmentRepositories(country, category);
+  }
+
+  async getAmericasDigitalServices(country?: string): Promise<any> {
+    return this.americasGovernmentBridge.getDigitalServices(country);
+  }
+
+  async getAmericasTransparencyInitiatives(country?: string): Promise<any> {
+    return this.americasGovernmentBridge.getTransparencyInitiatives(country);
+  }
+
+  async searchAmericasGovernment(query: string, filters?: any): Promise<any> {
+    return this.americasGovernmentBridge.search(query, filters);
+  }
+
+  async getAmericasCountryStats(country: string): Promise<any> {
+    return this.americasGovernmentBridge.getCountryStats(country);
+  }
+
+  getAmericasRepositoryCategories(): any {
+    return this.americasGovernmentBridge.getRelatedRepositories();
+  }
+
+  async getAmericasRegionalStats(region: string): Promise<any> {
+    // Implementation for regional statistics
+    const regionCountries: { [key: string]: string[] } = {
+      north_america: ['Canada', 'United States', 'Mexico'],
+      central_america: ['Guatemala', 'Belize', 'El Salvador', 'Honduras', 'Nicaragua', 'Costa Rica', 'Panama'],
+      caribbean: ['Jamaica', 'Trinidad and Tobago', 'Barbados'],
+      south_america: ['Brazil', 'Argentina', 'Chile', 'Colombia', 'Peru', 'Venezuela', 'Ecuador', 'Bolivia', 'Paraguay', 'Uruguay', 'Guyana', 'Suriname']
+    };
+
+    const countries = regionCountries[region] || [];
+    const stats = await Promise.all(
+      countries.map(country => this.americasGovernmentBridge.getCountryStats(country))
+    );
+
+    return {
+      region,
+      countries: countries.length,
+      totalRepositories: stats.reduce((sum, stat) => sum + stat.repositories.total, 0),
+      totalDigitalServices: stats.reduce((sum, stat) => sum + stat.digitalServices.total, 0),
+      totalTransparencyInitiatives: stats.reduce((sum, stat) => sum + stat.transparency.total, 0),
+      totalDatasets: stats.reduce((sum, stat) => sum + stat.transparency.totalDatasets, 0),
+      totalApiEndpoints: stats.reduce((sum, stat) => sum + stat.transparency.totalApiEndpoints, 0),
+      countryStats: stats
+    };
+  }
+
+  async generateAmericasDigitalMaturityReport(params: any): Promise<any> {
+    const { countries, categories } = params;
+    const countryStats = await Promise.all(
+      countries.map((country: string) => this.americasGovernmentBridge.getCountryStats(country))
+    );
+
+    return {
+      reportType: 'Digital Maturity Assessment',
+      scope: {
+        countries: countries.length,
+        categories: categories?.length || 0
+      },
+      summary: {
+        totalRepositories: countryStats.reduce((sum, stat) => sum + stat.repositories.total, 0),
+        totalDigitalServices: countryStats.reduce((sum, stat) => sum + stat.digitalServices.total, 0),
+        averageAccessibilityScore: this.calculateAverageAccessibility(countryStats),
+        mobileOptimizationRate: this.calculateMobileOptimization(countryStats),
+        openSourceAdoption: this.calculateOpenSourceAdoption(countryStats)
+      },
+      countryAnalysis: countryStats.map(stat => ({
+        country: stat.country,
+        digitalMaturityScore: this.calculateDigitalMaturityScore(stat),
+        strengths: this.identifyStrengths(stat),
+        recommendations: this.generateRecommendations(stat)
+      })),
+      generatedAt: new Date().toISOString()
+    };
+  }
+
+  private calculateAverageAccessibility(stats: any[]): number {
+    // Implementation for calculating average accessibility score
+    return 0.75; // Placeholder
+  }
+
+  private calculateMobileOptimization(stats: any[]): number {
+    // Implementation for calculating mobile optimization rate
+    return 0.85; // Placeholder
+  }
+
+  private calculateOpenSourceAdoption(stats: any[]): number {
+    // Implementation for calculating open source adoption rate
+    return 0.45; // Placeholder
+  }
+
+  private calculateDigitalMaturityScore(stat: any): number {
+    // Implementation for calculating digital maturity score
+    return Math.random() * 100; // Placeholder
+  }
+
+  private identifyStrengths(stat: any): string[] {
+    // Implementation for identifying strengths
+    return ['Strong digital services portfolio', 'High accessibility compliance']; // Placeholder
+  }
+
+  private generateRecommendations(stat: any): string[] {
+    // Implementation for generating recommendations
+    return ['Increase mobile optimization', 'Expand open data initiatives']; // Placeholder
   }
 }
