@@ -1,0 +1,147 @@
+{
+  "server": {
+    "port": 3000,
+    "host": "0.0.0.0",
+    "environment": "development"
+  },
+  "database": {
+    "mongodb": {
+      "uri": "mongodb://localhost:27017/canadian-political-bridge",
+      "options": {
+        "useNewUrlParser": true,
+        "useUnifiedTopology": true
+      }
+    }
+  },
+  "redis": {
+    "host": "localhost",
+    "port": 6379,
+    "password": "",
+    "db": 0
+  },
+  "apis": {
+    "federal": {
+      "openGovernment": {
+        "baseUrl": "https://open.canada.ca/data/api",
+        "apiKey": "your-open-government-api-key"
+      },
+      "canadaCa": {
+        "baseUrl": "https://api.canada.ca",
+        "apiKey": "your-canada-ca-api-key"
+      }
+    },
+    "provincial": {
+      "alberta": {
+        "baseUrl": "https://data.alberta.ca/api",
+        "apiKey": "your-alberta-api-key"
+      },
+      "ontario": {
+        "baseUrl": "https://data.ontario.ca/api",
+        "apiKey": "your-ontario-api-key"
+      }
+    },
+    "political": {
+      "pollsterAudit": {
+        "baseUrl": "https://api.pollsteraudit.ca",
+        "apiKey": "your-pollster-audit-api-key"
+      },
+      "openNorth": {
+        "baseUrl": "https://represent.opennorth.ca",
+        "apiKey": "your-opennorth-api-key"
+      }
+    },
+    "parties": {
+      "liberal": {
+        "official": "https://liberal.ca",
+        "github": "https://github.com/liberal-party-canada",
+        "apiKey": "your-liberal-api-key"
+      },
+      "conservative": {
+        "official": "https://conservative.ca",
+        "github": "https://github.com/conservative-party-canada",
+        "apiKey": "your-conservative-api-key"
+      },
+      "ndp": {
+        "official": "https://ndp.ca",
+        "github": "https://github.com/ndp-canada",
+        "apiKey": "your-ndp-api-key"
+      },
+      "bloc": {
+        "official": "https://blocquebecois.org",
+        "github": "https://github.com/bloc-quebecois",
+        "apiKey": "your-bloc-api-key"
+      },
+      "green": {
+        "official": "https://greenparty.ca",
+        "github": "https://github.com/green-party-canada",
+        "apiKey": "your-green-api-key"
+      },
+      "ppc": {
+        "official": "https://peoplespartyofcanada.ca",
+        "github": "https://github.com/peoples-party-canada",
+        "apiKey": "your-ppc-api-key"
+      }
+    }
+  },
+  "ai": {
+    "openai": {
+      "apiKey": "your-openai-api-key",
+      "model": "gpt-4",
+      "maxTokens": 4000
+    }
+  },
+  "security": {
+    "jwtSecret": "your-jwt-secret-key",
+    "bcryptRounds": 12,
+    "rateLimiting": {
+      "windowMs": 900000,
+      "maxRequests": 100
+    }
+  },
+  "logging": {
+    "level": "info",
+    "file": "logs/canadian-political-bridge.log",
+    "maxSize": "20m",
+    "maxFiles": "14d"
+  },
+  "cache": {
+    "defaultTtl": 300,
+    "federalDataTtl": 300,
+    "provincialDataTtl": 300,
+    "politicalDataTtl": 180,
+    "electoralDataTtl": 600
+  },
+  "sync": {
+    "intervals": {
+      "federal": "0 */15 * * * *",
+      "provincial": "0 */20 * * * *",
+      "political": "0 */5 * * * *",
+      "electoral": "0 0 */6 * * *"
+    }
+  },
+  "github": {
+    "repositories": {
+      "federal": [
+        "canada-ca/design-system",
+        "canada-ca/ore-ero",
+        "canada-ca/tracker",
+        "canada-ca/aia-eia-js",
+        "open-data/ckanext-canada",
+        "open-data/opengov",
+        "cds-snc/digital-canada-ca-website",
+        "gcperformance/service-data",
+        "gcdigitalpolicy/gccatalogue"
+      ],
+      "provincial": [
+        "GovAlta/ui-components",
+        "ongov/Digital-Service-Standard",
+        "ongov/Open-Data-Directive"
+      ],
+      "political": [
+        "PollsterAudit/PollsterAuditApi",
+        "opennorth/represent-canada-data"
+      ]
+    },
+    "accessToken": "your-github-access-token"
+  }
+}
