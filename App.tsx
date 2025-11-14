@@ -38,6 +38,7 @@ import { initializeChinaGovernanceService } from './services/chinaGovernanceServ
 import { initializeANZGovernanceService } from './services/anzGovernanceService';
 import { initializePalantirGovernanceService } from './services/palantirGovernanceService';
 import { initializeUnifiedRepositoryBridge } from './services/unifiedRepositoryBridge';
+import { initializeCoreHypercubeProtocol } from './services/coreHypercubeProtocol';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -129,6 +130,13 @@ const App: React.FC = () => {
             
             // Initialize Unified Repository Bridge
             initializeUnifiedRepositoryBridge();
+            
+            // Initialize Core Hypercube Protocol
+            const coreProtocol = initializeCoreHypercubeProtocol();
+            
+            // Execute Core Hypercube Protocol
+            console.log('🌐 [CORE PROTOCOL] Executing CORE HYPERCUBE PROTOCOL...');
+            await coreProtocol.executeProtocol();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
