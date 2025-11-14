@@ -5,6 +5,7 @@ import { PoliticalPartyBridge } from './bridges/PoliticalPartyBridge';
 import { ElectoralDataBridge } from './bridges/ElectoralDataBridge';
 import { TreatyAndInternationalLawBridge } from './bridges/TreatyAndInternationalLawBridge';
 import { GovernmentDepartmentsBridge } from './bridges/GovernmentDepartmentsBridge';
+import { IndigenousGovernanceBridge } from './bridges/IndigenousGovernanceBridge';
 import { AIAnalysisEngine } from './AIAnalysisEngine';
 import { DataAggregator } from './DataAggregator';
 import { CacheManager } from '../utils/CacheManager';
@@ -24,6 +25,7 @@ export class BridgeOrchestrator {
   private electoralDataBridge: ElectoralDataBridge;
   private treatyInternationalLawBridge: TreatyAndInternationalLawBridge;
   private governmentDepartmentsBridge: GovernmentDepartmentsBridge;
+  private indigenousGovernanceBridge: IndigenousGovernanceBridge;
   private aiEngine: AIAnalysisEngine;
   private dataAggregator: DataAggregator;
   private cacheManager: CacheManager;
@@ -36,6 +38,7 @@ export class BridgeOrchestrator {
     this.electoralDataBridge = new ElectoralDataBridge();
     this.treatyInternationalLawBridge = new TreatyAndInternationalLawBridge();
     this.governmentDepartmentsBridge = new GovernmentDepartmentsBridge();
+    this.indigenousGovernanceBridge = new IndigenousGovernanceBridge();
     this.aiEngine = new AIAnalysisEngine();
     this.dataAggregator = new DataAggregator();
     this.cacheManager = new CacheManager();
@@ -55,7 +58,8 @@ export class BridgeOrchestrator {
         this.politicalPartyBridge.initialize(),
         this.electoralDataBridge.initialize(),
         this.treatyInternationalLawBridge.initialize(),
-        this.governmentDepartmentsBridge.initialize()
+        this.governmentDepartmentsBridge.initialize(),
+        this.indigenousGovernanceBridge.initialize()
       ]);
 
       // Initialize AI engine
@@ -676,5 +680,186 @@ export class BridgeOrchestrator {
     }
     
     return datasets;
+  }
+
+  // Indigenous Governance Methods
+  async getIndigenousGovernanceData(category?: string, filters?: any): Promise<any> {
+    return await this.indigenousGovernanceBridge.getData(category, filters);
+  }
+
+  async getIndianActProvisions(type?: string): Promise<any> {
+    return await this.indigenousGovernanceBridge.getIndianActProvisions(type);
+  }
+
+  async getIndigenousGovernmentModels(type?: string): Promise<any> {
+    return await this.indigenousGovernanceBridge.getIndigenousGovernmentModels(type);
+  }
+
+  async getDecolonizationStrategies(phase?: string): Promise<any> {
+    return await this.indigenousGovernanceBridge.getDecolonizationStrategies(phase);
+  }
+
+  async getIndigenousLegalSystems(nation?: string): Promise<any> {
+    const legalSystems = await this.indigenousGovernanceBridge.getData('indigenousLegalSystems');
+    if (nation) {
+      return legalSystems.filter((system: any) => 
+        system.nation.toLowerCase().includes(nation.toLowerCase())
+      );
+    }
+    return legalSystems;
+  }
+
+  async getSelfGovernmentAgreements(status?: string): Promise<any> {
+    const agreements = await this.indigenousGovernanceBridge.getData('selfGovernmentAgreements');
+    if (status) {
+      return agreements.filter((agreement: any) => agreement.status === status);
+    }
+    return agreements;
+  }
+
+  async searchIndigenousGovernance(query: string, filters?: any): Promise<any> {
+    return await this.indigenousGovernanceBridge.search(query, filters);
+  }
+
+  async getConstitutionalReformProposals(): Promise<any> {
+    // This would return constitutional reform proposals for Indigenous governance
+    return [
+      {
+        id: 'section_35_enhancement',
+        title: 'Enhanced Section 35 Recognition',
+        description: 'Strengthen constitutional recognition of Indigenous rights',
+        proposedAmendment: 'Add explicit recognition of Indigenous governments and jurisdiction',
+        supportingParties: ['NDP', 'Bloc Québécois', 'Green Party'],
+        indigenousSupport: 'Strong support from Assembly of First Nations',
+        implementationRequirements: [
+          'Federal-provincial agreement',
+          'Indigenous consent',
+          '7/50 constitutional amendment formula'
+        ],
+        timeline: '5-10 years',
+        challenges: [
+          'Provincial resistance',
+          'Federal political will',
+          'Public education needed'
+        ]
+      },
+      {
+        id: 'indigenous_government_recognition',
+        title: 'Indigenous Government Recognition Clause',
+        description: 'Constitutional recognition of Indigenous governments as third order of government',
+        proposedAmendment: 'New section recognizing Indigenous governments with inherent jurisdiction',
+        supportingParties: ['NDP', 'Green Party'],
+        indigenousSupport: 'Supported by most Indigenous organizations',
+        implementationRequirements: [
+          'Unanimous federal-provincial agreement',
+          'Indigenous consent',
+          'Constitutional convention'
+        ],
+        timeline: '10+ years',
+        challenges: [
+          'Requires unanimous consent',
+          'Complex jurisdictional issues',
+          'Fiscal arrangements'
+        ]
+      }
+    ];
+  }
+
+  async generateDecolonizationActionPlan(params: any): Promise<any> {
+    // This would generate a customized decolonization action plan
+    const { nation, priorities, timeline, budget } = params;
+    
+    return {
+      nation: nation,
+      timeline: timeline,
+      estimatedBudget: budget || 50000000, // $50 million default
+      actions: [
+        {
+          id: 'action_1',
+          priority: 1,
+          action: 'Establish Indigenous-led governance transition team',
+          timeline: '0-6 months',
+          budget: 2000000,
+          responsibility: 'Indigenous nation',
+          expectedOutcome: 'Functional transition authority',
+          successMetrics: ['Team established', 'Community mandate', 'Funding secured']
+        },
+        {
+          id: 'action_2',
+          priority: 2,
+          action: 'Negotiate self-government framework agreement',
+          timeline: '6-24 months',
+          budget: 5000000,
+          responsibility: 'Joint (Indigenous nation and federal government)',
+          expectedOutcome: 'Signed framework agreement',
+          successMetrics: ['Agreement signed', 'Jurisdiction defined', 'Fiscal arrangements']
+        },
+        {
+          id: 'action_3',
+          priority: 3,
+          action: 'Develop Indigenous constitution and laws',
+          timeline: '12-36 months',
+          budget: 3000000,
+          responsibility: 'Indigenous nation',
+          expectedOutcome: 'Indigenous legal framework',
+          successMetrics: ['Constitution ratified', 'Laws enacted', 'Institutions established']
+        }
+      ],
+      riskMitigation: [
+        'Ensure adequate funding throughout process',
+        'Maintain community engagement and consent',
+        'Build capacity for governance functions',
+        'Establish dispute resolution mechanisms'
+      ],
+      successIndicators: [
+        'Functional Indigenous government',
+        'Community satisfaction with governance',
+        'Improved service delivery',
+        'Cultural revitalization',
+        'Economic development'
+      ]
+    };
+  }
+
+  async analyzeIndianActProvision(params: any): Promise<any> {
+    // This would analyze a specific Indian Act provision for colonial impact
+    const { section, content } = params;
+    
+    return {
+      section: section,
+      content: content,
+      analysisType: 'colonial_impact_assessment',
+      colonialImpact: 'This provision demonstrates colonial control by imposing external governance structures',
+      violatesUNDRIP: [
+        'Article 4: Right to autonomy and self-government',
+        'Article 5: Right to maintain and strengthen institutions'
+      ],
+      violatesInternationalLaw: [
+        'ICCPR Article 1: Right to self-determination',
+        'CERD Article 5: Equal enjoyment of rights'
+      ],
+      recommendedAction: 'repeal',
+      replacementFramework: 'Indigenous nations should have full authority to determine their own governance structures',
+      legalPrecedents: [
+        'Delgamuukw v. British Columbia (1997)',
+        'Haida Nation v. British Columbia (2004)',
+        'Tsilhqot\'in Nation v. British Columbia (2014)'
+      ],
+      internationalComparisons: [
+        'New Zealand: Māori self-determination',
+        'Norway: Sami Parliament',
+        'United States: Tribal sovereignty'
+      ]
+    };
+  }
+
+  async getIndigenousGovernanceRepositories(category?: string): Promise<any> {
+    const repositories = this.indigenousGovernanceBridge.getRelatedRepositories();
+    
+    if (category) {
+      return repositories[category as keyof typeof repositories] || [];
+    }
+    
+    return repositories;
   }
 }

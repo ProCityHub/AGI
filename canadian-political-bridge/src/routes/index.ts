@@ -6,6 +6,7 @@ import { politicalPartyRoutes } from './politicalParties';
 import { electoralRoutes } from './electoral';
 import { treatyInternationalLawRoutes } from './treatyInternationalLaw';
 import { governmentDepartmentsRoutes } from './governmentDepartments';
+import { indigenousGovernanceRoutes } from './indigenousGovernance';
 import { analysisRoutes } from './analysis';
 import { searchRoutes } from './search';
 import { statusRoutes } from './status';
@@ -21,6 +22,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
   electoralRoutes(app, orchestrator, apiBase);
   treatyInternationalLawRoutes(app, orchestrator, apiBase);
   governmentDepartmentsRoutes(app, orchestrator, apiBase);
+  indigenousGovernanceRoutes(app, orchestrator, apiBase);
   analysisRoutes(app, orchestrator, apiBase);
   searchRoutes(app, orchestrator, apiBase);
   statusRoutes(app, orchestrator, apiBase);
@@ -38,6 +40,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         electoral: `${apiBase}/electoral`,
         treatyInternationalLaw: `${apiBase}/treaty-international-law`,
         governmentDepartments: `${apiBase}/government-departments`,
+        indigenousGovernance: `${apiBase}/indigenous-governance`,
         analysis: `${apiBase}/analysis`,
         search: `${apiBase}/search`,
         status: `${apiBase}/status`
@@ -66,7 +69,13 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         'Environment and Climate Change Canada',
         'All Federal Departments and Agencies',
         'Government Services and Operations',
-        'IT Projects and Digital Services'
+        'IT Projects and Digital Services',
+        'Indian Act Analysis and Deconstruction',
+        'Indigenous Self-Government Models',
+        'Decolonization Strategies and Action Plans',
+        'Indigenous Legal Systems and Traditions',
+        'Self-Government Agreements and Treaties',
+        'Constitutional Reform for Indigenous Rights'
       ]
     });
   });
@@ -83,6 +92,7 @@ export function setupRoutes(app: Express, orchestrator: BridgeOrchestrator): voi
         `${apiBase}/electoral`,
         `${apiBase}/treaty-international-law`,
         `${apiBase}/government-departments`,
+        `${apiBase}/indigenous-governance`,
         `${apiBase}/analysis`,
         `${apiBase}/search`,
         `${apiBase}/status`
