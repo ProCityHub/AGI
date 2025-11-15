@@ -40,6 +40,7 @@ import { initializePalantirGovernanceService } from './services/palantirGovernan
 import { initializeUnifiedRepositoryBridge } from './services/unifiedRepositoryBridge';
 import { initializeCoreHypercubeProtocol } from './services/coreHypercubeProtocol';
 import { initializeGitHubRepositoryBridge } from './services/githubRepositoryBridge';
+import { initializeRussiaGovernanceBridge } from './services/russiaGovernanceBridge';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -68,6 +69,7 @@ const App: React.FC = () => {
     const [showPalantirBridge, setShowPalantirBridge] = useState(false);
     const [showUnifiedBridge, setShowUnifiedBridge] = useState(false);
     const [showGitHubBridge, setShowGitHubBridge] = useState(false);
+    const [showRussiaBridge, setShowRussiaBridge] = useState(false);
 
     useEffect(() => {
         if (getUsers().length === 0) {
@@ -146,6 +148,13 @@ const App: React.FC = () => {
             // Bridge ALL GitHub repositories
             console.log('🐙 [GITHUB BRIDGE] Bridging ALL GitHub repositories...');
             await githubBridge.bridgeAllRepositories();
+            
+            // Initialize Russia Governance Bridge
+            const russiaBridge = initializeRussiaGovernanceBridge();
+            
+            // Bridge ALL Russian repositories
+            console.log('🇷🇺 [RUSSIA BRIDGE] Bridging ALL Russian repositories...');
+            await russiaBridge.bridgeAllRepositories();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
@@ -581,6 +590,12 @@ const App: React.FC = () => {
                     icon={<div className="text-2xl">🐙</div>}
                     initialPosition={{ x: 690, y: 350 }}
                     onDoubleClick={() => setShowGitHubBridge(true)}
+                />
+                <DesktopIcon
+                    label="Russia Bridge"
+                    icon={<div className="text-2xl">🇷🇺</div>}
+                    initialPosition={{ x: 800, y: 350 }}
+                    onDoubleClick={() => setShowRussiaBridge(true)}
                 />
             </main>
 
