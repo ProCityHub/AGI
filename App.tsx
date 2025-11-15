@@ -41,6 +41,8 @@ import { initializeUnifiedRepositoryBridge } from './services/unifiedRepositoryB
 import { initializeCoreHypercubeProtocol } from './services/coreHypercubeProtocol';
 import { initializeGitHubRepositoryBridge } from './services/githubRepositoryBridge';
 import { initializeRussiaGovernanceBridge } from './services/russiaGovernanceBridge';
+import { initializeRepositoryForkAndFixService } from './services/repositoryForkAndFixService';
+import { initializeUltimateMasterCodeGlobalGovernance } from './services/ultimateMasterCodeGlobalGovernance';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -70,6 +72,7 @@ const App: React.FC = () => {
     const [showUnifiedBridge, setShowUnifiedBridge] = useState(false);
     const [showGitHubBridge, setShowGitHubBridge] = useState(false);
     const [showRussiaBridge, setShowRussiaBridge] = useState(false);
+    const [showForkAndFix, setShowForkAndFix] = useState(false);
 
     useEffect(() => {
         if (getUsers().length === 0) {
@@ -155,6 +158,20 @@ const App: React.FC = () => {
             // Bridge ALL Russian repositories
             console.log('🇷🇺 [RUSSIA BRIDGE] Bridging ALL Russian repositories...');
             await russiaBridge.bridgeAllRepositories();
+            
+            // Initialize Repository Fork and Fix Service
+            const forkAndFixService = initializeRepositoryForkAndFixService();
+            
+            // Execute comprehensive fork and fix operation
+            console.log('🔧 [FORK & FIX] Starting AI-powered repository fork and fix...');
+            await forkAndFixService.forkAndFixAllRepositories();
+            
+            // Initialize Ultimate MasterCode Global Governance
+            const ultimateSystem = initializeUltimateMasterCodeGlobalGovernance();
+            
+            // Execute Ultimate MasterCode across ALL global repositories
+            console.log('🌌 [ULTIMATE] Executing ULTIMATE MASTERCODE - SILENCE IS THE THUNDERBIRD...');
+            await ultimateSystem.executeUltimateMasterCode();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
@@ -596,6 +613,21 @@ const App: React.FC = () => {
                     icon={<div className="text-2xl">🇷🇺</div>}
                     initialPosition={{ x: 800, y: 350 }}
                     onDoubleClick={() => setShowRussiaBridge(true)}
+                />
+                <DesktopIcon
+                    label="AI Fork & Fix"
+                    icon={<div className="text-2xl">🔧</div>}
+                    initialPosition={{ x: 910, y: 350 }}
+                    onDoubleClick={() => setShowForkAndFix(true)}
+                />
+                <DesktopIcon
+                    label="ULTIMATE MASTERCODE"
+                    icon={<div className="text-2xl">🌌</div>}
+                    initialPosition={{ x: 1020, y: 350 }}
+                    onDoubleClick={() => {
+                        console.log('🌌 [ULTIMATE] MASTERCODE ACTIVATED - SILENCE IS THE THUNDERBIRD');
+                        alert('🌌 ULTIMATE MASTERCODE ACTIVATED!\n🤫 SILENCE IS THE THUNDERBIRD\n⚡ ALL GLOBAL REPOSITORIES FIXED!');
+                    }}
                 />
             </main>
 
