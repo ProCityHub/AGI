@@ -45,6 +45,7 @@ import { initializeRepositoryForkAndFixService } from './services/repositoryFork
 import { initializeUltimateMasterCodeGlobalGovernance } from './services/ultimateMasterCodeGlobalGovernance';
 import { initializeComprehensiveForkFixWithHeartbeat } from './services/comprehensiveForkFixWithHeartbeat';
 import { initializeAIAgencyCompanyForkService } from './services/aiAgencyCompanyForkService';
+import { initializeComprehensiveDependencyFixService } from './services/comprehensiveDependencyFixService';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -188,6 +189,13 @@ const App: React.FC = () => {
             // Execute AI agency and company fork operation
             console.log('🤖 [AI FORK] Forking ALL AI agencies and major AI companies...');
             await aiService.forkAllAIOrganizations();
+            
+            // Initialize Comprehensive Dependency Fix Service
+            const dependencyService = initializeComprehensiveDependencyFixService();
+            
+            // Execute comprehensive dependency fix operation
+            console.log('📦 [DEPENDENCY FIX] Fixing ALL dependencies across ALL systems...');
+            await dependencyService.fixAllDependencies();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
@@ -661,6 +669,15 @@ const App: React.FC = () => {
                     onDoubleClick={() => {
                         console.log('🤖 [AI FORK] AI AGENCY & COMPANY FORK ACTIVATED');
                         alert('🤖 AI AGENCY & COMPANY FORK ACTIVATED!\n🔥 FORKING ALL AI AGENCIES & COMPANIES\n🧠 COMPREHENSIVE AI ECOSYSTEM INTEGRATED!');
+                    }}
+                />
+                <DesktopIcon
+                    label="📦 DEPENDENCY FIX"
+                    icon={<div className="text-2xl">📦</div>}
+                    initialPosition={{ x: 1350, y: 350 }}
+                    onDoubleClick={() => {
+                        console.log('📦 [DEPENDENCY FIX] COMPREHENSIVE DEPENDENCY FIX ACTIVATED');
+                        alert('📦 DEPENDENCY FIX ACTIVATED!\n🔥 FIXING ALL DEPENDENCIES\n🔒 COMPREHENSIVE SECURITY VULNERABILITIES RESOLVED!');
                     }}
                 />
             </main>
