@@ -1,0 +1,324 @@
+name: AI/ML Specialized Bot
+
+on:
+  push:
+    branches: [ main, master, develop ]
+    paths:
+      - '**/*.py'
+      - '**/requirements.txt'
+      - '**/pyproject.toml'
+      - '**/*model*'
+      - '**/*train*'
+      - '**/*dataset*'
+  pull_request:
+    branches: [ main, master, develop ]
+    paths:
+      - '**/*.py'
+      - '**/requirements.txt'
+      - '**/pyproject.toml'
+      - '**/*model*'
+      - '**/*train*'
+      - '**/*dataset*'
+  schedule:
+    - cron: '0 6 * * *'  # Daily ML health check
+
+jobs:
+  detect-ml-project:
+    runs-on: ubuntu-latest
+    outputs:
+      is-ml-project: ${{ steps.detect.outputs.is-ml-project }}
+      has-models: ${{ steps.detect.outputs.has-models }}
+      has-datasets: ${{ steps.detect.outputs.has-datasets }}
+      has-notebooks: ${{ steps.detect.outputs.has-notebooks }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect ML project characteristics
+        id: detect
+        run: |
+          # Check for ML/AI indicators
+          ML_INDICATORS=0
+          
+          # Check for common ML libraries in requirements
+          if grep -E "(torch|tensorflow|sklearn|pandas|numpy|transformers|huggingface|openai)" requirements.txt pyproject.toml setup.py 2>/dev/null; then
+            ML_INDICATORS=$((ML_INDICATORS + 1))
+          fi
+          
+          # Check for model files
+          if find . -name "*.pkl" -o -name "*.h5" -o -name "*.pt" -o -name "*.pth" -o -name "*.onnx" | head -1 | grep -q .; then
+            ML_INDICATORS=$((ML_INDICATORS + 1))
+            echo "has-models=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-models=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # Check for dataset files
+          if find . -name "*.csv" -o -name "*.json" -o -name "*.parquet" -o -name "*dataset*" | head -1 | grep -q .; then
+            echo "has-datasets=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-datasets=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # Check for Jupyter notebooks
+          if find . -name "*.ipynb" | head -1 | grep -q .; then
+            echo "has-notebooks=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-notebooks=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # Check for ML-related directories
+          if find . -type d -name "*model*" -o -name "*train*" -o -name "*data*" -o -name "*experiment*" | head -1 | grep -q .; then
+            ML_INDICATORS=$((ML_INDICATORS + 1))
+          fi
+          
+          if [ $ML_INDICATORS -ge 2 ]; then
+            echo "is-ml-project=true" >> $GITHUB_OUTPUT
+          else
+            echo "is-ml-project=false" >> $GITHUB_OUTPUT
+          fi
+
+  model-validation:
+    runs-on: ubuntu-latest
+    needs: detect-ml-project
+    if: needs.detect-ml-project.outputs.is-ml-project == 'true' && needs.detect-ml-project.outputs.has-models == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install model validation tools
+        run: |
+          pip install --upgrade pip
+          pip install onnx onnxruntime torch tensorflow-cpu scikit-learn
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      
+      - name: Validate model files
+        run: |
+          echo "🔍 Validating model files..."
+          
+          # Check ONNX models
+          for model in $(find . -name "*.onnx"); do
+            echo "Validating ONNX model: $model"
+            python -c "
+            import onnx
+            try:
+                model = onnx.load('$model')
+                onnx.checker.check_model(model)
+                print('✅ $model is valid')
+            except Exception as e:
+                print('❌ $model validation failed:', e)
+            "
+          done
+          
+          # Check PyTorch models
+          for model in $(find . -name "*.pt" -o -name "*.pth"); do
+            echo "Validating PyTorch model: $model"
+            python -c "
+            import torch
+            try:
+                model = torch.load('$model', map_location='cpu')
+                print('✅ $model loaded successfully')
+            except Exception as e:
+                print('❌ $model loading failed:', e)
+            "
+          done
+          
+          # Check pickle models (scikit-learn, etc.)
+          for model in $(find . -name "*.pkl"); do
+            echo "Validating pickle model: $model"
+            python -c "
+            import pickle
+            try:
+                with open('$model', 'rb') as f:
+                    model = pickle.load(f)
+                print('✅ $model loaded successfully')
+            except Exception as e:
+                print('❌ $model loading failed:', e)
+            "
+          done
+
+  dataset-validation:
+    runs-on: ubuntu-latest
+    needs: detect-ml-project
+    if: needs.detect-ml-project.outputs.is-ml-project == 'true' && needs.detect-ml-project.outputs.has-datasets == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install data validation tools
+        run: |
+          pip install --upgrade pip
+          pip install pandas numpy great-expectations pandera
+      
+      - name: Validate datasets
+        run: |
+          echo "🔍 Validating dataset files..."
+          
+          python -c "
+          import pandas as pd
+          import numpy as np
+          import os
+          import glob
+          
+          # Find CSV files
+          csv_files = glob.glob('**/*.csv', recursive=True)
+          for csv_file in csv_files:
+              try:
+                  df = pd.read_csv(csv_file)
+                  print(f'✅ {csv_file}: {df.shape[0]} rows, {df.shape[1]} columns')
+                  
+                  # Basic data quality checks
+                  null_percentage = (df.isnull().sum().sum() / (df.shape[0] * df.shape[1])) * 100
+                  print(f'   Null values: {null_percentage:.2f}%')
+                  
+                  # Check for duplicate rows
+                  duplicates = df.duplicated().sum()
+                  print(f'   Duplicate rows: {duplicates}')
+                  
+                  if null_percentage > 50:
+                      print(f'⚠️  High null percentage in {csv_file}')
+                  
+              except Exception as e:
+                  print(f'❌ Error reading {csv_file}: {e}')
+          
+          # Find JSON files
+          json_files = glob.glob('**/*.json', recursive=True)
+          for json_file in json_files:
+              try:
+                  with open(json_file, 'r') as f:
+                      import json
+                      data = json.load(f)
+                      if isinstance(data, list):
+                          print(f'✅ {json_file}: {len(data)} records')
+                      elif isinstance(data, dict):
+                          print(f'✅ {json_file}: dictionary with {len(data)} keys')
+                      else:
+                          print(f'✅ {json_file}: valid JSON')
+              except Exception as e:
+                  print(f'❌ Error reading {json_file}: {e}')
+          "
+
+  notebook-validation:
+    runs-on: ubuntu-latest
+    needs: detect-ml-project
+    if: needs.detect-ml-project.outputs.is-ml-project == 'true' && needs.detect-ml-project.outputs.has-notebooks == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install notebook tools
+        run: |
+          pip install --upgrade pip
+          pip install nbformat nbconvert jupyter
+      
+      - name: Validate Jupyter notebooks
+        run: |
+          echo "🔍 Validating Jupyter notebooks..."
+          
+          for notebook in $(find . -name "*.ipynb"); do
+            echo "Validating notebook: $notebook"
+            
+            # Check if notebook is valid JSON
+            python -c "
+            import nbformat
+            try:
+                with open('$notebook', 'r') as f:
+                    nb = nbformat.read(f, as_version=4)
+                print('✅ $notebook is valid')
+                
+                # Count cells
+                code_cells = sum(1 for cell in nb.cells if cell.cell_type == 'code')
+                markdown_cells = sum(1 for cell in nb.cells if cell.cell_type == 'markdown')
+                print(f'   Code cells: {code_cells}, Markdown cells: {markdown_cells}')
+                
+                # Check for outputs (indicates if notebook was run)
+                cells_with_output = sum(1 for cell in nb.cells if cell.cell_type == 'code' and cell.outputs)
+                if cells_with_output == 0 and code_cells > 0:
+                    print('⚠️  Notebook appears to have no outputs - consider running before committing')
+                
+            except Exception as e:
+                print('❌ $notebook validation failed:', e)
+            "
+          done
+
+  ml-security-scan:
+    runs-on: ubuntu-latest
+    needs: detect-ml-project
+    if: needs.detect-ml-project.outputs.is-ml-project == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install security scanning tools
+        run: |
+          pip install --upgrade pip
+          pip install safety bandit semgrep
+      
+      - name: ML-specific security scan
+        run: |
+          echo "🔒 Running ML-specific security scans..."
+          
+          # Check for hardcoded API keys in ML code
+          echo "Checking for hardcoded API keys..."
+          grep -r -i "api_key\|openai\|huggingface_hub" --include="*.py" . || echo "No API keys found in code"
+          
+          # Check for unsafe pickle usage
+          echo "Checking for unsafe pickle usage..."
+          grep -r "pickle.load\|pickle.loads" --include="*.py" . && echo "⚠️ Found pickle.load usage - ensure you trust the source" || echo "No unsafe pickle usage found"
+          
+          # Check for model file sizes (large files might indicate issues)
+          echo "Checking model file sizes..."
+          find . -name "*.pkl" -o -name "*.h5" -o -name "*.pt" -o -name "*.pth" -exec ls -lh {} \; | awk '$5 ~ /[0-9]+G/ {print "⚠️ Large model file:", $9, $5}'
+          
+          # Run bandit for Python security issues
+          bandit -r . -f json -o bandit-ml-report.json || true
+          
+          # Check for common ML vulnerabilities
+          echo "Checking for common ML vulnerabilities..."
+          grep -r "eval\|exec\|__import__" --include="*.py" . && echo "⚠️ Found potentially dangerous functions" || echo "No dangerous functions found"
+
+  experiment-tracking:
+    runs-on: ubuntu-latest
+    needs: detect-ml-project
+    if: needs.detect-ml-project.outputs.is-ml-project == 'true' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Track ML experiments
+        run: |
+          echo "📊 Tracking ML experiment metadata..."
+          
+          # Create experiment metadata
+          cat > experiment_metadata.json << EOF
+          {
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "commit_sha": "${{ github.sha }}",
+            "branch": "${{ github.ref_name }}",
+            "repository": "${{ github.repository }}",
+            "models_found": $(find . -name "*.pkl" -o -name "*.h5" -o -name "*.pt" -o -name "*.pth" | wc -l),
+            "notebooks_found": $(find . -name "*.ipynb" | wc -l),
+            "datasets_found": $(find . -name "*.csv" -o -name "*.json" -o -name "*.parquet" | wc -l)
+          }
+          EOF
+          
+          echo "Experiment metadata:"
+          cat experiment_metadata.json
+          
+          # Store as artifact for tracking
+          echo "experiment_metadata=$(cat experiment_metadata.json)" >> $GITHUB_OUTPUT
+      
+      - name: Upload experiment metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: ml-experiment-metadata-${{ github.sha }}
+          path: experiment_metadata.json
+          retention-days: 90
