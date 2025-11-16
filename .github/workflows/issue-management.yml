@@ -1,0 +1,194 @@
+name: Issue & PR Management Bot
+
+on:
+  issues:
+    types: [opened, edited, labeled, unlabeled]
+  pull_request:
+    types: [opened, edited, labeled, unlabeled, synchronize]
+  issue_comment:
+    types: [created]
+  schedule:
+    - cron: '0 0 * * *'  # Daily stale check
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Auto-label issues and PRs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labelRules = {
+              'bug': ['error', 'exception', 'crash', 'fail', 'broken', 'not working'],
+              'enhancement': ['feature', 'improve', 'add', 'new', 'enhancement'],
+              'documentation': ['docs', 'readme', 'documentation', 'guide'],
+              'security': ['security', 'vulnerability', 'cve', 'exploit'],
+              'performance': ['slow', 'performance', 'optimization', 'speed'],
+              'ai/ml': ['model', 'training', 'dataset', 'neural', 'machine learning', 'ai'],
+              'dependencies': ['dependency', 'package', 'version', 'update'],
+              'python': ['python', '.py', 'pip', 'requirements.txt'],
+              'typescript': ['typescript', '.ts', '.tsx', 'npm', 'node'],
+              'rust': ['rust', '.rs', 'cargo', 'crate']
+            };
+            
+            const title = context.payload.issue?.title || context.payload.pull_request?.title || '';
+            const body = context.payload.issue?.body || context.payload.pull_request?.body || '';
+            const text = (title + ' ' + body).toLowerCase();
+            
+            const labelsToAdd = [];
+            
+            for (const [label, keywords] of Object.entries(labelRules)) {
+              if (keywords.some(keyword => text.includes(keyword))) {
+                labelsToAdd.push(label);
+              }
+            }
+            
+            // Check file changes for PRs
+            if (context.payload.pull_request) {
+              const files = await github.rest.pulls.listFiles({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number
+              });
+              
+              const fileExtensions = files.data.map(file => file.filename.split('.').pop());
+              
+              if (fileExtensions.includes('py')) labelsToAdd.push('python');
+              if (fileExtensions.includes('ts') || fileExtensions.includes('tsx')) labelsToAdd.push('typescript');
+              if (fileExtensions.includes('rs')) labelsToAdd.push('rust');
+              if (fileExtensions.includes('md')) labelsToAdd.push('documentation');
+            }
+            
+            if (labelsToAdd.length > 0) {
+              const issueNumber = context.payload.issue?.number || context.payload.pull_request?.number;
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: [...new Set(labelsToAdd)]
+              });
+            }
+
+  welcome-new-contributors:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    steps:
+      - name: Welcome new contributors
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Check if this is the user's first contribution
+            const author = context.payload.issue?.user.login || context.payload.pull_request?.user.login;
+            
+            const contributions = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} author:${author}`
+            });
+            
+            if (contributions.data.total_count === 1) {
+              const welcomeMessage = `
+              🎉 **Welcome to ProCityHub!** 
+              
+              Thank you for your ${context.payload.issue ? 'issue' : 'pull request'}! This appears to be your first contribution to this repository.
+              
+              ${context.payload.issue ? 
+                '- Please make sure you\'ve provided all the necessary details\n- Check if there are any similar existing issues\n- Feel free to ask questions if you need clarification' :
+                '- Please ensure your PR follows our coding standards\n- Make sure all tests pass\n- Don\'t forget to update documentation if needed'
+              }
+              
+              Our maintainers will review this soon. Thanks for contributing to the project! 🚀
+              `;
+              
+              const issueNumber = context.payload.issue?.number || context.payload.pull_request?.number;
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: welcomeMessage
+              });
+            }
+
+  stale-management:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - name: Mark stale issues and PRs
+        uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: |
+            This issue has been automatically marked as stale because it has not had recent activity. 
+            It will be closed if no further activity occurs within 7 days.
+            If this issue is still relevant, please comment to keep it open.
+          stale-pr-message: |
+            This pull request has been automatically marked as stale because it has not had recent activity.
+            It will be closed if no further activity occurs within 7 days.
+            If this PR is still relevant, please comment or push new commits to keep it open.
+          close-issue-message: |
+            This issue was automatically closed because it has been stale for 7 days with no activity.
+            If you believe this issue is still relevant, please reopen it.
+          close-pr-message: |
+            This pull request was automatically closed because it has been stale for 7 days with no activity.
+            If you believe this PR is still relevant, please reopen it.
+          days-before-stale: 30
+          days-before-close: 7
+          stale-issue-label: 'stale'
+          stale-pr-label: 'stale'
+          exempt-issue-labels: 'pinned,security,enhancement'
+          exempt-pr-labels: 'pinned,security,work-in-progress'
+
+  auto-assign:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    steps:
+      - name: Auto-assign based on files changed
+        uses: actions/github-script@v7
+        with:
+          script: |
+            if (!context.payload.pull_request) return;
+            
+            const files = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+            
+            // Define code owners based on file patterns
+            const codeOwners = {
+              'python': [], // Add Python maintainers
+              'typescript': [], // Add TypeScript maintainers
+              'rust': [], // Add Rust maintainers
+              'docs': [], // Add documentation maintainers
+              'ai': [] // Add AI/ML maintainers
+            };
+            
+            const assignees = new Set();
+            
+            files.data.forEach(file => {
+              if (file.filename.endsWith('.py')) {
+                codeOwners.python.forEach(owner => assignees.add(owner));
+              }
+              if (file.filename.endsWith('.ts') || file.filename.endsWith('.tsx')) {
+                codeOwners.typescript.forEach(owner => assignees.add(owner));
+              }
+              if (file.filename.endsWith('.rs')) {
+                codeOwners.rust.forEach(owner => assignees.add(owner));
+              }
+              if (file.filename.endsWith('.md')) {
+                codeOwners.docs.forEach(owner => assignees.add(owner));
+              }
+              if (file.filename.includes('model') || file.filename.includes('train')) {
+                codeOwners.ai.forEach(owner => assignees.add(owner));
+              }
+            });
+            
+            if (assignees.size > 0) {
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                assignees: Array.from(assignees)
+              });
+            }

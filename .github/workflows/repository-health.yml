@@ -1,0 +1,317 @@
+name: Repository Health Monitor
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  schedule:
+    - cron: '0 12 * * 0'  # Weekly health check on Sundays
+
+jobs:
+  repository-health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Check repository structure
+        run: |
+          echo "🏥 Repository Health Check Report"
+          echo "================================="
+          
+          # Check for essential files
+          echo "📋 Essential Files Check:"
+          
+          if [ -f README.md ]; then
+            echo "✅ README.md exists"
+            readme_lines=$(wc -l < README.md)
+            if [ $readme_lines -lt 10 ]; then
+              echo "⚠️  README.md is quite short ($readme_lines lines) - consider adding more details"
+            else
+              echo "   README.md has $readme_lines lines"
+            fi
+          else
+            echo "❌ README.md missing - consider adding project documentation"
+          fi
+          
+          if [ -f LICENSE ] || [ -f LICENSE.md ] || [ -f LICENSE.txt ]; then
+            echo "✅ License file exists"
+          else
+            echo "⚠️  No license file found - consider adding one"
+          fi
+          
+          if [ -f .gitignore ]; then
+            echo "✅ .gitignore exists"
+          else
+            echo "⚠️  .gitignore missing - consider adding one"
+          fi
+          
+          if [ -f CONTRIBUTING.md ]; then
+            echo "✅ CONTRIBUTING.md exists"
+          else
+            echo "ℹ️  CONTRIBUTING.md not found - consider adding contribution guidelines"
+          fi
+          
+          if [ -f CODE_OF_CONDUCT.md ]; then
+            echo "✅ CODE_OF_CONDUCT.md exists"
+          else
+            echo "ℹ️  CODE_OF_CONDUCT.md not found - consider adding one for community projects"
+          fi
+          
+          if [ -f SECURITY.md ]; then
+            echo "✅ SECURITY.md exists"
+          else
+            echo "ℹ️  SECURITY.md not found - consider adding security policy"
+          fi
+
+      - name: Check documentation quality
+        run: |
+          echo ""
+          echo "📚 Documentation Quality Check:"
+          
+          # Check README content quality
+          if [ -f README.md ]; then
+            # Check for common sections
+            if grep -qi "installation\|install\|setup" README.md; then
+              echo "✅ Installation instructions found"
+            else
+              echo "⚠️  No installation instructions found in README"
+            fi
+            
+            if grep -qi "usage\|example\|how to" README.md; then
+              echo "✅ Usage examples found"
+            else
+              echo "⚠️  No usage examples found in README"
+            fi
+            
+            if grep -qi "contribute\|contributing" README.md; then
+              echo "✅ Contributing information found"
+            else
+              echo "ℹ️  No contributing information in README"
+            fi
+            
+            # Check for broken links (basic check)
+            broken_links=$(grep -o 'http[s]*://[^)]*' README.md | head -5)
+            if [ ! -z "$broken_links" ]; then
+              echo "ℹ️  Found external links in README (manual verification recommended)"
+            fi
+          fi
+          
+          # Count documentation files
+          doc_files=$(find . -name "*.md" | wc -l)
+          echo "📄 Found $doc_files markdown files"
+
+      - name: Check code organization
+        run: |
+          echo ""
+          echo "🗂️  Code Organization Check:"
+          
+          # Check directory structure
+          if [ -d src ] || [ -d lib ]; then
+            echo "✅ Source code directory found"
+          else
+            echo "ℹ️  No standard source directory (src/lib) found"
+          fi
+          
+          if [ -d tests ] || [ -d test ]; then
+            echo "✅ Test directory found"
+            test_files=$(find tests test -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.rs" 2>/dev/null | wc -l)
+            echo "   Found $test_files test files"
+          else
+            echo "⚠️  No test directory found - consider adding tests"
+          fi
+          
+          if [ -d docs ] || [ -d documentation ]; then
+            echo "✅ Documentation directory found"
+          else
+            echo "ℹ️  No dedicated documentation directory found"
+          fi
+          
+          # Check for configuration files
+          config_files=$(find . -maxdepth 2 -name "*.yml" -o -name "*.yaml" -o -name "*.json" -o -name "*.toml" -o -name "*.ini" | wc -l)
+          echo "⚙️  Found $config_files configuration files"
+
+      - name: Check dependency management
+        run: |
+          echo ""
+          echo "📦 Dependency Management Check:"
+          
+          # Python dependencies
+          if [ -f requirements.txt ]; then
+            echo "✅ requirements.txt found"
+            req_count=$(wc -l < requirements.txt)
+            echo "   $req_count dependencies listed"
+            
+            # Check for version pinning
+            unpinned=$(grep -v "==" requirements.txt | grep -v "^#" | grep -v "^$" | wc -l)
+            if [ $unpinned -gt 0 ]; then
+              echo "⚠️  $unpinned dependencies without version pinning"
+            fi
+          fi
+          
+          if [ -f pyproject.toml ]; then
+            echo "✅ pyproject.toml found"
+          fi
+          
+          if [ -f setup.py ]; then
+            echo "✅ setup.py found"
+          fi
+          
+          # Node.js dependencies
+          if [ -f package.json ]; then
+            echo "✅ package.json found"
+            if [ -f package-lock.json ]; then
+              echo "✅ package-lock.json found"
+            elif [ -f yarn.lock ]; then
+              echo "✅ yarn.lock found"
+            else
+              echo "⚠️  No lock file found - consider using npm ci or yarn"
+            fi
+          fi
+          
+          # Rust dependencies
+          if [ -f Cargo.toml ]; then
+            echo "✅ Cargo.toml found"
+            if [ -f Cargo.lock ]; then
+              echo "✅ Cargo.lock found"
+            else
+              echo "ℹ️  Cargo.lock not found (normal for libraries)"
+            fi
+          fi
+
+      - name: Check security configuration
+        run: |
+          echo ""
+          echo "🔒 Security Configuration Check:"
+          
+          # Check for security workflows
+          if [ -d .github/workflows ]; then
+            security_workflows=$(find .github/workflows -name "*.yml" -o -name "*.yaml" | xargs grep -l "security\|vulnerability\|audit" | wc -l)
+            if [ $security_workflows -gt 0 ]; then
+              echo "✅ Security workflows found"
+            else
+              echo "⚠️  No security workflows found - consider adding vulnerability scanning"
+            fi
+          fi
+          
+          # Check for dependabot
+          if [ -f .github/dependabot.yml ]; then
+            echo "✅ Dependabot configuration found"
+          else
+            echo "ℹ️  No Dependabot configuration - consider adding for automated dependency updates"
+          fi
+          
+          # Check for secrets in common files
+          echo "🔍 Checking for potential secrets..."
+          if grep -r -i "password\|secret\|key\|token" --include="*.py" --include="*.js" --include="*.ts" --include="*.rs" . | grep -v ".git" | head -5; then
+            echo "⚠️  Potential secrets found in code - please review"
+          else
+            echo "✅ No obvious secrets found in code"
+          fi
+
+      - name: Check CI/CD configuration
+        run: |
+          echo ""
+          echo "🔄 CI/CD Configuration Check:"
+          
+          if [ -d .github/workflows ]; then
+            workflow_count=$(find .github/workflows -name "*.yml" -o -name "*.yaml" | wc -l)
+            echo "✅ Found $workflow_count GitHub Actions workflows"
+            
+            # Check for common workflows
+            if find .github/workflows -name "*.yml" -o -name "*.yaml" | xargs grep -l "test\|ci" > /dev/null; then
+              echo "✅ CI/testing workflow found"
+            else
+              echo "⚠️  No CI/testing workflow found"
+            fi
+            
+            if find .github/workflows -name "*.yml" -o -name "*.yaml" | xargs grep -l "deploy\|release" > /dev/null; then
+              echo "✅ Deployment/release workflow found"
+            else
+              echo "ℹ️  No deployment/release workflow found"
+            fi
+          else
+            echo "⚠️  No GitHub Actions workflows found"
+          fi
+          
+          # Check for other CI systems
+          if [ -f .travis.yml ]; then
+            echo "ℹ️  Travis CI configuration found"
+          fi
+          
+          if [ -f .circleci/config.yml ]; then
+            echo "ℹ️  CircleCI configuration found"
+          fi
+
+      - name: Generate health score
+        run: |
+          echo ""
+          echo "📊 Repository Health Score:"
+          echo "=========================="
+          
+          score=0
+          max_score=20
+          
+          # Essential files (5 points)
+          [ -f README.md ] && score=$((score + 1))
+          [ -f LICENSE ] || [ -f LICENSE.md ] || [ -f LICENSE.txt ] && score=$((score + 1))
+          [ -f .gitignore ] && score=$((score + 1))
+          [ -f CONTRIBUTING.md ] && score=$((score + 1))
+          [ -f SECURITY.md ] && score=$((score + 1))
+          
+          # Documentation quality (3 points)
+          if [ -f README.md ]; then
+            readme_lines=$(wc -l < README.md)
+            [ $readme_lines -gt 20 ] && score=$((score + 1))
+            grep -qi "installation\|install" README.md && score=$((score + 1))
+            grep -qi "usage\|example" README.md && score=$((score + 1))
+          fi
+          
+          # Code organization (4 points)
+          [ -d tests ] || [ -d test ] && score=$((score + 1))
+          [ -d src ] || [ -d lib ] && score=$((score + 1))
+          [ -d docs ] || [ -d documentation ] && score=$((score + 1))
+          [ -d .github/workflows ] && score=$((score + 1))
+          
+          # Dependency management (3 points)
+          ([ -f requirements.txt ] || [ -f pyproject.toml ] || [ -f package.json ] || [ -f Cargo.toml ]) && score=$((score + 1))
+          ([ -f package-lock.json ] || [ -f yarn.lock ] || [ -f Cargo.lock ]) && score=$((score + 1))
+          [ -f .github/dependabot.yml ] && score=$((score + 1))
+          
+          # Security (3 points)
+          if [ -d .github/workflows ]; then
+            find .github/workflows -name "*.yml" -o -name "*.yaml" | xargs grep -l "security\|vulnerability" > /dev/null && score=$((score + 1))
+          fi
+          ! grep -r -i "password\|secret\|key" --include="*.py" --include="*.js" --include="*.ts" . | grep -v ".git" > /dev/null && score=$((score + 1))
+          [ -f SECURITY.md ] && score=$((score + 1))
+          
+          # CI/CD (2 points)
+          if [ -d .github/workflows ]; then
+            find .github/workflows -name "*.yml" -o -name "*.yaml" | xargs grep -l "test\|ci" > /dev/null && score=$((score + 1))
+            find .github/workflows -name "*.yml" -o -name "*.yaml" | xargs grep -l "deploy\|release" > /dev/null && score=$((score + 1))
+          fi
+          
+          percentage=$((score * 100 / max_score))
+          
+          echo "Score: $score/$max_score ($percentage%)"
+          
+          if [ $percentage -ge 80 ]; then
+            echo "🎉 Excellent repository health!"
+          elif [ $percentage -ge 60 ]; then
+            echo "👍 Good repository health"
+          elif [ $percentage -ge 40 ]; then
+            echo "⚠️  Fair repository health - room for improvement"
+          else
+            echo "❌ Poor repository health - significant improvements needed"
+          fi
+          
+          echo ""
+          echo "💡 Recommendations for improvement:"
+          [ ! -f README.md ] && echo "- Add a comprehensive README.md"
+          [ ! -f LICENSE ] && [ ! -f LICENSE.md ] && echo "- Add a license file"
+          [ ! -d tests ] && [ ! -d test ] && echo "- Add tests for your code"
+          [ ! -f .github/dependabot.yml ] && echo "- Configure Dependabot for dependency updates"
+          [ ! -f SECURITY.md ] && echo "- Add a security policy"
+          [ ! -d .github/workflows ] && echo "- Set up GitHub Actions for CI/CD"
