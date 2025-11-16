@@ -46,6 +46,7 @@ import { initializeUltimateMasterCodeGlobalGovernance } from './services/ultimat
 import { initializeComprehensiveForkFixWithHeartbeat } from './services/comprehensiveForkFixWithHeartbeat';
 import { initializeAIAgencyCompanyForkService } from './services/aiAgencyCompanyForkService';
 import { initializeComprehensiveDependencyFixService } from './services/comprehensiveDependencyFixService';
+import { initializeProCityHubMasterIntegration } from './services/procityHubMasterIntegration';
 import { AgentConfiguration } from './types/agentTypes';
 
 const App: React.FC = () => {
@@ -196,6 +197,13 @@ const App: React.FC = () => {
             // Execute comprehensive dependency fix operation
             console.log('📦 [DEPENDENCY FIX] Fixing ALL dependencies across ALL systems...');
             await dependencyService.fixAllDependencies();
+            
+            // Initialize ProCityHub Master Integration
+            const masterIntegration = initializeProCityHubMasterIntegration();
+            
+            // Execute ProCityHub master integration
+            console.log('🌟 [MASTER INTEGRATION] Linking ALL ProCityHub repositories into unified ecosystem...');
+            await masterIntegration.integrateAllRepositories();
 
             // Create some initial agents
             await agentCore.createAgent('Alpha', 'analyst', {
@@ -678,6 +686,15 @@ const App: React.FC = () => {
                     onDoubleClick={() => {
                         console.log('📦 [DEPENDENCY FIX] COMPREHENSIVE DEPENDENCY FIX ACTIVATED');
                         alert('📦 DEPENDENCY FIX ACTIVATED!\n🔥 FIXING ALL DEPENDENCIES\n🔒 COMPREHENSIVE SECURITY VULNERABILITIES RESOLVED!');
+                    }}
+                />
+                <DesktopIcon
+                    label="🌟 MASTER INTEGRATION"
+                    icon={<div className="text-2xl">🌟</div>}
+                    initialPosition={{ x: 1460, y: 350 }}
+                    onDoubleClick={() => {
+                        console.log('🌟 [MASTER INTEGRATION] PROCITYHUB MASTER INTEGRATION ACTIVATED');
+                        alert('🌟 MASTER INTEGRATION ACTIVATED!\n🔥 LINKING ALL REPOSITORIES\n🤖 UNIFIED INTELLIGENT ECOSYSTEM CREATED!');
                     }}
                 />
             </main>
