@@ -315,3 +315,8 @@ jobs:
           [ ! -f .github/dependabot.yml ] && echo "- Configure Dependabot for dependency updates"
           [ ! -f SECURITY.md ] && echo "- Add a security policy"
           [ ! -d .github/workflows ] && echo "- Set up GitHub Actions for CI/CD"
+          
+          # Always exit with success code - this is an informational workflow
+          echo ""
+          echo "ℹ️  This health check is informational and does not block the build."
+          exit 0
