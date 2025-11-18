@@ -11,7 +11,7 @@
  */
 
 import { initializeRepositoryForkAndFixService } from '../services/repositoryForkAndFixService';
-import { masterAGIOrchestrator } from '../services/MasterAGIOrchestrator';
+import { masterAGIOrchestrator } from '../src/orchestrator/MasterAGIOrchestrator';
 
 async function main() {
   console.log('🚀 [MAIN] Starting comprehensive repository fork and fix operation...');

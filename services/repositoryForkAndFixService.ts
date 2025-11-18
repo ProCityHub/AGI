@@ -9,7 +9,7 @@
  * @version 1.0.0
  */
 
-import { masterAGIOrchestrator } from './MasterAGIOrchestrator';
+import { masterAGIOrchestrator } from '../src/orchestrator/MasterAGIOrchestrator';
 import { getRussiaGovernanceBridge } from './russiaGovernanceBridge';
 import { getGitHubRepositoryBridge } from './githubRepositoryBridge';
 import { getUnifiedRepositoryBridge } from './unifiedRepositoryBridge';

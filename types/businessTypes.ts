@@ -507,3 +507,40 @@ export interface BusinessSettings {
     };
   };
 }
+
+// Additional compliance and verification types
+export interface ComplianceVerification {
+  id: string;
+  type: 'license' | 'certification' | 'insurance' | 'bond' | 'registration';
+  status: 'pending' | 'verified' | 'expired' | 'rejected';
+  verificationDate?: number;
+  expirationDate?: number;
+  verifiedBy?: string;
+  documentUrl?: string;
+  notes?: string;
+}
+
+export interface RegulatoryCompliance {
+  id: string;
+  jurisdiction: string;
+  regulationType: 'federal' | 'state' | 'local' | 'industry';
+  complianceLevel: 'basic' | 'professional' | 'expert' | 'government';
+  requirements: ComplianceRequirement[];
+  status: 'compliant' | 'non_compliant' | 'pending_review' | 'in_progress';
+  lastReviewDate: number;
+  nextReviewDate: number;
+  complianceOfficer?: string;
+}
+
+export interface ComplianceRequirement {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  status: 'met' | 'not_met' | 'in_progress' | 'not_applicable';
+  dueDate?: number;
+  completedDate?: number;
+  evidence?: string[];
+  notes?: string;
+}

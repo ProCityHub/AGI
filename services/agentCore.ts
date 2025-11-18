@@ -10,9 +10,36 @@ import {
   AgentLearningEvent,
   AgentMetrics
 } from '../types/agentTypes';
-import { EventEmitter } from 'events';
+// Browser-compatible EventEmitter replacement
+class SimpleEventEmitter {
+  private events: Map<string, Function[]> = new Map();
 
-export class AgentCore extends EventEmitter {
+  on(event: string, listener: Function) {
+    if (!this.events.has(event)) {
+      this.events.set(event, []);
+    }
+    this.events.get(event)!.push(listener);
+  }
+
+  emit(event: string, ...args: any[]) {
+    const listeners = this.events.get(event);
+    if (listeners) {
+      listeners.forEach(listener => listener(...args));
+    }
+  }
+
+  removeListener(event: string, listener: Function) {
+    const listeners = this.events.get(event);
+    if (listeners) {
+      const index = listeners.indexOf(listener);
+      if (index > -1) {
+        listeners.splice(index, 1);
+      }
+    }
+  }
+}
+
+export class AgentCore extends SimpleEventEmitter {
   private agents: Map<string, AgentState> = new Map();
   private tasks: Map<string, AgentTask> = new Map();
   private messages: AgentMessage[] = [];
