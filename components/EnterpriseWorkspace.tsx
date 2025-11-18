@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { formTypes, FormTypeNode } from './formTypes';
 import { generateOrgChart, createAgentProfile, performSystemAudit, generateCommunicationsFeed, performCommunicationsAudit, generateOpportunityDossier, generateSystemProposals, generateDesignConcept, performWebsiteAudit, generateCompatibilityReport, generateSystemEvolutionPlan } from '../services/geminiService';
@@ -343,12 +342,12 @@ const WebsiteEvolutionDisplay: React.FC<{ report: WebsiteAuditReport }> = ({ rep
                     <div key={category}>
                         <h5 className="text-lg font-bold text-[var(--sol-accent-cyan)]">{category} (Lattice)</h5>
                         <div className="space-y-2 mt-1">
-                        {proposals.map((p, i) => (
+                        {Array.isArray(proposals) ? proposals.map((p, i) => (
                             <div key={i} className="p-3 bg-[var(--sol-bg-end)] rounded-md border border-[var(--sol-panel-border)]">
                                 <p className="font-semibold text-white">{p.proposal}</p>
                                 <p className="text-sm text-[var(--sol-text-secondary)]"><strong>Rationale:</strong> {p.rationale}</p>
                             </div>
-                        ))}
+                        )) : null}
                         </div>
                     </div>
                 ))}

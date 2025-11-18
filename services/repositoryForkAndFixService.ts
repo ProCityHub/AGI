@@ -123,7 +123,7 @@ export class RepositoryForkAndFixService {
       `Language: ${repo.language || 'Unknown'}`,
       `Last Updated: ${repo.lastUpdated || 'Unknown'}`,
       `Type: ${repo.type || 'Unknown'}`
-    ], 'analytical');
+    ], 'deductive');
     
     // Simulate comprehensive repository analysis
     const issues = await this.identifyRepositoryIssues(repo);

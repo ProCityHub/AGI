@@ -258,10 +258,10 @@ const AgentControlPanel: React.FC<AgentControlPanelProps> = ({ onClose }) => {
                         <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                           <div
                             className="bg-blue-500 h-2 rounded-full"
-                            style={{ width: `${value * 100}%` }}
+                            style={{ width: `${typeof value === 'number' ? value * 100 : 0}%` }}
                           />
                         </div>
-                        <div className="text-xs text-gray-600 mt-1">{(value * 100).toFixed(0)}%</div>
+                        <div className="text-xs text-gray-600 mt-1">{typeof value === 'number' ? (value * 100).toFixed(0) : '0'}%</div>
                       </div>
                     ))}
                   </div>
@@ -399,7 +399,7 @@ const AgentControlPanel: React.FC<AgentControlPanelProps> = ({ onClose }) => {
                         })}
                         className="w-32"
                       />
-                      <span className="text-sm w-8">{(value * 100).toFixed(0)}%</span>
+                      <span className="text-sm w-8">{typeof value === 'number' ? (value * 100).toFixed(0) : '0'}%</span>
                     </div>
                   ))}
                 </div>

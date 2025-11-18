@@ -240,11 +240,11 @@ export class UltimateAIModel {
 
     try {
       // Use Master AGI Orchestrator for complex reasoning
-      const orchestratorResult = await masterAGIOrchestrator.processComplexTask({
-        id: taskId,
+      const orchestratorTaskId = await masterAGIOrchestrator.submitTask({
         type: fullTask.type,
         priority: fullTask.priority,
-        data: task
+        input: task,
+        modules: ['reasoning', 'computation']
       });
 
       // Apply advanced reasoning and problem-solving
@@ -583,4 +583,3 @@ export async function initializeUltimateAIModel(): Promise<UltimateAIModel> {
   
   return model;
 }
-

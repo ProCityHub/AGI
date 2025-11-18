@@ -316,7 +316,7 @@ export class ComprehensiveForkFixWithHeartbeat {
       `Source: ${fork.source}`,
       `Security Level: ${fork.securityLevel}`,
       `Country: ${fork.country || 'Unknown'}`
-    ], 'analytical');
+    ], 'deductive');
     
     // Identify and fix security issues
     const securityFixes = await this.fixSecurityIssues(fork, originalRepo);

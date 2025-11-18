@@ -111,7 +111,8 @@ export class MultiModalService {
   // Text Processing
   private async processText(input: MultiModalInput): Promise<MultiModalOutput> {
     const content = input.content as string;
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     // Determine processing type based on content
     const processingType = this.detectTextProcessingType(content);
@@ -152,7 +153,8 @@ export class MultiModalService {
 
   // Image Processing
   private async processImage(input: MultiModalInput): Promise<MultiModalOutput> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     // Convert image to base64 if needed
     let imageData: string;
@@ -240,7 +242,8 @@ export class MultiModalService {
   // Document Processing
   private async processDocument(input: MultiModalInput): Promise<MultiModalOutput> {
     const content = input.content as string;
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `Analyze this document and provide:
 1. Document type and structure
@@ -276,7 +279,8 @@ ${content}`;
   // Code Processing
   private async processCode(input: MultiModalInput): Promise<MultiModalOutput> {
     const code = input.content as string;
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const language = input.metadata?.language || this.detectProgrammingLanguage(code);
     

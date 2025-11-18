@@ -284,6 +284,8 @@ export interface ServicePricing {
   packages?: PricingPackage[];
   hourlyRate?: number;
   consultationFee?: number;
+  paymentTerms?: string;
+  refundPolicy?: string;
 }
 
 export interface PricingPackage {
@@ -314,11 +316,21 @@ export interface LeadCapture {
   message?: string;
   source: 'website' | 'consultation' | 'service_inquiry' | 'newsletter';
   status: 'new' | 'contacted' | 'qualified' | 'converted' | 'closed';
-  priority: 'low' | 'medium' | 'high';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
   createdAt: number;
   updatedAt: number;
   notes: LeadNote[];
   estimatedValue?: number;
+  leadScore?: number;
+  urgency?: 'low' | 'medium' | 'high' | 'urgent';
+  marketingOptIn?: boolean;
+  companySize?: string;
+  budget?: number;
+  jobTitle?: string;
+  assignedTo?: string;
+  nextFollowUp?: number;
+  consentGiven?: boolean;
+  gdprCompliant?: boolean;
 }
 
 export interface LeadNote {
@@ -344,6 +356,9 @@ export interface ServiceInquiry {
   pricing: ServicePricing;
   createdAt: number;
   updatedAt: number;
+  complianceVerified?: boolean;
+  providerId?: string;
+  jurisdictionVerified?: boolean;
 }
 
 export interface InquiryDocument {
@@ -384,6 +399,8 @@ export interface BusinessMetrics {
   }>;
   monthlyGrowth: number;
   customerSatisfaction: number;
+  verifiedProviders?: number;
+  complianceScore?: number;
 }
 
 export interface ConsultationBooking {
@@ -518,6 +535,8 @@ export interface ComplianceVerification {
   verifiedBy?: string;
   documentUrl?: string;
   notes?: string;
+  providerId?: string;
+  verificationType?: string;
 }
 
 export interface RegulatoryCompliance {
@@ -543,4 +562,17 @@ export interface ComplianceRequirement {
   completedDate?: number;
   evidence?: string[];
   notes?: string;
+}
+
+export interface AIRecommendation {
+  id: string;
+  type: 'service' | 'provider' | 'optimization' | 'compliance';
+  title: string;
+  description: string;
+  confidence: number;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  reasoning: string;
+  actionItems: string[];
+  estimatedImpact: string;
+  createdAt: number;
 }

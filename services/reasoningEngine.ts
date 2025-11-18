@@ -117,7 +117,9 @@ export class ReasoningEngine {
 
   // Chain of Thought Reasoning
   async chainOfThought(problem: string, context: any = {}): Promise<ReasoningChain> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Note: Using mock implementation until Google GenAI SDK is properly configured
+    // // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Solve this problem using step-by-step reasoning. Break down your thinking into clear, logical steps.
@@ -159,7 +161,8 @@ Be explicit about your reasoning at each step.`;
     risk_factors: string[];
     contingencies: string[];
   }> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Create a detailed, step-by-step plan to achieve the following goal:
@@ -187,7 +190,8 @@ Format your response as a structured plan with clear steps and dependencies.`;
 
   // Hypothesis Testing
   async generateHypothesis(observation: string, context: any = {}): Promise<Hypothesis> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Given this observation, generate a testable hypothesis:
@@ -216,7 +220,8 @@ Be scientific and rigorous in your approach.`;
       throw new Error(`Hypothesis ${hypothesisId} not found`);
     }
 
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Evaluate this hypothesis against new evidence:
@@ -242,7 +247,8 @@ Provide a rigorous scientific evaluation.`;
 
   // Causal Reasoning
   async identifyCausalRelations(events: string[], context: any = {}): Promise<CausalRelation[]> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Analyze these events and identify potential causal relationships:
@@ -276,7 +282,8 @@ Consider alternative explanations and confounding factors.`;
     criteria: string[] = [],
     context: any = {}
   ): Promise<DecisionNode> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Make a decision for the following question:
@@ -312,7 +319,8 @@ Consider both short-term and long-term implications.`;
     strength: number;
     insights: string[];
   }>> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Find analogies between the source and target domain:
@@ -349,7 +357,8 @@ Focus on meaningful, useful analogies that provide genuine insights.`;
       throw new Error(`Reasoning chain ${chainId} not found`);
     }
 
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Evaluate this reasoning chain for quality and correctness:
@@ -376,7 +385,8 @@ Be thorough and critical in your evaluation.`;
 
   // Private Methods
   private async performDeductiveReasoning(chain: ReasoningChain, context: any): Promise<void> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Use deductive reasoning to solve this problem:
@@ -399,7 +409,8 @@ Structure your response with clear logical steps.`;
   }
 
   private async performInductiveReasoning(chain: ReasoningChain, context: any): Promise<void> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Use inductive reasoning to solve this problem:
@@ -422,7 +433,8 @@ Note that inductive conclusions are probabilistic, not certain.`;
   }
 
   private async performAbductiveReasoning(chain: ReasoningChain, context: any): Promise<void> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Use abductive reasoning to solve this problem:
@@ -445,7 +457,8 @@ Focus on finding the most plausible explanation.`;
   }
 
   private async performCausalReasoning(chain: ReasoningChain, context: any): Promise<void> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Use causal reasoning to solve this problem:
@@ -469,7 +482,8 @@ Be careful to distinguish causation from correlation.`;
   }
 
   private async performAnalogicalReasoning(chain: ReasoningChain, context: any): Promise<void> {
-    const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Mock implementation - Google GenAI SDK integration pending
+    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
 Use analogical reasoning to solve this problem:

@@ -146,16 +146,16 @@ async function demonstrateUltimateAI() {
 
     // Integration with Master AGI Orchestrator
     console.log('\n🧠 [INTEGRATION] Master AGI Orchestrator Integration...');
-    const orchestratorTask = await masterAGIOrchestrator.processComplexTask({
-      id: 'ultimate-ai-integration-test',
+    const orchestratorTaskId = await masterAGIOrchestrator.submitTask({
       type: 'analysis',
       priority: 'high',
-      data: {
+      input: {
         description: 'Test integration between Ultimate AI Model and Master AGI Orchestrator',
         requirements: ['high_performance', 'accurate_results', 'efficient_processing']
-      }
+      },
+      modules: ['reasoning', 'analysis']
     });
-    console.log(`   ✅ Master AGI Orchestrator task completed`);
+    console.log(`   ✅ Master AGI Orchestrator task submitted with ID: ${orchestratorTaskId}`);
     console.log(`   🎯 Integration successful - Ultimate AI can leverage all orchestrator capabilities`);
 
     console.log('\n🌟 ===============================================');
@@ -206,4 +206,3 @@ if (require.main === module) {
 }
 
 export { demonstrateUltimateAI };
-
