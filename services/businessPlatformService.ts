@@ -193,41 +193,37 @@ export class BusinessPlatformService {
 
       recommendations.push({
         id: this.generateId(),
-        type: 'service_match',
+        type: 'service',
         title: 'Recommended Services',
         description: 'AI-identified services that match this lead\'s profile',
         confidence: 0.85,
-        reasoning: serviceAnalysis.steps.map(step => step.reasoning),
+        reasoning: serviceAnalysis.steps.map(step => step.content).join('; '),
         actionItems: [
           'Send targeted service information',
           'Schedule consultation for high-value services',
           'Provide relevant case studies'
         ],
         priority: 'high',
-        createdAt: Date.now(),
-        isImplemented: false
+        estimatedImpact: 'High potential for increased conversion rates and customer satisfaction',
+        createdAt: Date.now()
       });
 
       // Lead scoring insights
       recommendations.push({
         id: this.generateId(),
-        type: 'lead_scoring',
+        type: 'optimization',
         title: 'Lead Quality Assessment',
         description: `High-quality lead with score ${lead.leadScore}/100`,
         confidence: 0.92,
-        reasoning: [
-          'Company size indicates substantial budget',
-          'Urgency level suggests immediate need',
-          'Multiple service interests show comprehensive requirements'
-        ],
+        reasoning: 'Company size indicates substantial budget; Urgency level suggests immediate need; Multiple service interests show comprehensive requirements',
         actionItems: [
           'Prioritize immediate follow-up',
           'Assign to senior consultant',
           'Prepare comprehensive proposal'
         ],
         priority: lead.leadScore > 80 ? 'high' : 'medium',
-        createdAt: Date.now(),
-        isImplemented: false
+        estimatedImpact: 'Improved lead qualification and conversion optimization',
+        createdAt: Date.now()
       });
 
       this.recommendations.push(...recommendations);

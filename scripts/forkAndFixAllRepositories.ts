@@ -94,7 +94,7 @@ async function main() {
     console.log(`📈 Average improvement: ${statistics.averageImprovementScore.toFixed(1)} points`);
     
     const topIssueType = Object.entries(statistics.issuesByType)
-      .sort(([,a], [,b]) => b - a)[0];
+      .sort(([,a], [,b]) => (typeof b === 'number' ? b : 0) - (typeof a === 'number' ? a : 0))[0];
     console.log(`🎯 Most common issue type: ${topIssueType[0]} (${topIssueType[1]} occurrences)`);
     
     console.log('\n🚀 [NEXT STEPS] Recommended Actions:');

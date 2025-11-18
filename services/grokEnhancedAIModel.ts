@@ -237,7 +237,7 @@ export class GrokEnhancedAIModel {
     // Use Master AGI Orchestrator for complex development reasoning
     const orchestratorTaskId = await this.masterAGIOrchestrator.submitTask({
       type: 'analysis',
-      priority: task.priority,
+      priority: task.priority === 'urgent' ? 'critical' : task.priority,
       input: {
         task: task.description,
         context: task.context,
@@ -833,4 +833,3 @@ export class GrokEnhancedAIModel {
 }
 
 export default GrokEnhancedAIModel;
-

@@ -75,30 +75,27 @@ async function executeComprehensiveDependencyFix() {
     
     console.log('\n📊 [STATUS DISTRIBUTION] Repository Processing Status:');
     Object.entries(stats.repositoriesByStatus).forEach(([status, count]) => {
-      const numCount = typeof count === "number" ? count : 0;
       const emoji = status === 'fixed' ? '✅' : 
                    status === 'failed' ? '❌' : 
                    status === 'fixing' ? '🔄' : '🔍';
-      console.log(`  ${emoji} ${status.toUpperCase()}: ${numCount} repositories`);
+      console.log(`  ${emoji} ${status.toUpperCase()}: ${count} repositories`);
     });
     
     console.log('\n🐛 [ISSUE TYPE DISTRIBUTION] Issues by Type:');
     Object.entries(stats.issuesByType).forEach(([type, count]) => {
-      const numCount = typeof count === "number" ? count : 0;
       const emoji = type === 'outdated' ? '📅' : 
                    type === 'vulnerable' ? '🔒' : 
                    type === 'deprecated' ? '⚠️' : 
                    type === 'incompatible' ? '⚡' : '❓';
-      console.log(`  ${emoji} ${type.toUpperCase()}: ${numCount} issues`);
+      console.log(`  ${emoji} ${type.toUpperCase()}: ${count} issues`);
     });
     
     console.log('\n🔥 [SEVERITY DISTRIBUTION] Issues by Severity:');
     Object.entries(stats.issuesBySeverity).forEach(([severity, count]) => {
-      const numCount = typeof count === "number" ? count : 0;
       const emoji = severity === 'critical' ? '🔴' : 
                    severity === 'high' ? '🟠' : 
                    severity === 'medium' ? '🟡' : '🟢';
-      console.log(`  ${emoji} ${severity.toUpperCase()}: ${numCount} issues`);
+      console.log(`  ${emoji} ${severity.toUpperCase()}: ${count} issues`);
     });
     
     console.log('\n📋 [DETAILED RESULTS] Individual Repository Results:');
