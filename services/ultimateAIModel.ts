@@ -239,13 +239,52 @@ export class UltimateAIModel {
     this.activeTasks.set(taskId, fullTask);
 
     try {
+      // Map TaskExecution types to AGITask types
+      const mapTaskType = (type: string): 'reasoning' | 'computation' | 'creation' | 'analysis' | 'synthesis' => {
+        switch (type) {
+          case 'creative': return 'creation';
+          case 'code': return 'computation';
+          case 'research': return 'analysis';
+          case 'problem_solving': return 'reasoning';
+          case 'automation': return 'synthesis';
+          default: return 'analysis';
+        }
+      };
+
+      const mapPriority = (priority: string): 'low' | 'medium' | 'high' | 'critical' => {
+        if (priority === 'emergency') return 'critical';
+        return priority as 'low' | 'medium' | 'high' | 'critical';
+      };
+
       // Use Master AGI Orchestrator for complex reasoning
       const orchestratorTaskId = await masterAGIOrchestrator.submitTask({
-        type: fullTask.type,
-        priority: fullTask.priority,
+        type: mapTaskType(fullTask.type),
+        priority: mapPriority(fullTask.priority),
         input: task,
         modules: ['reasoning', 'computation']
       });
+
+      // Wait for orchestrator result
+      let orchestratorResult;
+      let attempts = 0;
+      const maxAttempts = 100; // 10 seconds max wait
+      
+      while (attempts < maxAttempts) {
+        const taskStatus = masterAGIOrchestrator.getTaskStatus(orchestratorTaskId);
+        if (taskStatus?.status === 'completed') {
+          orchestratorResult = taskStatus.result;
+          break;
+        } else if (taskStatus?.status === 'failed') {
+          throw new Error(`Orchestrator task failed: ${taskStatus.error}`);
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+      }
+      
+      if (!orchestratorResult) {
+        throw new Error('Orchestrator task timed out');
+      }
 
       // Apply advanced reasoning and problem-solving
       const result = await this.advancedReasoning(fullTask, orchestratorResult);
@@ -587,12 +626,14 @@ export class UltimateAIModel {
     try {
       // Store task in active tasks
       const taskId = `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const taskExecution = {
-        id: taskId,
-        task: task,
-        status: 'processing' as const,
-        startTime: new Date(),
-        progress: 0
+      const taskExecution: TaskExecution = {
+        taskId: taskId,
+        type: task.type || 'analysis',
+        priority: task.priority || 'medium',
+        status: 'in_progress',
+        startTime: Date.now(),
+        confidence: 0,
+        qualityScore: 0
       };
       
       this.activeTasks.set(taskId, taskExecution);
@@ -615,9 +656,10 @@ export class UltimateAIModel {
       
       // Update task status
       taskExecution.status = 'completed';
-      taskExecution.progress = 100;
-      taskExecution.endTime = new Date();
+      taskExecution.endTime = Date.now();
       taskExecution.result = result;
+      taskExecution.confidence = this.calculateConfidence(result);
+      taskExecution.qualityScore = this.calculateQualityScore(result);
       
       console.log(`✅ [COMPLETED] Task ${taskId} processed successfully`);
       return result;

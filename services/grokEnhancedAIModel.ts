@@ -33,6 +33,7 @@ export interface GrokTask {
   status: 'pending' | 'processing' | 'completed' | 'failed' | 'learning';
   result?: any;
   learningData?: any;
+  corrected?: boolean;
   performanceMetrics?: GrokPerformanceMetrics;
 }
 

@@ -378,6 +378,18 @@ export class UnifiedRepositoryBridge {
       heartbeatPattern: this.heartbeatPattern
     };
   }
+
+  getAllRepositories(): any[] {
+    // Return repository data from hypercube nodes
+    return Array.from(this.nodes.values()).map(node => ({
+      id: node.id,
+      name: node.name,
+      type: node.type,
+      repos: node.repositories,
+      users: node.users,
+      source: 'unified_bridge'
+    }));
+  }
 }
 
 // Singleton instance

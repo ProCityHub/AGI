@@ -194,7 +194,8 @@ export class ProsyncTerminal {
                 const nodeMapping = {
                     beat: i + 1,
                     node: this.toBinary(node),
-                    interference: false
+                    interference: false,
+                    fork: null as any
                 };
 
                 console.log(`[PROSYNC TOPOLOGY] MAPPING BEAT ${i + 1} TO NODE ${nodeMapping.node}`);
@@ -307,7 +308,4 @@ export function initializeProsyncEngine(): ProsyncTerminal {
     return prosyncInstance;
 }
 
-// Export types for external use
-export type {
-    ProsyncSimulationResult
-};
+// Types are already exported via interface declarations above

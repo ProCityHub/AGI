@@ -755,6 +755,8 @@ Focus on structural similarities rather than surface features.`;
         id: chainId,
         goal: request.goal || request.query || 'Complex reasoning task',
         steps: [],
+        conclusion: '',
+        reasoning_type: 'deductive',
         currentStep: 0,
         status: 'active',
         confidence: 0,
