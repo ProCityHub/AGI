@@ -356,9 +356,6 @@ Focus on meaningful, useful analogies that provide genuine insights.`;
       throw new Error(`Reasoning chain ${chainId} not found`);
     }
 
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Evaluate this reasoning chain for quality and correctness:
 
@@ -376,17 +373,17 @@ Please evaluate:
 
 Be thorough and critical in your evaluation.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     return this.parseReasoningEvaluation(response);
   }
 
   // Private Methods
   private async performDeductiveReasoning(chain: ReasoningChain, context: any): Promise<void> {
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Use deductive reasoning to solve this problem:
 
@@ -401,16 +398,16 @@ Apply deductive reasoning:
 
 Structure your response with clear logical steps.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     this.parseReasoningSteps(chain, response, 'deductive');
   }
 
   private async performInductiveReasoning(chain: ReasoningChain, context: any): Promise<void> {
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Use inductive reasoning to solve this problem:
 
@@ -425,16 +422,16 @@ Apply inductive reasoning:
 
 Note that inductive conclusions are probabilistic, not certain.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     this.parseReasoningSteps(chain, response, 'inductive');
   }
 
   private async performAbductiveReasoning(chain: ReasoningChain, context: any): Promise<void> {
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Use abductive reasoning to solve this problem:
 
@@ -449,16 +446,16 @@ Apply abductive reasoning:
 
 Focus on finding the most plausible explanation.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     this.parseReasoningSteps(chain, response, 'abductive');
   }
 
   private async performCausalReasoning(chain: ReasoningChain, context: any): Promise<void> {
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Use causal reasoning to solve this problem:
 
@@ -474,16 +471,16 @@ Apply causal reasoning:
 
 Be careful to distinguish causation from correlation.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     this.parseReasoningSteps(chain, response, 'causal');
   }
 
   private async performAnalogicalReasoning(chain: ReasoningChain, context: any): Promise<void> {
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Use analogical reasoning to solve this problem:
 
@@ -499,8 +496,11 @@ Apply analogical reasoning:
 
 Focus on structural similarities rather than surface features.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     this.parseReasoningSteps(chain, response, 'analogical');
   }
@@ -776,7 +776,7 @@ Focus on structural similarities rather than surface features.`;
           result = this.generateReasoningResult(chain, 'abductive');
           break;
         case 'causal':
-          result = await this.performCausalReasoning(request);
+          result = await this.processCausalReasoningRequest(request);
           break;
         default:
           // General complex reasoning - use hybrid approach
@@ -807,7 +807,7 @@ Focus on structural similarities rather than surface features.`;
     };
   }
 
-  private async performCausalReasoning(request: any): Promise<any> {
+  private async processCausalReasoningRequest(request: any): Promise<any> {
     console.log('🔗 [CAUSAL REASONING] Analyzing causal relationships...');
     
     const causalRelation: CausalRelation = {
