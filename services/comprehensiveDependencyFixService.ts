@@ -405,7 +405,7 @@ export class ComprehensiveDependencyFixService {
   }
 
   private determineFixMethod(issueType: DependencyIssue['type']): DependencyFix['fixMethod'] {
-    const methodMap = {
+    const methodMap: Record<string, DependencyFix['fixMethod']> = {
       outdated: 'update',
       vulnerable: 'patch',
       deprecated: 'replace',

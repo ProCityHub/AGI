@@ -104,8 +104,8 @@ export class GrokEnhancedAIModel {
   constructor() {
     this.masterAGIOrchestrator = new MasterAGIOrchestrator();
     this.ultimateAIModel = new UltimateAIModel();
-    this.reasoningEngine = new ReasoningEngine();
-    this.multiModalService = new MultiModalService();
+    this.reasoningEngine = new ReasoningEngine(process.env.GOOGLE_AI_API_KEY || 'default-key');
+    this.multiModalService = new MultiModalService(process.env.GOOGLE_AI_API_KEY || 'default-key');
     
     this.agentCapabilities = {
       autonomousTaskPlanning: true,

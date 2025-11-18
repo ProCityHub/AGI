@@ -373,7 +373,18 @@ export class BusinessPlatformService {
         '100k_500k': 85,
         'over_500k': 100
       };
-      score += budgetScores[leadData.budget as keyof typeof budgetScores] || 0;
+      
+      // Convert numeric budget to budget category
+      const getBudgetCategory = (budget: number): keyof typeof budgetScores => {
+        if (budget < 10000) return 'under_10k';
+        if (budget < 50000) return '10k_50k';
+        if (budget < 100000) return '50k_100k';
+        if (budget < 500000) return '100k_500k';
+        return 'over_500k';
+      };
+      
+      const budgetCategory = getBudgetCategory(leadData.budget);
+      score += budgetScores[budgetCategory] || 0;
     }
 
     // Urgency scoring

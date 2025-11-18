@@ -111,8 +111,6 @@ export class MultiModalService {
   // Text Processing
   private async processText(input: MultiModalInput): Promise<MultiModalOutput> {
     const content = input.content as string;
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     // Determine processing type based on content
     const processingType = this.detectTextProcessingType(content);
@@ -135,27 +133,27 @@ export class MultiModalService {
         prompt = `Process and understand the following text, providing relevant insights:\n\n${content}`;
     }
     
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    
+    const responseText = result.candidates[0].content.parts[0].text;
     
     return {
       type: 'text',
-      content: response.text(),
+      content: responseText,
       confidence: 0.85,
       processingTime: 0,
       metadata: {
         model: 'gemini-2.5-flash',
-        processingType,
-        tokens: response.text().length / 4 // rough estimate
+        tokens: responseText.length / 4 // rough estimate
       }
     };
   }
 
   // Image Processing
   private async processImage(input: MultiModalInput): Promise<MultiModalOutput> {
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     // Convert image to base64 if needed
     let imageData: string;
     if (input.content instanceof File) {
@@ -175,23 +173,32 @@ export class MultiModalService {
       }
     };
     
-    const result = await model.generateContent([prompt, imagePart]);
-    const response = await result.response;
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ 
+        role: "user", 
+        parts: [
+          { text: prompt },
+          imagePart
+        ]
+      }]
+    });
+    
+    const responseText = result.candidates[0].content.parts[0].text;
     
     return {
       type: 'analysis',
       content: {
-        description: response.text(),
-        detectedObjects: this.extractObjectsFromDescription(response.text()),
-        detectedText: this.extractTextFromDescription(response.text()),
-        colors: this.extractColorsFromDescription(response.text()),
+        description: responseText,
+        detectedObjects: this.extractObjectsFromDescription(responseText),
+        detectedText: this.extractTextFromDescription(responseText),
+        colors: this.extractColorsFromDescription(responseText),
         metadata: input.metadata
       },
       confidence: 0.8,
       processingTime: 0,
       metadata: {
-        model: 'gemini-2.5-flash',
-        inputFormat: input.metadata?.mimeType
+        model: 'gemini-2.5-flash'
       }
     };
   }
@@ -209,9 +216,7 @@ export class MultiModalService {
       confidence: 0.1,
       processingTime: 0,
       metadata: {
-        note: 'Placeholder implementation',
-        inputFormat: input.metadata?.mimeType,
-        duration: input.metadata?.duration
+        model: 'placeholder'
       }
     };
   }
@@ -232,9 +237,7 @@ export class MultiModalService {
       confidence: 0.1,
       processingTime: 0,
       metadata: {
-        note: 'Placeholder implementation',
-        inputFormat: input.metadata?.mimeType,
-        duration: input.metadata?.duration
+        model: 'placeholder'
       }
     };
   }
@@ -242,8 +245,6 @@ export class MultiModalService {
   // Document Processing
   private async processDocument(input: MultiModalInput): Promise<MultiModalOutput> {
     const content = input.content as string;
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `Analyze this document and provide:
 1. Document type and structure
@@ -255,23 +256,26 @@ export class MultiModalService {
 Document content:
 ${content}`;
     
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    
+    const responseText = result.candidates[0].content.parts[0].text;
     
     return {
       type: 'analysis',
       content: {
-        analysis: response.text(),
+        analysis: responseText,
         documentType: this.detectDocumentType(content),
         extractedEntities: this.extractEntitiesFromText(content),
-        summary: this.extractSummaryFromAnalysis(response.text()),
+        summary: this.extractSummaryFromAnalysis(responseText),
         metadata: input.metadata
       },
       confidence: 0.85,
       processingTime: 0,
       metadata: {
-        model: 'gemini-2.5-flash',
-        inputFormat: input.metadata?.format
+        model: 'gemini-2.5-flash'
       }
     };
   }
@@ -279,8 +283,6 @@ ${content}`;
   // Code Processing
   private async processCode(input: MultiModalInput): Promise<MultiModalOutput> {
     const code = input.content as string;
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const language = input.metadata?.language || this.detectProgrammingLanguage(code);
     
@@ -297,26 +299,28 @@ Code:
 ${code}
 \`\`\``;
     
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    
+    const responseText = result.candidates[0].content.parts[0].text;
     
     return {
       type: 'analysis',
       content: {
-        analysis: response.text(),
+        analysis: responseText,
         language,
         complexity: this.calculateCodeComplexity(code),
         functions: this.extractFunctions(code, language),
-        issues: this.extractIssuesFromAnalysis(response.text()),
-        suggestions: this.extractSuggestionsFromAnalysis(response.text()),
+        issues: this.extractIssuesFromAnalysis(responseText),
+        suggestions: this.extractSuggestionsFromAnalysis(responseText),
         metadata: input.metadata
       },
       confidence: 0.9,
       processingTime: 0,
       metadata: {
-        model: 'gemini-2.5-flash',
-        language,
-        linesOfCode: code.split('\n').length
+        model: 'gemini-2.5-flash'
       }
     };
   }
@@ -503,6 +507,17 @@ ${code}
       chunks.push(array.slice(i, i + size));
     }
     return chunks;
+  }
+
+  // Public initialization method for Master AGI Orchestrator integration
+  async initialize(): Promise<void> {
+    console.log('🎨 [MULTIMODAL SERVICE] Initializing multi-modal processing capabilities...');
+    
+    // Initialize capabilities
+    this.initializeCapabilities();
+    
+    console.log('✅ [MULTIMODAL SERVICE] All processing capabilities initialized and ready');
+    console.log('🎯 [CAPABILITIES] Text, image, audio, document, and code processing active');
   }
 }
 

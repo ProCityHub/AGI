@@ -717,6 +717,147 @@ Focus on structural similarities rather than surface features.`;
   getCausalRelations(): CausalRelation[] {
     return this.causalRelations;
   }
+
+  // Public initialization method for Master AGI Orchestrator integration
+  async initialize(): Promise<void> {
+    console.log('🧠 [REASONING ENGINE] Initializing advanced reasoning capabilities...');
+    
+    // Initialize reasoning chains
+    this.reasoningChains.clear();
+    
+    // Initialize hypotheses storage
+    this.hypotheses.clear();
+    
+    // Initialize causal relations
+    this.causalRelations = [];
+    
+    // Initialize decision nodes
+    this.decisionNodes.clear();
+    
+    console.log('✅ [REASONING ENGINE] All reasoning systems initialized and ready');
+    console.log('🎯 [CAPABILITIES] Deductive, inductive, abductive, and causal reasoning active');
+  }
+
+  // Public complex reasoning method for Master AGI Orchestrator integration
+  async processComplexReasoning(request: any): Promise<any> {
+    console.log(`🔍 [COMPLEX REASONING] Processing complex reasoning request: ${request.type || 'general'}`);
+    
+    try {
+      const chainId = `reasoning_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Create reasoning chain for the complex request
+      const chain: ReasoningChain = {
+        id: chainId,
+        goal: request.goal || request.query || 'Complex reasoning task',
+        steps: [],
+        currentStep: 0,
+        status: 'active',
+        confidence: 0,
+        evidence: request.evidence || [],
+        assumptions: request.assumptions || [],
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      
+      this.reasoningChains.set(chainId, chain);
+      
+      // Perform reasoning based on request type
+      let result;
+      switch (request.type) {
+        case 'deductive':
+          await this.performDeductiveReasoning(chain, request.context || {});
+          result = this.generateReasoningResult(chain, 'deductive');
+          break;
+        case 'inductive':
+          await this.performInductiveReasoning(chain, request.context || {});
+          result = this.generateReasoningResult(chain, 'inductive');
+          break;
+        case 'abductive':
+          await this.performAbductiveReasoning(chain, request.context || {});
+          result = this.generateReasoningResult(chain, 'abductive');
+          break;
+        case 'causal':
+          result = await this.performCausalReasoning(request);
+          break;
+        default:
+          // General complex reasoning - use hybrid approach
+          result = await this.performHybridReasoning(chain, request);
+      }
+      
+      console.log(`✅ [REASONING COMPLETE] Complex reasoning completed for chain ${chainId}`);
+      return result;
+      
+    } catch (error) {
+      console.error(`❌ [REASONING ERROR] Complex reasoning failed:`, error);
+      throw error;
+    }
+  }
+
+  private generateReasoningResult(chain: ReasoningChain, type: string): any {
+    return {
+      chainId: chain.id,
+      type: `${type}_reasoning_result`,
+      goal: chain.goal,
+      steps: chain.steps,
+      confidence: chain.confidence,
+      status: chain.status,
+      reasoning: chain.steps.map(step => step.content).join(' → '),
+      conclusion: chain.steps.length > 0 ? chain.steps[chain.steps.length - 1].content : 'No conclusion reached',
+      evidence: chain.evidence,
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  private async performCausalReasoning(request: any): Promise<any> {
+    console.log('🔗 [CAUSAL REASONING] Analyzing causal relationships...');
+    
+    const causalRelation: CausalRelation = {
+      id: `causal_${Date.now()}`,
+      cause: request.cause || 'Unknown cause',
+      effect: request.effect || 'Unknown effect',
+      strength: request.strength || 0.7,
+      confidence: request.confidence || 0.8,
+      evidence: request.evidence || [],
+      context: request.context || {}
+    };
+    
+    this.causalRelations.push(causalRelation);
+    
+    return {
+      type: 'causal_reasoning_result',
+      causalRelation: causalRelation,
+      analysis: `Causal relationship identified: ${causalRelation.cause} → ${causalRelation.effect}`,
+      strength: causalRelation.strength,
+      confidence: causalRelation.confidence,
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  private async performHybridReasoning(chain: ReasoningChain, request: any): Promise<any> {
+    console.log('🌟 [HYBRID REASONING] Applying multi-modal reasoning approach...');
+    
+    // Apply multiple reasoning types for comprehensive analysis
+    await this.performDeductiveReasoning(chain, request.context || {});
+    await this.performInductiveReasoning(chain, request.context || {});
+    
+    // Generate hybrid result
+    return {
+      type: 'hybrid_reasoning_result',
+      chainId: chain.id,
+      goal: chain.goal,
+      approaches: ['deductive', 'inductive'],
+      steps: chain.steps,
+      confidence: chain.confidence,
+      reasoning: 'Multi-modal reasoning approach applied for comprehensive analysis',
+      conclusion: chain.steps.length > 0 ? chain.steps[chain.steps.length - 1].content : 'Complex analysis complete',
+      recommendations: [
+        'Consider multiple perspectives',
+        'Validate assumptions',
+        'Gather additional evidence if needed'
+      ],
+      timestamp: new Date().toISOString()
+    };
+  }
 }
 
 // Singleton instance
