@@ -281,10 +281,8 @@ export class BusinessPlatformService {
       complianceScore: this.calculateOverallComplianceScore(),
       servicePopularity: this.calculateServicePopularity(),
       leadSources: this.calculateLeadSources(),
-      providerMetrics: this.calculateProviderMetrics(),
       monthlyGrowth: this.calculateMonthlyGrowth(),
-      customerSatisfaction: this.calculateCustomerSatisfaction(),
-      regulatoryCompliance: this.calculateRegulatoryCompliance()
+      customerSatisfaction: this.calculateCustomerSatisfaction()
     };
   }
 
@@ -318,14 +316,13 @@ export class BusinessPlatformService {
       const verificationId = this.generateId();
       const verification: ComplianceVerification = {
         id: verificationId,
+        type: 'license',
         providerId: provider.id,
         verificationType: 'license',
         status: 'pending',
         verificationDate: Date.now(),
         verifiedBy: 'system',
-        verificationMethod: 'automated',
-        documentUrls: [license.documentUrl],
-        nextVerificationDue: Date.now() + (365 * 24 * 60 * 60 * 1000) // 1 year
+        documentUrl: license.documentUrl
       };
       
       this.verifications.set(verificationId, verification);
@@ -336,14 +333,13 @@ export class BusinessPlatformService {
       const verificationId = this.generateId();
       const verification: ComplianceVerification = {
         id: verificationId,
+        type: 'insurance',
         providerId: provider.id,
         verificationType: 'insurance',
         status: 'pending',
         verificationDate: Date.now(),
         verifiedBy: 'system',
-        verificationMethod: 'automated',
-        documentUrls: [insurance.certificateUrl],
-        nextVerificationDue: insurance.expirationDate
+        documentUrl: insurance.certificateUrl
       };
       
       this.verifications.set(verificationId, verification);
