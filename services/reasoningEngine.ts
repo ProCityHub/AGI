@@ -117,10 +117,6 @@ export class ReasoningEngine {
 
   // Chain of Thought Reasoning
   async chainOfThought(problem: string, context: any = {}): Promise<ReasoningChain> {
-    // Note: Using mock implementation until Google GenAI SDK is properly configured
-    // // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Solve this problem using step-by-step reasoning. Break down your thinking into clear, logical steps.
 
@@ -137,8 +133,11 @@ Please structure your response as follows:
 
 Be explicit about your reasoning at each step.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     return this.parseChainOfThoughtResponse(response, problem);
   }
@@ -161,9 +160,6 @@ Be explicit about your reasoning at each step.`;
     risk_factors: string[];
     contingencies: string[];
   }> {
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Create a detailed, step-by-step plan to achieve the following goal:
 
@@ -182,17 +178,17 @@ Please provide:
 
 Format your response as a structured plan with clear steps and dependencies.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     return this.parsePlanResponse(response);
   }
 
   // Hypothesis Testing
   async generateHypothesis(observation: string, context: any = {}): Promise<Hypothesis> {
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Given this observation, generate a testable hypothesis:
 
@@ -208,8 +204,11 @@ Please provide:
 
 Be scientific and rigorous in your approach.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     return this.parseHypothesisResponse(response, observation);
   }
@@ -220,9 +219,6 @@ Be scientific and rigorous in your approach.`;
       throw new Error(`Hypothesis ${hypothesisId} not found`);
     }
 
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Evaluate this hypothesis against new evidence:
 
@@ -239,17 +235,17 @@ Please:
 
 Provide a rigorous scientific evaluation.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     return this.updateHypothesisFromTest(hypothesis, newEvidence, response);
   }
 
   // Causal Reasoning
   async identifyCausalRelations(events: string[], context: any = {}): Promise<CausalRelation[]> {
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Analyze these events and identify potential causal relationships:
 
@@ -266,8 +262,11 @@ For each potential causal relationship, provide:
 Be careful to distinguish between correlation and causation.
 Consider alternative explanations and confounding factors.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     const relations = this.parseCausalRelations(response);
     this.causalRelations.push(...relations);
@@ -282,9 +281,6 @@ Consider alternative explanations and confounding factors.`;
     criteria: string[] = [],
     context: any = {}
   ): Promise<DecisionNode> {
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Make a decision for the following question:
 
@@ -302,8 +298,11 @@ For each option, provide:
 Then recommend the best option with detailed reasoning.
 Consider both short-term and long-term implications.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     return this.parseDecisionResponse(response, question, options);
   }
@@ -319,9 +318,6 @@ Consider both short-term and long-term implications.`;
     strength: number;
     insights: string[];
   }>> {
-    // Mock implementation - Google GenAI SDK integration pending
-    // const model = this.ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `
 Find analogies between the source and target domain:
 
@@ -338,8 +334,11 @@ For each analogy, provide:
 
 Focus on meaningful, useful analogies that provide genuine insights.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response.text();
+    const result = await this.ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
+    });
+    const response = result.candidates[0].content.parts[0].text;
     
     return this.parseAnalogiesResponse(response);
   }
