@@ -20,14 +20,20 @@ export interface ReasoningChain {
   reasoning_type: 'deductive' | 'inductive' | 'abductive' | 'causal' | 'analogical';
   created_at: number;
   completed_at?: number;
+  currentStep?: number;
+  status?: string;
+  evidence?: string[];
+  assumptions?: string[];
 }
 
 export interface CausalRelation {
+  id?: string;
   cause: string;
   effect: string;
   strength: number; // 0-1
   evidence: string[];
   confidence: number;
+  context?: any;
 }
 
 export interface Hypothesis {
@@ -754,8 +760,8 @@ Focus on structural similarities rather than surface features.`;
         confidence: 0,
         evidence: request.evidence || [],
         assumptions: request.assumptions || [],
-        createdAt: new Date(),
-        updatedAt: new Date()
+        created_at: Date.now(),
+        completed_at: undefined
       };
       
       this.reasoningChains.set(chainId, chain);
