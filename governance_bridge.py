@@ -32,6 +32,30 @@ class TurkmenistanGovernanceBridge:
                 "repo": "bbs",
                 "description": "Digital rights and internet freedom discussions",
                 "type": "digital_rights"
+            },
+            "nexus_ai_platform": {
+                "owner": "cxbxmxcx",
+                "repo": "Nexus",
+                "description": "AI Agent Nexus platform for developing and hosting AI agents",
+                "type": "ai_agent_platform"
+            },
+            "talus_nexus": {
+                "owner": "Talus-Network",
+                "repo": "nexus",
+                "description": "The Agentic Framework created by Talus",
+                "type": "agentic_framework"
+            },
+            "nexus_bench": {
+                "owner": "nexusflowai",
+                "repo": "NexusBench",
+                "description": "Function call, tool use, and agent benchmarks",
+                "type": "ai_benchmarking"
+            },
+            "nexus_chain": {
+                "owner": "KOSASIH",
+                "repo": "nexus-chain",
+                "description": "Decentralized, AI-Powered, Quantum-Resistant Smart Contract Platform",
+                "type": "blockchain_ai"
             }
         }
         
@@ -157,6 +181,10 @@ Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}
             "🔗 Fork SDU-for-DPG for government analytics patterns",
             "🐧 Study Turkman Linux for sovereign OS architecture",
             "🗣️ Engage with net4people community on digital rights",
+            "🤖 Integrate Nexus AI agent platform for AGI development",
+            "🌐 Implement Talus agentic framework for enterprise agents",
+            "📊 Use NexusBench for AI agent performance evaluation",
+            "⛓️ Explore Nexus Chain for blockchain-AI convergence",
             "📊 Implement government data analytics workflows",
             "🌐 Create API bridges to government portals",
             "🔒 Develop secure communication protocols",
@@ -189,4 +217,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
