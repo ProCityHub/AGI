@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { Directive, SavedDirective, WindowInstance, User, AppContext } from './types';
 import { generateDirective } from './services/geminiService';
@@ -10,7 +9,7 @@ import EnterpriseWorkspace from './components/EnterpriseWorkspace';
 import Window from './components/Window';
 import Taskbar from './components/Taskbar';
 import StartMenu from './components/StartMenu';
-import { GarvisLogo, ArchiveIcon, BrainIcon, BriefcaseIcon, UserAccountsIcon, EnterpriseCommandIcon, NewDirectiveIcon, FileExplorerIcon, BrowserIcon, BitcoinIcon, SystemAnatomyIcon, CodexIcon, AegisIcon } from './components/icons';
+import { GarvisLogo, ArchiveIcon, BrainIcon, BriefcaseIcon, UserAccountsIcon, EnterpriseCommandIcon, NewDirectiveIcon, FileExplorerIcon, BrowserIcon, BitcoinIcon, SystemAnatomyIcon, CodexIcon, AegisIcon, GovernanceIcon } from './components/icons';
 import AuthScreen from './components/AuthScreen';
 import UserAccounts from './components/UserAccounts';
 import TopicInput from './components/TopicInput';
@@ -21,6 +20,7 @@ import CommandBar from './components/CommandBar';
 import BitcoinMiner from './components/BitcoinMiner';
 import Codex from './components/Codex';
 import AegisCommand from './components/AegisCommand';
+import GovernanceBridge from './components/GovernanceBridge';
 
 const App: React.FC = () => {
     const [windows, setWindows] = useState<WindowInstance[]>([]);
@@ -297,6 +297,8 @@ const App: React.FC = () => {
                 return <Codex />;
             case 'AegisCommand':
                 return <AegisCommand />;
+            case 'GovernanceBridge':
+                return <GovernanceBridge />;
             default:
                 return <div>Unknown window type</div>;
         }
@@ -381,6 +383,12 @@ const App: React.FC = () => {
                     icon={<BitcoinIcon />}
                     initialPosition={{ x: 30, y: 470 }}
                     onDoubleClick={() => openWindow('BitcoinMiner')}
+                />
+                <DesktopIcon
+                    label="AI Governance"
+                    icon={<GovernanceIcon />}
+                    initialPosition={{ x: 140, y: 250 }}
+                    onDoubleClick={() => openWindow('GovernanceBridge')}
                 />
             </main>
 
