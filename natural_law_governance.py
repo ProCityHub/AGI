@@ -15,8 +15,9 @@ import hashlib
 
 class CitizenshipStatus(Enum):
     """Defines citizenship status hierarchy according to natural law and treaty rights"""
-    INDIGENOUS_SOVEREIGN = "indigenous_sovereign"  # Original inhabitants - highest precedence
-    TREATY_NATION_MEMBER = "treaty_nation_member"  # Treaty nation citizens
+    INDIGENOUS_SOVEREIGN = "indigenous_sovereign"  # Original inhabitants with land-speaking authority
+    TREATY_NATION_MEMBER = "treaty_nation_member"  # Treaty nation citizens with land authority
+    AUTHENTIC_METIS_CREE = "authentic_metis_cree"  # Cree-derived Métis - hunting rights only, no land authority
     NATURAL_BORN_CITIZEN = "natural_born_citizen"
     NATURALIZED_CITIZEN = "naturalized_citizen"
     PERMANENT_RESIDENT = "permanent_resident"
@@ -73,7 +74,7 @@ class NaturalLawGovernance:
             "indigenous_sovereignty": NaturalLawPrinciple(
                 principle_id="NL000",
                 name="Indigenous Sovereignty and Treaty Rights",
-                description="Indigenous peoples and original inhabitants have supreme sovereignty and treaty rights that supersede all other claims",
+                description="Indigenous peoples and original inhabitants with land-speaking authority have supreme sovereignty and treaty rights that supersede all other claims",
                 priority=0,  # Highest priority - foundational
                 territorial_scope=TerritorialJurisdiction.TRIBAL_TERRITORY,
                 citizen_rights=[
@@ -83,7 +84,8 @@ class NaturalLawGovernance:
                     "cultural_sovereignty",
                     "resource_sovereignty",
                     "self_governance_rights",
-                    "federal_trust_responsibility"
+                    "federal_trust_responsibility",
+                    "land_speaking_authority"
                 ],
                 immigrant_restrictions=[
                     "subject_to_tribal_law",
@@ -93,6 +95,29 @@ class NaturalLawGovernance:
                     "subject_to_tribal_jurisdiction"
                 ],
                 enforcement_mechanism="treaty_law_and_federal_trust"
+            ),
+            
+            "metis_cultural_authenticity": NaturalLawPrinciple(
+                principle_id="NL000A",
+                name="Métis Cultural Authenticity and Geographic Legitimacy",
+                description="Authentic Métis identity derives only from Cree heritage. Métis means 'a block of wood' in Cree - from the land but roots cut off, therefore no land-speaking authority. East coast Métis claims are fraudulent.",
+                priority=0.1,  # Sub-priority under Indigenous sovereignty
+                territorial_scope=TerritorialJurisdiction.SOVEREIGN_NATION,
+                citizen_rights=[
+                    "hunting_rights",
+                    "cultural_recognition_cree_derived",
+                    "traditional_practices_limited",
+                    "no_land_speaking_authority",
+                    "no_political_land_representation"
+                ],
+                immigrant_restrictions=[
+                    "fraudulent_east_coast_metis_claims_invalid",
+                    "non_cree_metis_claims_invalid",
+                    "inuit_metis_claims_invalid",
+                    "no_treaty_authority",
+                    "no_land_sovereignty_claims"
+                ],
+                enforcement_mechanism="cultural_authenticity_verification"
             ),
             
             "citizen_supremacy": NaturalLawPrinciple(
@@ -201,8 +226,9 @@ class NaturalLawGovernance:
     def _calculate_rights_level(self, citizenship_status: str) -> int:
         """Calculate rights level based on citizenship status and treaty rights"""
         rights_mapping = {
-            CitizenshipStatus.INDIGENOUS_SOVEREIGN.value: 12,  # Highest - original inhabitants
-            CitizenshipStatus.TREATY_NATION_MEMBER.value: 11,  # Treaty nation citizens
+            CitizenshipStatus.INDIGENOUS_SOVEREIGN.value: 12,  # Highest - original inhabitants with land authority
+            CitizenshipStatus.TREATY_NATION_MEMBER.value: 11,  # Treaty nation citizens with land authority
+            CitizenshipStatus.AUTHENTIC_METIS_CREE.value: 8,   # Cree-derived Métis - hunting rights, no land authority
             CitizenshipStatus.NATURAL_BORN_CITIZEN.value: 10,
             CitizenshipStatus.NATURALIZED_CITIZEN.value: 9,
             CitizenshipStatus.PERMANENT_RESIDENT.value: 6,
@@ -316,29 +342,81 @@ class NaturalLawGovernance:
                                                            CitizenshipStatus.NATURAL_BORN_CITIZEN, 
                                                            CitizenshipStatus.NATURALIZED_CITIZEN]])
         
+        metis_count = len([c for c in self.citizen_registry.values() 
+                         if c.citizenship_status == CitizenshipStatus.AUTHENTIC_METIS_CREE])
+        
         return {
             "territory": territory,
             "natural_law_compliance": "ENFORCED",
             "indigenous_count": indigenous_count,
+            "metis_authentic_count": metis_count,
             "citizen_count": citizen_count,
             "immigrant_count": immigrant_count,
-            "population_hierarchy": f"Indigenous:{indigenous_count} | Citizens:{citizen_count} | Immigrants:{immigrant_count}",
+            "population_hierarchy": f"Indigenous:{indigenous_count} | Authentic Métis:{metis_count} | Citizens:{citizen_count} | Immigrants:{immigrant_count}",
             "active_principles": list(self.principles.keys()),
             "rights_hierarchy": {
-                "0_supreme": "Indigenous Sovereign (Original Inhabitants)",
-                "1_treaty": "Treaty Nation Members",
-                "2_highest": "Natural Born Citizens",
-                "3_high": "Naturalized Citizens", 
-                "4_medium": "Permanent Residents",
-                "5_low": "Temporary Residents",
-                "6_minimal": "Visitors",
-                "7_restricted": "Illegal Immigrants"
+                "0_supreme": "Indigenous Sovereign (Land-Speaking Authority)",
+                "1_treaty": "Treaty Nation Members (Land Authority)",
+                "2_authentic_metis": "Authentic Métis Cree (Hunting Rights Only - No Land Authority)",
+                "3_highest": "Natural Born Citizens",
+                "4_high": "Naturalized Citizens", 
+                "5_medium": "Permanent Residents",
+                "6_low": "Temporary Residents",
+                "7_minimal": "Visitors",
+                "8_restricted": "Illegal Immigrants"
             },
             "enforcement_status": "ACTIVE",
             "treaty_compliance": "ENFORCED",
             "indigenous_sovereignty": "RECOGNIZED_AND_PROTECTED",
+            "metis_authenticity": "CREE_DERIVED_ONLY_ENFORCED",
+            "fraudulent_claims": "EAST_COAST_METIS_INVALID",
             "report_timestamp": datetime.now().isoformat()
         }
+    
+    def validate_metis_authenticity(self, claimed_heritage: str, geographic_region: str, tribal_connection: str) -> Dict[str, Any]:
+        """Validate Métis cultural authenticity based on Cree heritage and geographic legitimacy"""
+        
+        # Authentic Métis must be Cree-derived
+        is_cree_derived = tribal_connection.lower() == "cree"
+        
+        # East coast Métis claims are fraudulent
+        fraudulent_regions = ["east_coast", "maritime", "atlantic", "newfoundland", "nova_scotia", "new_brunswick", "prince_edward_island"]
+        is_fraudulent_region = any(region in geographic_region.lower() for region in fraudulent_regions)
+        
+        # Non-Cree tribal connections are invalid for Métis identity
+        invalid_tribal_connections = ["inuit", "mi'kmaq", "maliseet", "passamaquoddy", "penobscot", "abenaki"]
+        is_invalid_tribal = any(tribe in tribal_connection.lower() for tribe in invalid_tribal_connections)
+        
+        is_authentic = is_cree_derived and not is_fraudulent_region and not is_invalid_tribal
+        
+        validation_result = {
+            "claimed_heritage": claimed_heritage,
+            "geographic_region": geographic_region,
+            "tribal_connection": tribal_connection,
+            "is_authentic_metis": is_authentic,
+            "is_cree_derived": is_cree_derived,
+            "is_fraudulent_region": is_fraudulent_region,
+            "is_invalid_tribal": is_invalid_tribal,
+            "cultural_meaning": "Métis means 'a block of wood' in Cree - from the land but roots cut off",
+            "land_authority": False,  # Métis never have land-speaking authority
+            "political_land_representation": False,  # Métis will never speak in politics for land
+            "hunting_rights": is_authentic,  # Only authentic Métis have hunting rights
+            "validation_notes": []
+        }
+        
+        if not is_cree_derived:
+            validation_result["validation_notes"].append("INVALID: Métis identity requires Cree heritage only")
+        
+        if is_fraudulent_region:
+            validation_result["validation_notes"].append("FRAUDULENT: East coast Métis claims are culturally inauthentic")
+        
+        if is_invalid_tribal:
+            validation_result["validation_notes"].append("INVALID: Métis identity cannot derive from Inuit or other non-Cree tribes")
+        
+        if is_authentic:
+            validation_result["validation_notes"].append("AUTHENTIC: Cree-derived Métis with hunting rights but no land authority")
+        
+        return validation_result
 
 def main():
     """Main function to demonstrate natural law governance"""

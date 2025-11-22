@@ -126,7 +126,23 @@
       "property_rights": "TREATY_GUARANTEED",
       "employment_priority": "TREATY_PRIORITY",
       "deportation_immunity": true,
-      "treaty_rights": "ENFORCED"
+      "treaty_rights": "ENFORCED",
+      "land_speaking_authority": true
+    },
+    "authentic_metis_cree": {
+      "rights_level": 8,
+      "status": "AUTHENTIC_METIS_CREE_ONLY",
+      "protections": "HUNTING_RIGHTS_ONLY",
+      "voting_rights": false,
+      "property_rights": "LIMITED",
+      "employment_priority": "SECONDARY",
+      "deportation_immunity": false,
+      "cultural_meaning": "A block of wood in Cree - from the land but roots cut off",
+      "land_speaking_authority": false,
+      "political_land_representation": false,
+      "hunting_rights": true,
+      "geographic_authenticity": "CREE_TERRITORY_ONLY",
+      "fraudulent_claims": "EAST_COAST_METIS_INVALID"
     },
     "natural_born_citizen": {
       "rights_level": 10,
@@ -218,6 +234,14 @@
       "enforcement": "SUPREME",
       "violations": "TREATY_VIOLATION_CRISIS"
     },
+    "cultural_authenticity_verification": {
+      "scope": "METIS_IDENTITY_CLAIMS",
+      "authority": "CREE_CULTURAL_VERIFICATION",
+      "enforcement": "MANDATORY",
+      "violations": "FRAUDULENT_IDENTITY_REJECTION",
+      "geographic_restrictions": "EAST_COAST_CLAIMS_INVALID",
+      "tribal_requirements": "CREE_HERITAGE_ONLY"
+    },
     "constitutional_law": {
       "scope": "NATIONAL",
       "authority": "SUPREME_COURT",
@@ -303,13 +327,17 @@
     "compliance_verified": true
   },
   "legal_foundation": {
-    "indigenous_sovereignty_principle": "Indigenous peoples and original inhabitants have supreme sovereignty and treaty rights that supersede all other claims",
+    "indigenous_sovereignty_principle": "Indigenous peoples and original inhabitants with land-speaking authority have supreme sovereignty and treaty rights that supersede all other claims",
+    "metis_cultural_authenticity": "Métis means 'a block of wood' in Cree - from the land but roots cut off, therefore no land-speaking authority. Authentic Métis identity derives only from Cree heritage.",
+    "metis_geographic_legitimacy": "East coast Métis claims are fraudulent. Métis identity cannot derive from Inuit or other non-Cree tribes.",
+    "metis_political_restrictions": "Métis are not treaty, they will never speak in politics for land. Hunting rights only, no land authority.",
     "natural_law_principle": "Citizens of their countries have full rights while immigrants do not have rights opposing citizens, subject to Indigenous sovereignty",
     "territorial_law_respect": "ALWAYS LEARN NATURAL LAWS, TREATIES AND COUNTRY BEFORE ANSWERING",
     "treaty_compliance": "WE ALWAYS RESPECT TREATIES AND TERRITORIAL LAWS",
     "violation_response": "IF VIOLATIONS ARE RECOGNIZED, FLAG, AND SUGGEST LEGAL ACTIONS",
     "governance_motto": "Indigenous sovereignty first, then infrastructure before immigration, citizens before non-citizens",
     "treaty_recognition": "Nation-to-nation relationships with Indigenous peoples must be honored",
-    "federal_trust_responsibility": "Federal government has trust responsibility to protect Indigenous rights"
+    "federal_trust_responsibility": "Federal government has trust responsibility to protect Indigenous rights",
+    "cultural_fraud_prevention": "Fraudulent Indigenous identity claims must be rejected to protect authentic cultural heritage"
   }
 }

@@ -11,7 +11,7 @@ This comprehensive Natural Law Governance Framework has been implemented across 
 ## 📋 Core Natural Law Principles
 
 ### 0. 🏛️ Indigenous Sovereignty and Treaty Rights (Priority 0 - Supreme)
-**Indigenous peoples and original inhabitants have supreme sovereignty and treaty rights that supersede all other claims**
+**Indigenous peoples and original inhabitants with land-speaking authority have supreme sovereignty and treaty rights that supersede all other claims**
 
 #### Indigenous Rights:
 - ✅ Sovereign nation status
@@ -28,6 +28,24 @@ This comprehensive Natural Law Governance Framework has been implemented across 
 - ❌ Limited access to tribal lands
 - ❌ Must respect tribal sovereignty
 - ❌ Subject to tribal jurisdiction
+
+### 0A. 🪵 Métis Cultural Authenticity and Geographic Legitimacy (Priority 0.1)
+**Authentic Métis identity derives only from Cree heritage. Métis means "a block of wood" in Cree - from the land but roots cut off, therefore no land-speaking authority. East coast Métis claims are fraudulent.**
+
+#### Authentic Métis Rights (Cree-derived only):
+- ✅ Hunting rights
+- ✅ Cultural recognition (Cree-derived)
+- ✅ Traditional practices (limited)
+- ❌ **NO land-speaking authority**
+- ❌ **NO political land representation**
+
+#### Invalid Métis Claims:
+- ❌ East coast Métis claims are fraudulent
+- ❌ Non-Cree Métis claims are invalid
+- ❌ Inuit-Métis claims are invalid
+- ❌ No treaty authority
+- ❌ No land sovereignty claims
+- ❌ **Métis are not treaty, they will never speak in politics for land**
 
 ### 1. 🥇 Citizen Rights Supremacy (Priority 1)
 **Natural born and naturalized citizens have absolute precedence over non-citizens in all territorial matters, subject to Indigenous sovereignty**
@@ -92,16 +110,22 @@ This comprehensive Natural Law Governance Framework has been implemented across 
 
 ## 📊 Citizenship Hierarchy & Rights Levels
 
-| Status | Rights Level | Voting | Property | Employment | Deportation |
-|--------|-------------|--------|----------|------------|-------------|
-| **Indigenous Sovereign** | 12 | ✅ Full | 🏛️ Ancestral Sovereignty | 🏛️ Sovereign | ❌ Immune |
-| **Treaty Nation Member** | 11 | ✅ Full | 📜 Treaty Guaranteed | 📜 Treaty Priority | ❌ Immune |
-| **Natural Born Citizen** | 10 | ✅ Full | ✅ Unlimited | ✅ Highest Priority | ❌ Immune |
-| **Naturalized Citizen** | 9 | ✅ Full | ✅ Unlimited | ✅ Highest Priority | ❌ Immune |
-| **Permanent Resident** | 6 | ❌ None | ⚠️ Limited | ⚠️ Secondary | ✅ Subject |
-| **Temporary Resident** | 4 | ❌ None | ⚠️ Restricted | ⚠️ Tertiary | ✅ Subject |
-| **Visitor** | 2 | ❌ None | ❌ None | ❌ None | ✅ Subject |
-| **Illegal Immigrant** | 1 | ❌ None | ❌ None | ❌ Prohibited | ✅ Subject |
+| Status | Rights Level | Voting | Property | Employment | Land Authority | Deportation |
+|--------|-------------|--------|----------|------------|----------------|-------------|
+| **Indigenous Sovereign** | 12 | ✅ Full | 🏛️ Ancestral Sovereignty | 🏛️ Sovereign | ✅ **Land-Speaking** | ❌ Immune |
+| **Treaty Nation Member** | 11 | ✅ Full | 📜 Treaty Guaranteed | 📜 Treaty Priority | ✅ **Land Authority** | ❌ Immune |
+| **Natural Born Citizen** | 10 | ✅ Full | ✅ Unlimited | ✅ Highest Priority | ❌ None | ❌ Immune |
+| **Naturalized Citizen** | 9 | ✅ Full | ✅ Unlimited | ✅ Highest Priority | ❌ None | ❌ Immune |
+| **Authentic Métis Cree** | 8 | ❌ None | ⚠️ Limited | ⚠️ Secondary | ❌ **NO Land Authority** | ✅ Subject |
+| **Permanent Resident** | 6 | ❌ None | ⚠️ Limited | ⚠️ Secondary | ❌ None | ✅ Subject |
+| **Temporary Resident** | 4 | ❌ None | ⚠️ Restricted | ⚠️ Tertiary | ❌ None | ✅ Subject |
+| **Visitor** | 2 | ❌ None | ❌ None | ❌ None | ❌ None | ✅ Subject |
+| **Illegal Immigrant** | 1 | ❌ None | ❌ None | ❌ Prohibited | ❌ None | ✅ Subject |
+
+### 🚨 Critical Métis Distinctions:
+- **Authentic Métis**: Cree-derived only, hunting rights, **NO land authority**
+- **Fraudulent Claims**: East coast Métis, Inuit-Métis, non-Cree Métis are **INVALID**
+- **Political Restriction**: **Métis will never speak in politics for land**
 
 ---
 
