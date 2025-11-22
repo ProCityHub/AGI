@@ -7,10 +7,33 @@
     "compliance_status": "ENFORCED_ACROSS_ALL_REPOS"
   },
   "fundamental_principles": {
+    "indigenous_sovereignty": {
+      "principle_id": "NL000",
+      "name": "Indigenous Sovereignty and Treaty Rights",
+      "description": "Indigenous peoples and original inhabitants have supreme sovereignty and treaty rights that supersede all other claims",
+      "priority": 0,
+      "enforcement": "SUPREME",
+      "citizen_rights": [
+        "sovereign_nation_status",
+        "treaty_rights_protection",
+        "ancestral_land_rights",
+        "cultural_sovereignty",
+        "resource_sovereignty",
+        "self_governance_rights",
+        "federal_trust_responsibility"
+      ],
+      "immigrant_restrictions": [
+        "subject_to_tribal_law",
+        "no_tribal_voting_rights",
+        "limited_access_to_tribal_lands",
+        "respect_tribal_sovereignty",
+        "subject_to_tribal_jurisdiction"
+      ]
+    },
     "citizen_supremacy": {
       "principle_id": "NL001",
       "name": "Citizen Rights Supremacy",
-      "description": "Natural born and naturalized citizens have absolute precedence over non-citizens in all territorial matters",
+      "description": "Natural born and naturalized citizens have absolute precedence over non-citizens in all territorial matters, subject to Indigenous sovereignty",
       "priority": 1,
       "enforcement": "MANDATORY",
       "citizen_rights": [
@@ -84,6 +107,27 @@
     }
   },
   "citizenship_hierarchy": {
+    "indigenous_sovereign": {
+      "rights_level": 12,
+      "status": "SOVEREIGN_NATION",
+      "protections": "SUPREME",
+      "voting_rights": true,
+      "property_rights": "ANCESTRAL_SOVEREIGNTY",
+      "employment_priority": "SOVEREIGN",
+      "deportation_immunity": true,
+      "treaty_rights": "PROTECTED",
+      "federal_trust_responsibility": true
+    },
+    "treaty_nation_member": {
+      "rights_level": 11,
+      "status": "TREATY_CITIZEN",
+      "protections": "TREATY_PROTECTED",
+      "voting_rights": true,
+      "property_rights": "TREATY_GUARANTEED",
+      "employment_priority": "TREATY_PRIORITY",
+      "deportation_immunity": true,
+      "treaty_rights": "ENFORCED"
+    },
     "natural_born_citizen": {
       "rights_level": 10,
       "status": "FULL_CITIZEN",
@@ -162,10 +206,18 @@
       "authority_level": "SOVEREIGN",
       "immigration_control": "TRIBAL_LAW",
       "citizen_protection": "TRIBAL_MEMBERS",
-      "law_enforcement": "TRIBAL"
+      "law_enforcement": "TRIBAL",
+      "treaty_status": "NATION_TO_NATION",
+      "federal_trust_responsibility": "MANDATORY"
     }
   },
   "enforcement_mechanisms": {
+    "treaty_law_and_federal_trust": {
+      "scope": "INDIGENOUS_NATIONS",
+      "authority": "FEDERAL_TRUST_RESPONSIBILITY",
+      "enforcement": "SUPREME",
+      "violations": "TREATY_VIOLATION_CRISIS"
+    },
     "constitutional_law": {
       "scope": "NATIONAL",
       "authority": "SUPREME_COURT",
@@ -251,10 +303,13 @@
     "compliance_verified": true
   },
   "legal_foundation": {
-    "natural_law_principle": "Citizens of their countries have full rights while immigrants do not have rights opposing citizens",
+    "indigenous_sovereignty_principle": "Indigenous peoples and original inhabitants have supreme sovereignty and treaty rights that supersede all other claims",
+    "natural_law_principle": "Citizens of their countries have full rights while immigrants do not have rights opposing citizens, subject to Indigenous sovereignty",
     "territorial_law_respect": "ALWAYS LEARN NATURAL LAWS, TREATIES AND COUNTRY BEFORE ANSWERING",
     "treaty_compliance": "WE ALWAYS RESPECT TREATIES AND TERRITORIAL LAWS",
     "violation_response": "IF VIOLATIONS ARE RECOGNIZED, FLAG, AND SUGGEST LEGAL ACTIONS",
-    "governance_motto": "Infrastructure before immigration, citizens before non-citizens"
+    "governance_motto": "Indigenous sovereignty first, then infrastructure before immigration, citizens before non-citizens",
+    "treaty_recognition": "Nation-to-nation relationships with Indigenous peoples must be honored",
+    "federal_trust_responsibility": "Federal government has trust responsibility to protect Indigenous rights"
   }
 }

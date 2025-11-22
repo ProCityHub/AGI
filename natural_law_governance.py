@@ -14,7 +14,9 @@ from datetime import datetime
 import hashlib
 
 class CitizenshipStatus(Enum):
-    """Defines citizenship status hierarchy according to natural law"""
+    """Defines citizenship status hierarchy according to natural law and treaty rights"""
+    INDIGENOUS_SOVEREIGN = "indigenous_sovereign"  # Original inhabitants - highest precedence
+    TREATY_NATION_MEMBER = "treaty_nation_member"  # Treaty nation citizens
     NATURAL_BORN_CITIZEN = "natural_born_citizen"
     NATURALIZED_CITIZEN = "naturalized_citizen"
     PERMANENT_RESIDENT = "permanent_resident"
@@ -68,10 +70,35 @@ class NaturalLawGovernance:
     def _initialize_natural_law_principles(self) -> Dict[str, NaturalLawPrinciple]:
         """Initialize fundamental natural law principles"""
         principles = {
+            "indigenous_sovereignty": NaturalLawPrinciple(
+                principle_id="NL000",
+                name="Indigenous Sovereignty and Treaty Rights",
+                description="Indigenous peoples and original inhabitants have supreme sovereignty and treaty rights that supersede all other claims",
+                priority=0,  # Highest priority - foundational
+                territorial_scope=TerritorialJurisdiction.TRIBAL_TERRITORY,
+                citizen_rights=[
+                    "sovereign_nation_status",
+                    "treaty_rights_protection",
+                    "ancestral_land_rights",
+                    "cultural_sovereignty",
+                    "resource_sovereignty",
+                    "self_governance_rights",
+                    "federal_trust_responsibility"
+                ],
+                immigrant_restrictions=[
+                    "subject_to_tribal_law",
+                    "no_tribal_voting_rights",
+                    "limited_access_to_tribal_lands",
+                    "respect_tribal_sovereignty",
+                    "subject_to_tribal_jurisdiction"
+                ],
+                enforcement_mechanism="treaty_law_and_federal_trust"
+            ),
+            
             "citizen_supremacy": NaturalLawPrinciple(
                 principle_id="NL001",
                 name="Citizen Rights Supremacy",
-                description="Natural born and naturalized citizens have absolute precedence over non-citizens in all territorial matters",
+                description="Natural born and naturalized citizens have absolute precedence over non-citizens in all territorial matters, subject to Indigenous sovereignty",
                 priority=1,
                 territorial_scope=TerritorialJurisdiction.SOVEREIGN_NATION,
                 citizen_rights=[
@@ -172,8 +199,10 @@ class NaturalLawGovernance:
         return citizen_profile
     
     def _calculate_rights_level(self, citizenship_status: str) -> int:
-        """Calculate rights level based on citizenship status"""
+        """Calculate rights level based on citizenship status and treaty rights"""
         rights_mapping = {
+            CitizenshipStatus.INDIGENOUS_SOVEREIGN.value: 12,  # Highest - original inhabitants
+            CitizenshipStatus.TREATY_NATION_MEMBER.value: 11,  # Treaty nation citizens
             CitizenshipStatus.NATURAL_BORN_CITIZEN.value: 10,
             CitizenshipStatus.NATURALIZED_CITIZEN.value: 9,
             CitizenshipStatus.PERMANENT_RESIDENT.value: 6,
@@ -195,10 +224,13 @@ class NaturalLawGovernance:
         if not citizen or not immigrant:
             return {"error": "Invalid citizen or immigrant ID"}
         
-        # Natural law: Citizens always have precedence
-        if citizen.rights_level >= 8:  # Citizens (natural born or naturalized)
+        # Natural law hierarchy: Indigenous > Treaty Nations > Citizens > Others
+        if citizen.rights_level >= 11:  # Indigenous or Treaty Nation members
+            decision = "indigenous_treaty_precedence"
+            rationale = f"Indigenous sovereignty and treaty rights: Original inhabitants and treaty nations have supreme precedence"
+        elif citizen.rights_level >= 8:  # Citizens (natural born or naturalized)
             decision = "citizen_precedence"
-            rationale = f"Natural law principle: Citizens have absolute precedence over non-citizens in territorial matters"
+            rationale = f"Natural law principle: Citizens have absolute precedence over non-citizens in territorial matters, subject to Indigenous sovereignty"
         else:
             decision = "evaluate_by_rights_level"
             rationale = f"Both parties are non-citizens, evaluate by rights level"
@@ -208,7 +240,7 @@ class NaturalLawGovernance:
             "citizen_rights_level": citizen.rights_level,
             "immigrant_rights_level": immigrant.rights_level,
             "rationale": rationale,
-            "applicable_principles": ["citizen_supremacy", "territorial_sovereignty"],
+            "applicable_principles": ["indigenous_sovereignty", "citizen_supremacy", "territorial_sovereignty"],
             "timestamp": datetime.now().isoformat()
         }
     
@@ -270,30 +302,41 @@ class NaturalLawGovernance:
     
     def generate_governance_report(self, territory: str) -> Dict[str, Any]:
         """Generate comprehensive natural law governance report"""
+        indigenous_count = len([c for c in self.citizen_registry.values() 
+                              if c.citizenship_status in [CitizenshipStatus.INDIGENOUS_SOVEREIGN, 
+                                                         CitizenshipStatus.TREATY_NATION_MEMBER]])
+        
         citizen_count = len([c for c in self.citizen_registry.values() 
                            if c.citizenship_status in [CitizenshipStatus.NATURAL_BORN_CITIZEN, 
                                                      CitizenshipStatus.NATURALIZED_CITIZEN]])
         
         immigrant_count = len([c for c in self.citizen_registry.values() 
-                             if c.citizenship_status not in [CitizenshipStatus.NATURAL_BORN_CITIZEN, 
+                             if c.citizenship_status not in [CitizenshipStatus.INDIGENOUS_SOVEREIGN,
+                                                           CitizenshipStatus.TREATY_NATION_MEMBER,
+                                                           CitizenshipStatus.NATURAL_BORN_CITIZEN, 
                                                            CitizenshipStatus.NATURALIZED_CITIZEN]])
         
         return {
             "territory": territory,
             "natural_law_compliance": "ENFORCED",
+            "indigenous_count": indigenous_count,
             "citizen_count": citizen_count,
             "immigrant_count": immigrant_count,
-            "citizen_to_immigrant_ratio": f"{citizen_count}:{immigrant_count}" if immigrant_count > 0 else f"{citizen_count}:0",
+            "population_hierarchy": f"Indigenous:{indigenous_count} | Citizens:{citizen_count} | Immigrants:{immigrant_count}",
             "active_principles": list(self.principles.keys()),
             "rights_hierarchy": {
-                "1_highest": "Natural Born Citizens",
-                "2_high": "Naturalized Citizens", 
-                "3_medium": "Permanent Residents",
-                "4_low": "Temporary Residents",
-                "5_minimal": "Visitors",
-                "6_restricted": "Illegal Immigrants"
+                "0_supreme": "Indigenous Sovereign (Original Inhabitants)",
+                "1_treaty": "Treaty Nation Members",
+                "2_highest": "Natural Born Citizens",
+                "3_high": "Naturalized Citizens", 
+                "4_medium": "Permanent Residents",
+                "5_low": "Temporary Residents",
+                "6_minimal": "Visitors",
+                "7_restricted": "Illegal Immigrants"
             },
             "enforcement_status": "ACTIVE",
+            "treaty_compliance": "ENFORCED",
+            "indigenous_sovereignty": "RECOGNIZED_AND_PROTECTED",
             "report_timestamp": datetime.now().isoformat()
         }
 

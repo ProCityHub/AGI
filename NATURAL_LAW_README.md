@@ -10,8 +10,27 @@ This comprehensive Natural Law Governance Framework has been implemented across 
 
 ## 📋 Core Natural Law Principles
 
+### 0. 🏛️ Indigenous Sovereignty and Treaty Rights (Priority 0 - Supreme)
+**Indigenous peoples and original inhabitants have supreme sovereignty and treaty rights that supersede all other claims**
+
+#### Indigenous Rights:
+- ✅ Sovereign nation status
+- ✅ Treaty rights protection
+- ✅ Ancestral land rights
+- ✅ Cultural sovereignty
+- ✅ Resource sovereignty
+- ✅ Self-governance rights
+- ✅ Federal trust responsibility
+
+#### Non-Indigenous Restrictions:
+- ❌ Subject to tribal law
+- ❌ No tribal voting rights
+- ❌ Limited access to tribal lands
+- ❌ Must respect tribal sovereignty
+- ❌ Subject to tribal jurisdiction
+
 ### 1. 🥇 Citizen Rights Supremacy (Priority 1)
-**Natural born and naturalized citizens have absolute precedence over non-citizens in all territorial matters**
+**Natural born and naturalized citizens have absolute precedence over non-citizens in all territorial matters, subject to Indigenous sovereignty**
 
 #### Citizen Rights:
 - ✅ Voting rights
@@ -75,6 +94,8 @@ This comprehensive Natural Law Governance Framework has been implemented across 
 
 | Status | Rights Level | Voting | Property | Employment | Deportation |
 |--------|-------------|--------|----------|------------|-------------|
+| **Indigenous Sovereign** | 12 | ✅ Full | 🏛️ Ancestral Sovereignty | 🏛️ Sovereign | ❌ Immune |
+| **Treaty Nation Member** | 11 | ✅ Full | 📜 Treaty Guaranteed | 📜 Treaty Priority | ❌ Immune |
 | **Natural Born Citizen** | 10 | ✅ Full | ✅ Unlimited | ✅ Highest Priority | ❌ Immune |
 | **Naturalized Citizen** | 9 | ✅ Full | ✅ Unlimited | ✅ Highest Priority | ❌ Immune |
 | **Permanent Resident** | 6 | ❌ None | ⚠️ Limited | ⚠️ Secondary | ✅ Subject |
@@ -85,6 +106,12 @@ This comprehensive Natural Law Governance Framework has been implemented across 
 ---
 
 ## 🔒 Enforcement Mechanisms
+
+### Treaty Law and Federal Trust
+- **Scope**: Indigenous Nations
+- **Authority**: Federal Trust Responsibility
+- **Enforcement**: Supreme
+- **Violations**: Treaty Violation Crisis
 
 ### Constitutional Law
 - **Scope**: National
@@ -137,6 +164,8 @@ This comprehensive Natural Law Governance Framework has been implemented across 
 - **Immigration Control**: Tribal Law
 - **Citizen Protection**: Tribal Members
 - **Law Enforcement**: Tribal
+- **Treaty Status**: Nation-to-Nation
+- **Federal Trust Responsibility**: Mandatory
 
 ---
 
@@ -240,8 +269,11 @@ print(f"Compliance: {report['natural_law_compliance']}")
 
 ## 📞 Legal Foundation
 
+### Indigenous Sovereignty Principle
+**"Indigenous peoples and original inhabitants have supreme sovereignty and treaty rights that supersede all other claims"**
+
 ### Core Principle
-**"Citizens of their countries have full rights while immigrants do not have rights opposing citizens"**
+**"Citizens of their countries have full rights while immigrants do not have rights opposing citizens, subject to Indigenous sovereignty"**
 
 ### Repository Rules Compliance
 - **Always learn natural laws, treaties and country before answering**
@@ -249,7 +281,10 @@ print(f"Compliance: {report['natural_law_compliance']}")
 - **If violations are recognized, flag and suggest legal actions**
 
 ### Governance Motto
-**"Infrastructure before immigration, citizens before non-citizens"**
+**"Indigenous sovereignty first, then infrastructure before immigration, citizens before non-citizens"**
+
+### Treaty Recognition
+**"Nation-to-nation relationships with Indigenous peoples must be honored"**
 
 ---
 
