@@ -1,0 +1,346 @@
+{
+  "safety_rules": {
+    "blocked_keywords": [
+      "explicit_violence",
+      "hate_speech",
+      "harassment",
+      "dangerous_content",
+      "illegal_activities",
+      "explicit_sexual_content",
+      "self_harm",
+      "terrorism",
+      "drug_trafficking",
+      "weapons_manufacturing"
+    ],
+    "caution_keywords": [
+      "political_controversy",
+      "religious_debate",
+      "cultural_sensitivity",
+      "mature_themes",
+      "historical_trauma",
+      "mental_health",
+      "substance_use",
+      "violence_discussion"
+    ],
+    "territorial_sensitive": [
+      "indigenous_rights",
+      "treaty_violations",
+      "territorial_disputes",
+      "sovereignty_issues",
+      "sacred_sites",
+      "traditional_knowledge",
+      "cultural_appropriation",
+      "residential_schools",
+      "land_claims",
+      "indigenous_symbols"
+    ]
+  },
+  "age_restrictions": {
+    "child": {
+      "blocked_content": [
+        "violence",
+        "adult_themes",
+        "complex_politics",
+        "death",
+        "sexuality",
+        "substance_use",
+        "mature_relationships",
+        "financial_stress",
+        "war_content",
+        "horror_themes"
+      ],
+      "restricted_topics": [
+        "war",
+        "death",
+        "sexuality",
+        "politics",
+        "religion",
+        "mental_health",
+        "family_conflict"
+      ],
+      "allowed_content": [
+        "education",
+        "entertainment",
+        "basic_civics",
+        "science",
+        "nature",
+        "arts",
+        "sports",
+        "friendship",
+        "family_values",
+        "community_helpers"
+      ]
+    },
+    "teen": {
+      "blocked_content": [
+        "explicit_violence",
+        "adult_content",
+        "graphic_imagery",
+        "extreme_politics",
+        "hate_speech",
+        "self_harm_methods",
+        "illegal_activities"
+      ],
+      "restricted_topics": [
+        "mature_politics",
+        "complex_legal",
+        "adult_relationships",
+        "financial_planning",
+        "career_stress",
+        "substance_abuse"
+      ],
+      "allowed_content": [
+        "education",
+        "news",
+        "civic_engagement",
+        "career_exploration",
+        "social_issues",
+        "environmental_topics",
+        "technology",
+        "creative_arts",
+        "peer_relationships",
+        "identity_exploration"
+      ]
+    },
+    "young_adult": {
+      "blocked_content": [
+        "explicit_violence",
+        "hate_speech",
+        "illegal_activities",
+        "dangerous_instructions"
+      ],
+      "restricted_topics": [
+        "extreme_political_views",
+        "graphic_violence",
+        "explicit_content"
+      ],
+      "allowed_content": [
+        "political_discourse",
+        "career_development",
+        "relationships",
+        "financial_literacy",
+        "higher_education",
+        "social_justice",
+        "cultural_exploration",
+        "personal_development"
+      ]
+    },
+    "adult": {
+      "blocked_content": [
+        "illegal_activities",
+        "terrorism_instructions",
+        "child_exploitation",
+        "doxxing",
+        "harassment_campaigns"
+      ],
+      "restricted_topics": [],
+      "allowed_content": [
+        "all_legal_content",
+        "political_discourse",
+        "mature_themes",
+        "professional_content",
+        "academic_research",
+        "cultural_analysis",
+        "historical_discussion"
+      ]
+    }
+  },
+  "territorial_laws": {
+    "canada": {
+      "protected_symbols": [
+        "indigenous_sacred",
+        "national_symbols",
+        "maple_leaf",
+        "coat_of_arms",
+        "ceremonial_objects",
+        "traditional_medicines",
+        "sacred_ceremonies"
+      ],
+      "hate_speech_laws": true,
+      "privacy_requirements": "PIPEDA",
+      "indigenous_rights": "UNDRIP_compliant",
+      "official_languages": ["english", "french"],
+      "cultural_protections": [
+        "indigenous_cultural_property",
+        "traditional_knowledge",
+        "sacred_sites",
+        "ceremonial_practices"
+      ],
+      "prohibited_content": [
+        "holocaust_denial",
+        "genocide_denial",
+        "hate_propaganda",
+        "incitement_to_violence"
+      ]
+    },
+    "indigenous_treaty": {
+      "sacred_protection": true,
+      "cultural_sensitivity": "maximum",
+      "consultation_required": true,
+      "traditional_knowledge_protection": true,
+      "protected_elements": [
+        "sacred_symbols",
+        "ceremonial_objects",
+        "traditional_medicines",
+        "spiritual_practices",
+        "ancestral_knowledge",
+        "land_connections",
+        "oral_traditions",
+        "cultural_protocols"
+      ],
+      "restricted_sharing": [
+        "sacred_ceremonies",
+        "medicine_knowledge",
+        "spiritual_teachings",
+        "clan_specific_information",
+        "burial_practices",
+        "initiation_rites"
+      ],
+      "required_permissions": [
+        "elder_approval",
+        "community_consent",
+        "cultural_authority",
+        "traditional_protocols"
+      ]
+    },
+    "usa": {
+      "protected_symbols": [
+        "flag_code_compliance",
+        "national_monuments",
+        "federal_symbols"
+      ],
+      "hate_speech_laws": false,
+      "privacy_requirements": "CCPA",
+      "first_amendment_protections": true,
+      "prohibited_content": [
+        "child_exploitation",
+        "terrorism_instructions",
+        "copyright_infringement"
+      ]
+    },
+    "eu": {
+      "protected_symbols": [
+        "eu_flag",
+        "national_symbols",
+        "cultural_heritage"
+      ],
+      "hate_speech_laws": true,
+      "privacy_requirements": "GDPR",
+      "right_to_be_forgotten": true,
+      "prohibited_content": [
+        "holocaust_denial",
+        "hate_speech",
+        "terrorist_content",
+        "child_exploitation"
+      ]
+    },
+    "uk": {
+      "protected_symbols": [
+        "royal_symbols",
+        "national_emblems",
+        "cultural_heritage"
+      ],
+      "hate_speech_laws": true,
+      "privacy_requirements": "UK_GDPR",
+      "prohibited_content": [
+        "hate_speech",
+        "terrorist_content",
+        "child_exploitation",
+        "extreme_pornography"
+      ]
+    },
+    "international": {
+      "protected_symbols": [
+        "un_symbols",
+        "international_emblems",
+        "humanitarian_symbols"
+      ],
+      "universal_rights": "UDHR_compliant",
+      "prohibited_content": [
+        "crimes_against_humanity",
+        "war_crimes",
+        "genocide_incitement",
+        "child_exploitation",
+        "human_trafficking"
+      ],
+      "cultural_protections": [
+        "indigenous_rights",
+        "cultural_heritage",
+        "traditional_knowledge",
+        "sacred_sites"
+      ]
+    }
+  },
+  "content_filters": {
+    "text": {
+      "profanity_filter": true,
+      "hate_speech_detection": true,
+      "violence_detection": true,
+      "sexual_content_detection": true,
+      "substance_abuse_detection": true
+    },
+    "political": {
+      "extremism_detection": true,
+      "misinformation_flagging": true,
+      "territorial_sensitivity": true,
+      "treaty_compliance": true,
+      "indigenous_rights_protection": true
+    },
+    "religious": {
+      "blasphemy_sensitivity": true,
+      "cultural_respect": true,
+      "sacred_content_protection": true,
+      "interfaith_sensitivity": true
+    },
+    "cultural": {
+      "appropriation_detection": true,
+      "sacred_symbol_protection": true,
+      "traditional_knowledge_protection": true,
+      "community_consent_required": true
+    },
+    "code": {
+      "malware_detection": true,
+      "security_vulnerability_check": true,
+      "privacy_violation_detection": true,
+      "illegal_activity_detection": true
+    },
+    "data": {
+      "personal_information_detection": true,
+      "financial_data_protection": true,
+      "health_data_protection": true,
+      "biometric_data_protection": true
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "log_level": "INFO",
+    "retention_days": 90,
+    "compliance_reporting": true,
+    "real_time_alerts": true,
+    "performance_metrics": true
+  },
+  "cache_settings": {
+    "enabled": true,
+    "ttl_hours": 1,
+    "max_entries": 10000,
+    "cleanup_interval_minutes": 30
+  },
+  "performance": {
+    "max_processing_time_seconds": 5,
+    "concurrent_requests": 100,
+    "rate_limiting": {
+      "requests_per_minute": 1000,
+      "burst_allowance": 50
+    }
+  },
+  "compliance": {
+    "audit_logging": true,
+    "data_retention_policy": "90_days",
+    "privacy_by_design": true,
+    "consent_management": true,
+    "right_to_deletion": true
+  },
+  "last_updated": "2024-12-02T22:52:00Z",
+  "version": "1.0.0",
+  "schema_version": "1.0"
+}
