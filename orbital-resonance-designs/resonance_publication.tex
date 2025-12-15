@@ -1,0 +1,74 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tikz-3dplot}
+
+\begin{document}
+\tdplotsetmaincoords{70}{110}
+\begin{tikzpicture}[tdplot_main_coords, scale=4]
+
+    % Define Golden Ratio symbol
+    \def\phi{\varphi}
+
+    % Coordinates for the center
+    \coordinate (Center) at (0.5,0.5,0.5);
+
+    % Draw the Resonance Sum at Center
+    \node at (Center) [circle, fill=yellow, draw=orange, inner sep=2pt, opacity=0.8] {};
+    \node at (0.5,0.5,0.35) [below, align=center, font=\scriptsize] {\textbf{Locked}\\\textbf{Harmony}\\$4+2\sqrt{5}$};
+
+    % Loop through x, y, z to create corners
+    \foreach \x in {0,1} {
+        \foreach \y in {0,1} {
+            \foreach \z in {0,1} {
+                
+                % Define coordinate
+                \coordinate (P\x\y\z) at (\x,\y,\z);
+                
+                % Draw connection to center (Resonance Path)
+                \draw[orange!50, dashed, ->] (P\x\y\z) -- (Center);
+                
+                % Calculate Parity
+                \pgfmathparse{int(mod(\x+\y+\z,2))}
+                \let\parity\pgfmathresult
+                
+                % Check for resonance points
+                \pgfmathparse{int(\x+\y*2+\z*4)} % Binary value
+                \let\resval\pgfmathresult
+                \ifnum\resval=4 \def\reslabel{Io (100)} \else
+                \ifnum\resval=2 \def\reslabel{Europa (010)} \else
+                \ifnum\resval=1 \def\reslabel{Ganymede (001)} \else \def\reslabel{\x\y\z} \fi \fi \fi
+                
+                % Style based on Parity & Resonance
+                \ifnum\parity=0 
+                    % EVEN Parity -> Red, -phi
+                    \ifx\reslabel\x\y\z
+                        \node[circle, fill=red!30, draw=red, inner sep=1.5pt] (N\x\y\z) at (P\x\y\z) {\tiny \reslabel};
+                        \node[above=3pt, text=red] at (N\x\y\z) {\tiny $-\phi$};
+                    \else
+                        \node[star, star points=5, fill=green!50, draw=green, inner sep=2pt] (N\x\y\z) at (P\x\y\z) {\tiny \reslabel};
+                        \node[above=3pt, text=green] at (N\x\y\z) {\tiny Lock};
+                    \fi
+                \else
+                    % ODD Parity -> Blue, +phi
+                    \ifx\reslabel\x\y\z
+                        \node[circle, fill=blue!30, draw=blue, inner sep=1.5pt] (N\x\y\z) at (P\x\y\z) {\tiny \reslabel};
+                        \node[above=3pt, text=blue] at (N\x\y\z) {\tiny $+\phi$};
+                    \else
+                        \node[star, star points=5, fill=green!50, draw=green, inner sep=2pt] (N\x\y\z) at (P\x\y\z) {\tiny \reslabel};
+                        \node[above=3pt, text=green] at (N\x\y\z) {\tiny Lock};
+                    \fi
+                \fi
+            }
+        }
+    }
+
+    % Draw Orbital Edges (Background)
+    \draw[gray, thin] (0,0,0) -- (1,0,0) -- (1,1,0) -- (0,1,0) -- cycle;
+    \draw[gray, thin] (0,0,1) -- (1,0,1) -- (1,1,1) -- (0,1,1) -- cycle;
+    \draw[gray, thin] (0,0,0) -- (0,0,1);
+    \draw[gray, thin] (1,0,0) -- (1,0,1);
+    \draw[gray, thin] (1,1,0) -- (1,1,1);
+    \draw[gray, thin] (0,1,0) -- (0,1,1);
+
+\end{tikzpicture}
+\end{document}
+

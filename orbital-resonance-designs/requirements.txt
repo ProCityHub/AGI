@@ -1,0 +1,23 @@
+# Requirements for Orbital Resonance Lock Design Implementations
+# ==============================================================
+
+# Core visualization library
+matplotlib>=3.5.0
+
+# Numerical computing
+numpy>=1.21.0
+
+# Optional: For enhanced 3D rendering
+# scipy>=1.7.0
+
+# Optional: For animation export
+# pillow>=8.0.0
+# imageio>=2.9.0
+
+# Optional: For interactive widgets
+# ipywidgets>=7.6.0
+# jupyter>=1.0.0
+
+# Note: SVG generator uses only Python standard library (no dependencies)
+# Note: LaTeX/TikZ requires a LaTeX distribution (not pip-installable)
+

@@ -1,0 +1,54 @@
+# Gemini Integration Requirements
+
+# Core Gemini API
+google-generativeai>=0.8.0
+
+# Async support
+aiohttp>=3.9.0
+asyncio-throttle>=1.0.2
+
+# Data processing
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Configuration and environment
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+
+# Logging and monitoring
+structlog>=23.2.0
+prometheus-client>=0.19.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.12.0
+
+# Development tools
+black>=23.12.0
+isort>=5.13.0
+mypy>=1.8.0
+pre-commit>=3.6.0
+
+# Optional: CLI tools (if using subprocess approach)
+# Note: Gemini CLI should be installed separately via:
+# curl -sSL https://geminicli.com/install | bash
+
+# Optional: Enhanced features
+pillow>=10.1.0  # For image processing
+requests>=2.31.0  # For HTTP requests
+websockets>=12.0  # For real-time communication
+
+# Gaming-specific dependencies
+pygame>=2.5.0  # For game development and testing
+scipy>=1.11.0  # For advanced mathematical operations
+
+# Integration with existing AGI components
+transformers>=4.36.0  # For additional AI models
+torch>=2.1.0  # For PyTorch-based models
+tensorflow>=2.15.0  # For TensorFlow integration
+
+# Wii development support (Python bindings)
+# Note: These may need to be installed separately or built from source
+# ctypes  # Built-in, for C library integration
+# cffi>=1.16.0  # Alternative C integration
