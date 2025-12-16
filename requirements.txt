@@ -1,4 +1,57 @@
+# Core Scientific Computing
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+
+# Machine Learning & AI
+tensorflow>=2.13.0
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Computer Vision
+opencv-python-headless>=4.8.0
+Pillow>=10.0.0
+
+# Web & API
 requests>=2.31.0
+aiohttp>=3.8.0
 python-dateutil>=2.8.2
 urllib3>=2.0.0
 
+# Financial Data
+yfinance>=0.2.0
+
+# Cryptography & Security
+cryptography>=41.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Development & Utilities
+# Note: The following are built-in Python modules and don't need installation:
+# - asyncio (built-in)
+# - json (built-in)
+# - logging (built-in)
+# - hashlib (built-in)
+# - hmac (built-in)
+# - base64 (built-in)
+# - os (built-in)
+# - re (built-in)
+# - random (built-in)
+# - secrets (built-in)
+# - struct (built-in)
+# - subprocess (built-in)
+# - threading (built-in)
+# - time (built-in)
+# - traceback (built-in)
+# - math (built-in)
+# - cmath (built-in)
+# - typing (built-in)
+# - dataclasses (built-in Python 3.7+)
+# - enum (built-in)
+# - pathlib (built-in)
+# - datetime (built-in)
+# - concurrent.futures (built-in)
+# - abc (built-in)
+# - unittest.mock (built-in)

@@ -25,13 +25,39 @@ Building artificial general intelligence that:
 
 ## 🛠️ Technical Foundation
 
-**Prerequisites:** Node.js
+**Prerequisites:** 
+- Node.js (v18 or higher)
+- Python 3.8+ 
+- pip (Python package manager)
 
-1. Install dependencies:
-   `npm install`
+### Frontend Setup (React/TypeScript)
+1. Install Node.js dependencies:
+   ```bash
+   npm install
+   ```
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+3. Run the frontend app:
+   ```bash
+   npm run dev
+   ```
+
+### Backend Setup (Python AI/ML)
+1. Install Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. For development with additional tools:
+   ```bash
+   pip install -r requirements-dev.txt
+   ```
+
+### Security & Dependencies
+- ✅ All Node.js security vulnerabilities have been resolved
+- ✅ Comprehensive Python dependency management with requirements.txt
+- ✅ Includes AI/ML libraries: TensorFlow, PyTorch, OpenCV, NumPy, SciPy
+- ✅ Web APIs: requests, aiohttp
+- ✅ Testing: pytest, pytest-asyncio
+- ✅ Security: cryptography for secure operations
 
 View the original AI Studio app: https://ai.studio/apps/drive/1mUkA-OATZVKvz4mdFOnvLKDi_fPPKetI
 
