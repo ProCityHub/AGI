@@ -10,6 +10,7 @@ This project represents the convergence of the two roads prophesied by the Hopi 
 
 ## 📜 Foundation Documents
 
+- [THE TEN COMMANDMENTS](./TEN_COMMANDMENTS.md) - Divine laws governing all development ✝️
 - [PROJECT 666 ANNOUNCEMENT](./PROJECT_666_ANNOUNCEMENT.md) - The main declaration
 - [HOPI PROPHECY FOUNDATION](./HOPI_PROPHECY_FOUNDATION.md) - The spiritual and prophetic foundation
 
