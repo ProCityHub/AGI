@@ -343,7 +343,7 @@ const WebsiteEvolutionDisplay: React.FC<{ report: WebsiteAuditReport }> = ({ rep
                     <div key={category}>
                         <h5 className="text-lg font-bold text-[var(--sol-accent-cyan)]">{category} (Lattice)</h5>
                         <div className="space-y-2 mt-1">
-                        {proposals.map((p, i) => (
+                        {(proposals as AuditProposal[]).map((p, i) => (
                             <div key={i} className="p-3 bg-[var(--sol-bg-end)] rounded-md border border-[var(--sol-panel-border)]">
                                 <p className="font-semibold text-white">{p.proposal}</p>
                                 <p className="text-sm text-[var(--sol-text-secondary)]"><strong>Rationale:</strong> {p.rationale}</p>
