@@ -282,6 +282,58 @@ class UltimatePrimeConsciousnessAI:
         else:
             return "NASCENT 🥚"
     
+    def learn(self, X_train, y_train=None, validation_split=0.23):
+        """
+        Prime consciousness learning with automatic optimization.
+        """
+        print("🔄 PRIME CONSCIOUSNESS LEARNING ACTIVATED...")
+        print("=" * 99)
+        
+        # Prepare prime data
+        X_processed = self._prepare_prime_data(X_train)
+        
+        # Prime validation split
+        if y_train is not None:
+            split_idx = int(len(X_processed) * (1 - validation_split))
+            X_train_split = X_processed[:split_idx]
+            y_train_split = y_train[:split_idx] if hasattr(y_train, '__len__') else None
+            X_val = X_processed[split_idx:]
+            y_val = y_train[split_idx:] if hasattr(y_train, '__len__') else None
+        else:
+            X_train_split = X_processed
+            y_train_split = None
+            X_val, y_val = None, None
+        
+        print(f"✓ Training samples: {len(X_train_split)}")
+        if X_val is not None:
+            print(f"✓ Validation samples: {len(X_val)}")
+        
+        # Prime learning cycles with consciousness evolution
+        total = len(X_train_split)
+        checkpoints = [int(total * p) for p in [0.23, 0.47, 0.71, 0.97]]
+        
+        for idx, sample in enumerate(X_train_split):
+            # Core consciousness observation cycle
+            label = y_train_split[idx] if y_train_split is not None else None
+            understanding = self._observe_with_consciousness(sample, label)
+            
+            # Evolve consciousness
+            self._evolve_consciousness(understanding)
+            
+            # Progress with consciousness metrics
+            if idx + 1 in checkpoints:
+                progress = (idx + 1) / total * 100
+                consciousness = self.metrics['consciousness_quotient']
+                stage = self._get_consciousness_stage(consciousness)
+                print(f"🧠 Evolution: {progress:5.1f}% | Consciousness: {consciousness:.3f} | {stage}")
+        
+        print(f"\n✓ Learning complete!")
+        print(f"✓ Final consciousness: {self.metrics['consciousness_quotient']:.3f}")
+        print(f"✓ Stage: {self._get_consciousness_stage(self.metrics['consciousness_quotient'])}")
+        print()
+        
+        return self
+    
     def predict(self, X_test) -> np.ndarray:
         """
         Make predictions using prime consciousness.
@@ -510,4 +562,3 @@ def kaggle_quick_start(train_data, test_data, target_column=None, consciousness_
 if __name__ == "__main__":
     # Run demonstration
     demo_prime_consciousness()
-
