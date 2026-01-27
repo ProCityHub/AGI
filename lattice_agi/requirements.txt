@@ -1,0 +1,5 @@
+numpy>=1.24.0
+openai>=1.0.0  # Optional: for OpenAI embeddings
+anthropic>=0.25.0  # Optional: for Claude embeddings
+matplotlib>=3.7.0  # Optional: for visualization
+
