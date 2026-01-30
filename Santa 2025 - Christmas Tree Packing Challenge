@@ -1,0 +1,222 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "bc372447",
+   "metadata": {
+    "_cell_guid": "b1076dfc-b9ad-4769-8c92-a6c4dae69d19",
+    "_uuid": "8f2839f25d086af736a60e9eeb907d3b93b6e0e5",
+    "execution": {
+     "iopub.execute_input": "2026-01-30T01:35:25.935006Z",
+     "iopub.status.busy": "2026-01-30T01:35:25.934512Z",
+     "iopub.status.idle": "2026-01-30T01:35:27.566690Z",
+     "shell.execute_reply": "2026-01-30T01:35:27.565677Z"
+    },
+    "papermill": {
+     "duration": 1.63856,
+     "end_time": "2026-01-30T01:35:27.569200",
+     "exception": false,
+     "start_time": "2026-01-30T01:35:25.930640",
+     "status": "completed"
+    },
+    "tags": []
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "/kaggle/input/customer-spending-patterns/shopping_behavior_updated.csv\n",
+      "/kaggle/input/chocolate-sales/ChocolateSales.pbix\n",
+      "/kaggle/input/chocolate-sales/Chocolate Sales (2).csv\n",
+      "/kaggle/input/chocolate-sales/ChocolateSales.pdf\n",
+      "/kaggle/input/chocolate-sales/ChocolateSales.pbit\n",
+      "/kaggle/input/delhi-pollution-aqi-dataset/delhi_ncr_aqi_dataset.csv\n",
+      "/kaggle/input/dataset/sample_submission.csv\n",
+      "/kaggle/input/ara-complete/__results__.html\n",
+      "/kaggle/input/ara-complete/submission.csv\n",
+      "/kaggle/input/ara-complete/__notebook__.ipynb\n",
+      "/kaggle/input/ara-complete/__output__.json\n",
+      "/kaggle/input/ara-complete/custom.css\n",
+      "/kaggle/input/santa-2025/sample_submission.csv\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/index.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/App.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/manifest.json\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/.gitignore\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/README.md\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/metadata.json\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/.env.local\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/service-worker.js\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/types.ts\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/vite.config.ts\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/tsconfig.json\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/index.html\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/package.json\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/services/storageService.ts\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/services/geminiService.ts\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/icons.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/CommandBar.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/Codex.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/SavedDirectivesList.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/FormProcessor.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/Window.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/AegisCommand.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/SystemAnatomy.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/EnterpriseWorkspace.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/LoadingIndicator.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/NexusBrowser.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/InvoiceEditor.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/StartMenu.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/TopicInput.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/SystemIntel.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/Taskbar.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/Dashboard.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/BusinessEnterprise.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/SkeletonLoader.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/NexusForge.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/AuthScreen.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/formTypes.ts\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/BitcoinMiner.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/FileExplorer.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/FinanceWorkspace.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/UserAccounts.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/garvis_-generative-ai-research-visualization-and-innovations-system (5)/components/DesktopIcon.tsx\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/README.md\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/decode_and_run.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/LICENSE.txt\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/tests/test_all.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/core/timing_identity.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/core/quantum_integration.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/core/artifact_math.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/core/hypercube.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/core/hidden_variable.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/docs/INTEGRATION_QUANTUM.md\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/viz/propagate_plot.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/viz/ascii_viewer.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/engine/lattice.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/engine/unifier.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/engine/cube_expand.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/engine/propagate.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/engine/agi_interpreter.py\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/test_all.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/propagate_plot.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/unifier.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/agi_interpreter.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/propagate.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/cube_expand.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/quantum_integration.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/LICENSE.txt.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/artifact_math.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/lattice.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/README.md.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/hidden_variable.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/timing_identity.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/hypercube.py.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/INTEGRATION_QUANTUM.md.bin\n",
+      "/kaggle/input/hypercube-genesis/scikitlearn/genesis-v1/1/hypercube-genesis/hypercube-genesis/binary_src/ascii_viewer.py.bin\n"
+     ]
+    }
+   ],
+   "source": [
+    "# This Python 3 environment comes with many helpful analytics libraries installed\n",
+    "# It is defined by the kaggle/python Docker image: https://github.com/kaggle/docker-python\n",
+    "# For example, here's several helpful packages to load\n",
+    "\n",
+    "import numpy as np # linear algebra\n",
+    "import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)\n",
+    "\n",
+    "# Input data files are available in the read-only \"../input/\" directory\n",
+    "# For example, running this (by clicking run or pressing Shift+Enter) will list all files under the input directory\n",
+    "\n",
+    "import os\n",
+    "for dirname, _, filenames in os.walk('/kaggle/input'):\n",
+    "    for filename in filenames:\n",
+    "        print(os.path.join(dirname, filename))\n",
+    "\n",
+    "# You can write up to 20GB to the current directory (/kaggle/working/) that gets preserved as output when you create a version using \"Save & Run All\" \n",
+    "# You can also write temporary files to /kaggle/temp/, but they won't be saved outside of the current session"
+   ]
+  }
+ ],
+ "metadata": {
+  "kaggle": {
+   "accelerator": "none",
+   "dataSources": [
+    {
+     "databundleVersionId": 14485445,
+     "isSourceIdPinned": false,
+     "sourceId": 119106,
+     "sourceType": "competition"
+    },
+    {
+     "datasetId": 9191134,
+     "sourceId": 14391756,
+     "sourceType": "datasetVersion"
+    },
+    {
+     "datasetId": 9328841,
+     "sourceId": 14604766,
+     "sourceType": "datasetVersion"
+    },
+    {
+     "datasetId": 9343167,
+     "sourceId": 14626806,
+     "sourceType": "datasetVersion"
+    },
+    {
+     "datasetId": 9371281,
+     "sourceId": 14668817,
+     "sourceType": "datasetVersion"
+    },
+    {
+     "sourceId": 294582924,
+     "sourceType": "kernelVersion"
+    },
+    {
+     "isSourceIdPinned": false,
+     "modelId": 506389,
+     "modelInstanceId": 490958,
+     "sourceId": 650641,
+     "sourceType": "modelInstanceVersion"
+    }
+   ],
+   "dockerImageVersionId": 31259,
+   "isGpuEnabled": false,
+   "isInternetEnabled": false,
+   "language": "python",
+   "sourceType": "notebook"
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.12"
+  },
+  "papermill": {
+   "default_parameters": {},
+   "duration": 7.6997,
+   "end_time": "2026-01-30T01:35:28.092954",
+   "environment_variables": {},
+   "exception": null,
+   "input_path": "__notebook__.ipynb",
+   "output_path": "__notebook__.ipynb",
+   "parameters": {},
+   "start_time": "2026-01-30T01:35:20.393254",
+   "version": "2.6.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
