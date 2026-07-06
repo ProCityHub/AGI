@@ -63,6 +63,11 @@ export interface ConnectAllSnapshot {
   pendingCount: number;
   blockedCount: number;
   applications: LatticeApplicationNode[];
-  connected: ConnectedApplicationSnapshot[];
+  connected?: ConnectedApplicationSnapshot[];
+  statusScores?: {
+    observation: number;
+    action: number;
+    bridge: number;
+  };
   summary: string;
 }
