@@ -546,6 +546,59 @@ export class LatticeMoralAutonomyCore {
   }
 
   /**
+   * rememberDecision(decision: AutonomyDecision): MoralMemoryRecord
+   *
+   * Record a decision in moral memory for future reflection.
+   */
+  public rememberDecision(decision: AutonomyDecision): MoralMemoryRecord {
+    let outcome: 'executed' | 'approved' | 'denied' | 'pending' | 'cancelled' = 'pending';
+
+    if (decision.decision === 'approved') {
+      outcome = 'approved';
+    } else if (decision.decision === 'denied') {
+      outcome = 'denied';
+    } else if (decision.decision === 'warned') {
+      outcome = 'pending';
+    } else if (decision.decision === 'pending-approval') {
+      outcome = 'pending';
+    }
+
+    const record: MoralMemoryRecord = {
+      recordId: this.createId('moral-memory'),
+      decision,
+      outcome,
+      reflection: `Action "${decision.action.description}" resulted in decision: ${decision.decision}`,
+      lessons: [
+        'Decision recorded for future moral reflection.',
+        'Approval-gated actions must remain transparent.',
+      ],
+      timestamp: Date.now(),
+    };
+
+    this.memory.push(record);
+    return record;
+  }
+
+  /**
+   * exportMoralSnapshot(): MoralAutonomySnapshot
+   *
+   * Export the complete moral autonomy state for persistence or analysis.
+   */
+  public exportMoralSnapshot(): MoralAutonomySnapshot {
+    return {
+      version: this.moralConstitution.version,
+      author: 'Adrien D. Thomas',
+      decisionEngine: 'LatticeMoralAutonomyCore',
+      timestamp: Date.now(),
+      selfModel: this.getSelfModel(),
+      moralConstitution: this.getMoralConstitution(),
+      memory: [...this.memory],
+      memoryRecordCount: this.memory.length,
+      autonomyLevel: this.selfModel.autonomyLevel,
+    };
+  }
+
+  /**
    * reset(): void
    *
    * Clear memory and reset to default state.
