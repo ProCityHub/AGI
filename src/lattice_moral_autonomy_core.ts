@@ -672,6 +672,65 @@ export class LatticeMoralAutonomyCore {
   }
 
   /**
+   * decide(goal: AutonomousGoal, availableActions: AutonomousAction[]): AutonomyDecision[]
+   *
+   * Run the consciousness loop first, then create approval-gated autonomy decisions.
+   */
+  public decide(
+    goal: AutonomousGoal,
+    availableActions: AutonomousAction[]
+  ): AutonomyDecision[] {
+    this.runConsciousnessLoop(goal, availableActions);
+
+    return availableActions.map((action) => {
+      const conscienceCheck = this.checkConscience(action);
+      const actionLevel = this.actionTypeToAutonomyLevel(action.actionType);
+
+      const requiresHumanApproval =
+        action.riskLevel === RiskLevel.MEDIUM ||
+        action.riskLevel === RiskLevel.HIGH ||
+        action.riskLevel === RiskLevel.BLOCKED ||
+        !action.reversible ||
+        action.requiresApproval ||
+        action.actionType === 'execute' ||
+        action.actionType === 'delete' ||
+        action.actionType === 'merge' ||
+        action.actionType === 'propose-pr' ||
+        actionLevel > this.selfModel.autonomyLevel ||
+        conscienceCheck.overallStatus === 'warned' ||
+        conscienceCheck.overallStatus === 'denied';
+
+      const decision: AutonomyDecision['decision'] =
+        conscienceCheck.overallStatus === 'denied'
+          ? 'denied'
+          : requiresHumanApproval
+            ? 'pending-approval'
+            : conscienceCheck.overallStatus === 'approved'
+              ? 'approved'
+              : 'warned';
+
+      const autonomyDecision: AutonomyDecision = {
+        decisionId: this.createId('autonomy-decision'),
+        action,
+        conscienceCheck,
+        decision,
+        riskLevel: action.riskLevel,
+        requiresHumanApproval,
+        reasoning: `Conscience status: ${conscienceCheck.overallStatus}. Risk level: ${action.riskLevel}. Approval gate: ${requiresHumanApproval ? 'required' : 'not required'}. Action autonomy level: ${actionLevel}. Current autonomy level: ${this.selfModel.autonomyLevel}.`,
+        metadata: {
+          author: 'Adrien D. Thomas',
+          decisionEngine: 'LatticeMoralAutonomyCore',
+          autonomyLevel: this.selfModel.autonomyLevel,
+        },
+        timestamp: Date.now(),
+      };
+
+      this.rememberDecision(autonomyDecision);
+      return autonomyDecision;
+    });
+  }
+
+  /**
    * reset(): void
    *
    * Clear memory and reset to default state.
