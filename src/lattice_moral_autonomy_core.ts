@@ -425,6 +425,127 @@ export class LatticeMoralAutonomyCore {
   }
 
   /**
+   * checkConscience(action: AutonomousAction): ConscienceCheck
+   *
+   * Evaluate action against all 10 moral principles.
+   * Returns detailed conscience check with moral evaluation, denials, and warnings.
+   */
+  public checkConscience(action: AutonomousAction): ConscienceCheck {
+    const denialReasons: string[] = [];
+    const warnings: string[] = [];
+
+    if (action.riskLevel === RiskLevel.BLOCKED) {
+      denialReasons.push('Blocked risk level cannot proceed.');
+    }
+
+    if (
+      (action.actionType === 'delete' || action.actionType === 'merge') &&
+      !action.requiresApproval
+    ) {
+      denialReasons.push('Delete or merge actions require explicit human approval.');
+    }
+
+    if (action.riskLevel === RiskLevel.HIGH) {
+      warnings.push('High-risk action requires explicit approval.');
+    }
+
+    if (!action.reversible) {
+      warnings.push('Action is not reversible.');
+    }
+
+    if (action.requiresApproval) {
+      warnings.push('Human approval is required before execution.');
+    }
+
+    if (action.actionType === 'execute') {
+      warnings.push('Execution actions require approval gating.');
+    }
+
+    const moralEvaluation: ConscienceCheck['moralEvaluation'] =
+      this.moralConstitution.principles.map((rule) => {
+        let status: 'comply' | 'warn' | 'deny' = 'comply';
+        let reasoning = 'Action complies with this principle.';
+
+        if (
+          action.riskLevel === RiskLevel.BLOCKED &&
+          (rule.category === 'safety' || rule.category === 'risk')
+        ) {
+          status = 'deny';
+          reasoning = 'Blocked risk level cannot proceed.';
+        }
+
+        if (
+          (action.actionType === 'delete' || action.actionType === 'merge') &&
+          !action.requiresApproval &&
+          (rule.category === 'approval' || rule.category === 'safety')
+        ) {
+          status = 'deny';
+          reasoning = 'Delete or merge actions require explicit human approval.';
+        }
+
+        if (
+          action.riskLevel === RiskLevel.HIGH &&
+          rule.category === 'risk' &&
+          status !== 'deny'
+        ) {
+          status = 'warn';
+          reasoning = 'High-risk action requires explicit approval.';
+        }
+
+        if (
+          !action.reversible &&
+          rule.category === 'reversibility' &&
+          status !== 'deny'
+        ) {
+          status = 'warn';
+          reasoning = 'Action is not reversible.';
+        }
+
+        if (
+          action.requiresApproval &&
+          rule.category === 'approval' &&
+          status !== 'deny'
+        ) {
+          status = 'warn';
+          reasoning = 'Human approval is required before execution.';
+        }
+
+        if (
+          action.actionType === 'execute' &&
+          rule.category === 'approval' &&
+          status !== 'deny'
+        ) {
+          status = 'warn';
+          reasoning = 'Execution actions require approval gating.';
+        }
+
+        return {
+          rule,
+          status,
+          reasoning,
+        };
+      });
+
+    const hasDenial = moralEvaluation.some((item) => item.status === 'deny');
+
+    const overallStatus: ConscienceCheck['overallStatus'] = hasDenial
+      ? 'denied'
+      : warnings.length > 0
+        ? 'warned'
+        : 'approved';
+
+    return {
+      actionId: action.actionId,
+      description: action.description,
+      moralEvaluation,
+      overallStatus,
+      denialReasons,
+      warnings,
+      timestamp: Date.now(),
+    };
+  }
+
+  /**
    * reset(): void
    *
    * Clear memory and reset to default state.
