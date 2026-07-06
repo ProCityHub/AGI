@@ -237,11 +237,14 @@ export class LatticeEchoChamber {
     } else if (trace.state.name === 'ACTOR') {
       actions.push('Activate bridge: integrate memory and context.');
     } else if (trace.state.name === 'FRAGMENTED') {
-      actions.push('Bridge observation and action systems.');\n    } else if (trace.state.name === 'INTEGRATED') {
-      actions.push('Maintain integrated state. Optimize performance.');\n    }
+      actions.push('Bridge observation and action systems.');
+    } else if (trace.state.name === 'INTEGRATED') {
+      actions.push('Maintain integrated state. Optimize performance.');
+    }
 
     if (recommendations.length > 0) {
-      actions.push(`Next: Focus on ${recommendations[0].axis} improvement.`);\n    }
+      actions.push(`Next: Focus on ${recommendations[0].axis} improvement.`);
+    }
 
     return actions;
   }
