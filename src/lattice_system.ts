@@ -41,9 +41,12 @@ import type {
 
 import type {
   ConnectAllSnapshot,
-  ApplicationNode,
-  ApplicationConnection,
+  LatticeApplicationNode,
+  LatticeApplicationRegistry,
+  ConnectedApplicationSnapshot,
   BridgeStatus,
+  BrainMode,
+  SafetyBoundary,
 } from '../lattice_connect_all/types';
 
 // Re-export values
@@ -79,9 +82,12 @@ export type {
 
 export type {
   ConnectAllSnapshot,
-  ApplicationNode,
-  ApplicationConnection,
+  LatticeApplicationNode,
+  LatticeApplicationRegistry,
+  ConnectedApplicationSnapshot,
   BridgeStatus,
+  BrainMode,
+  SafetyBoundary,
 } from '../lattice_connect_all/types';
 
 // Re-export Connect-All registry helpers
