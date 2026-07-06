@@ -6,41 +6,82 @@
  * No consciousness claims. No autonomous production code rewriting.
  */
 
-// Re-export Lattice GitHub Brain
-export {
-  LatticeGitHubBrain,
-  latticeGitHubBrain,
+// Import values
+import { LatticeGitHubBrain, latticeGitHubBrain } from './lattice_github_brain';
+import { LatticeEchoChamber, latticeEchoChamber } from './lattice_echo_chamber';
+import { LatticeCommandCenter, latticeCommandCenter } from './lattice_command_center';
+import { latticeApplicationRegistry } from '../lattice_connect_all/registry';
+import { connectAllApplications } from '../lattice_connect_all/connect_all';
+
+// Import types
+import type {
   BrainInput,
   BrainState,
   BrainTrace,
-  BrainScores,
+  AxisScores,
+  AppFile,
+  SixWallProtocol,
+  HealingRecommendation,
+  BrainSnapshot,
+  RewriteSnapshot,
 } from './lattice_github_brain';
 
-// Re-export Lattice Echo Chamber
-export {
-  LatticeEchoChamber,
-  latticeEchoChamber,
+import type {
   EchoLearningGoal,
   EchoLearningCycle,
   EchoLearningSnapshot,
-  EchoRecommendation,
+  EchoImprovementRecommendation,
 } from './lattice_echo_chamber';
 
-// Re-export Lattice Command Center
-export {
-  LatticeCommandCenter,
-  latticeCommandCenter,
+import type {
   LatticeCommand,
   LatticeCommandResult,
   LatticeCommandSnapshot,
 } from './lattice_command_center';
 
-// Re-export Connect-All types
-export {
+import type {
   ConnectAllSnapshot,
   ApplicationNode,
   ApplicationConnection,
-  ConnectionStatus,
+  BridgeStatus,
+} from '../lattice_connect_all/types';
+
+// Re-export values
+export { LatticeGitHubBrain, latticeGitHubBrain } from './lattice_github_brain';
+export { LatticeEchoChamber, latticeEchoChamber } from './lattice_echo_chamber';
+export { LatticeCommandCenter, latticeCommandCenter } from './lattice_command_center';
+
+// Re-export types
+export type {
+  BrainInput,
+  BrainState,
+  BrainTrace,
+  AxisScores,
+  AppFile,
+  SixWallProtocol,
+  HealingRecommendation,
+  BrainSnapshot,
+  RewriteSnapshot,
+} from './lattice_github_brain';
+
+export type {
+  EchoLearningGoal,
+  EchoLearningCycle,
+  EchoLearningSnapshot,
+  EchoImprovementRecommendation,
+} from './lattice_echo_chamber';
+
+export type {
+  LatticeCommand,
+  LatticeCommandResult,
+  LatticeCommandSnapshot,
+} from './lattice_command_center';
+
+export type {
+  ConnectAllSnapshot,
+  ApplicationNode,
+  ApplicationConnection,
+  BridgeStatus,
 } from '../lattice_connect_all/types';
 
 // Re-export Connect-All registry helpers
@@ -69,11 +110,11 @@ export {
  * Returns an object with all core components ready to use.
  */
 export interface LatticeSystem {
-  brain: any;
-  echoChamber: any;
-  commandCenter: any;
-  registry: any;
-  connectAll: any;
+  brain: LatticeGitHubBrain;
+  echoChamber: LatticeEchoChamber;
+  commandCenter: LatticeCommandCenter;
+  registry: typeof latticeApplicationRegistry;
+  connectAll: typeof connectAllApplications;
   author: string;
   safetyBoundary: string;
 }
@@ -84,14 +125,6 @@ export interface LatticeSystem {
  * Initialize all Lattice components and return as unified system object.
  */
 export function createLatticeSystem(): LatticeSystem {
-  const {
-    LatticeGitHubBrain,
-    LatticeEchoChamber,
-    LatticeCommandCenter,
-  } = require('./lattice_github_brain');
-  const { latticeApplicationRegistry } = require('../lattice_connect_all/registry');
-  const { connectAllApplications } = require('../lattice_connect_all/connect_all');
-
   return {
     brain: new LatticeGitHubBrain(),
     echoChamber: new LatticeEchoChamber(),
@@ -115,8 +148,7 @@ export function createLatticeSystem(): LatticeSystem {
  * @param command - LatticeCommand input with observationItems, actionItems, bridgeItems, metadata
  * @returns LatticeCommandResult with traces, recommendations, and snapshots
  */
-export function runLatticeSystemCommand(command: any): any {
-  const { LatticeCommandCenter } = require('./lattice_command_center');
+export function runLatticeSystemCommand(command: LatticeCommand): LatticeCommandResult {
   const center = new LatticeCommandCenter();
   return center.commandLearnAndImprove(command);
 }
