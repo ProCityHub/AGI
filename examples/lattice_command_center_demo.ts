@@ -152,7 +152,11 @@ function runLatticeCommandCenterDemo(): void {
   );
 }
 
-if (require.main === module) {
+const isDirectRun =
+  typeof process !== 'undefined' &&
+  process.argv[1]?.endsWith('lattice_command_center_demo.ts');
+
+if (isDirectRun) {
   runLatticeCommandCenterDemo();
 }
 
