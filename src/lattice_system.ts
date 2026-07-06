@@ -11,6 +11,7 @@ import { LatticeGitHubBrain, latticeGitHubBrain } from './lattice_github_brain';
 import { LatticeEchoChamber, latticeEchoChamber } from './lattice_echo_chamber';
 import { LatticeCommandCenter, latticeCommandCenter } from './lattice_command_center';
 import { LatticeMoralAutonomyCore, latticeMoralAutonomyCore } from './lattice_moral_autonomy_core';
+import { LatticeAGIBridgeRuntime, latticeAGIBridgeRuntime } from './lattice_agi_bridge';
 import { LatticeCoherenceEngine, latticeCoherenceEngine } from './lattice_coherence_engine';
 import { latticeApplicationRegistry } from '../lattice_connect_all/registry';
 import { connectAllApplications } from '../lattice_connect_all/connect_all';
@@ -57,6 +58,17 @@ import type {
 } from './lattice_moral_autonomy_core';
 
 import type {
+  LatticeAGIBridgeInput,
+  LatticeAGIMode,
+  LatticeAGIObservation,
+  LatticeAGICoherenceScore,
+  LatticeAGICandidate,
+  LatticeAGISelectedAction,
+  LatticeAGICycle,
+  LatticeAGIBridgeSnapshot,
+} from './lattice_agi_bridge';
+
+import type {
   CoherenceInput,
   CoherenceWeights,
   CoherenceScore,
@@ -78,6 +90,7 @@ export { LatticeGitHubBrain, latticeGitHubBrain } from './lattice_github_brain';
 export { LatticeEchoChamber, latticeEchoChamber } from './lattice_echo_chamber';
 export { LatticeCommandCenter, latticeCommandCenter } from './lattice_command_center';
 export { LatticeMoralAutonomyCore, latticeMoralAutonomyCore } from './lattice_moral_autonomy_core';
+export { LatticeAGIBridgeRuntime, latticeAGIBridgeRuntime } from './lattice_agi_bridge';
 export { LatticeCoherenceEngine, latticeCoherenceEngine } from './lattice_coherence_engine';
 
 // Re-export types
@@ -120,6 +133,17 @@ export type {
   MoralMemoryRecord,
   MoralAutonomySnapshot,
 } from './lattice_moral_autonomy_core';
+
+export type {
+  LatticeAGIBridgeInput,
+  LatticeAGIMode,
+  LatticeAGIObservation,
+  LatticeAGICoherenceScore,
+  LatticeAGICandidate,
+  LatticeAGISelectedAction,
+  LatticeAGICycle,
+  LatticeAGIBridgeSnapshot,
+} from './lattice_agi_bridge';
 
 export type {
   CoherenceInput,
@@ -168,6 +192,7 @@ export interface LatticeSystem {
   echoChamber: LatticeEchoChamber;
   commandCenter: LatticeCommandCenter;
   moralAutonomyCore: LatticeMoralAutonomyCore;
+  agiBridgeRuntime: LatticeAGIBridgeRuntime;
   coherenceEngine: LatticeCoherenceEngine;
   registry: typeof latticeApplicationRegistry;
   connectAll: typeof connectAllApplications;
@@ -186,6 +211,7 @@ export function createLatticeSystem(): LatticeSystem {
     echoChamber: new LatticeEchoChamber(),
     commandCenter: new LatticeCommandCenter(),
     moralAutonomyCore: new LatticeMoralAutonomyCore(),
+    agiBridgeRuntime: new LatticeAGIBridgeRuntime(),
     coherenceEngine: new LatticeCoherenceEngine(),
     registry: latticeApplicationRegistry,
     connectAll: connectAllApplications,
