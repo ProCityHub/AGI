@@ -10,6 +10,7 @@
 import { LatticeGitHubBrain, latticeGitHubBrain } from './lattice_github_brain';
 import { LatticeEchoChamber, latticeEchoChamber } from './lattice_echo_chamber';
 import { LatticeCommandCenter, latticeCommandCenter } from './lattice_command_center';
+import { LatticeMoralAutonomyCore, latticeMoralAutonomyCore } from './lattice_moral_autonomy_core';
 import { latticeApplicationRegistry } from '../lattice_connect_all/registry';
 import { connectAllApplications } from '../lattice_connect_all/connect_all';
 
@@ -40,6 +41,21 @@ import type {
 } from './lattice_command_center';
 
 import type {
+  AutonomyLevel,
+  RiskLevel,
+  MoralRule,
+  MoralConstitution,
+  SelfModel,
+  ConsciousnessLoopState,
+  ConscienceCheck,
+  AutonomousGoal,
+  AutonomousAction,
+  AutonomyDecision,
+  MoralMemoryRecord,
+  MoralAutonomySnapshot,
+} from './lattice_moral_autonomy_core';
+
+import type {
   ConnectAllSnapshot,
   LatticeApplicationNode,
   LatticeApplicationRegistry,
@@ -53,6 +69,7 @@ import type {
 export { LatticeGitHubBrain, latticeGitHubBrain } from './lattice_github_brain';
 export { LatticeEchoChamber, latticeEchoChamber } from './lattice_echo_chamber';
 export { LatticeCommandCenter, latticeCommandCenter } from './lattice_command_center';
+export { LatticeMoralAutonomyCore, latticeMoralAutonomyCore } from './lattice_moral_autonomy_core';
 
 // Re-export types
 export type {
@@ -79,6 +96,21 @@ export type {
   LatticeCommandResult,
   LatticeCommandSnapshot,
 } from './lattice_command_center';
+
+export type {
+  AutonomyLevel,
+  RiskLevel,
+  MoralRule,
+  MoralConstitution,
+  SelfModel,
+  ConsciousnessLoopState,
+  ConscienceCheck,
+  AutonomousGoal,
+  AutonomousAction,
+  AutonomyDecision,
+  MoralMemoryRecord,
+  MoralAutonomySnapshot,
+} from './lattice_moral_autonomy_core';
 
 export type {
   ConnectAllSnapshot,
@@ -119,6 +151,7 @@ export interface LatticeSystem {
   brain: LatticeGitHubBrain;
   echoChamber: LatticeEchoChamber;
   commandCenter: LatticeCommandCenter;
+  moralAutonomyCore: LatticeMoralAutonomyCore;
   registry: typeof latticeApplicationRegistry;
   connectAll: typeof connectAllApplications;
   author: string;
@@ -135,11 +168,12 @@ export function createLatticeSystem(): LatticeSystem {
     brain: new LatticeGitHubBrain(),
     echoChamber: new LatticeEchoChamber(),
     commandCenter: new LatticeCommandCenter(),
+    moralAutonomyCore: new LatticeMoralAutonomyCore(),
     registry: latticeApplicationRegistry,
     connectAll: connectAllApplications,
     author: 'Adrien D. Thomas',
     safetyBoundary:
-      'Software architecture only. No consciousness claims. No autonomous production code rewriting.',
+      'Software architecture only. No consciousness claims. Approval-gated moral autonomy only. No unrestricted autonomous execution or autonomous production code rewriting.',
   };
 }
 
