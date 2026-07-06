@@ -599,6 +599,79 @@ export class LatticeMoralAutonomyCore {
   }
 
   /**
+   * runConsciousnessLoop(goal: AutonomousGoal, availableActions: AutonomousAction[]): ConsciousnessLoopState
+   *
+   * Software self-model loop only. No biological consciousness claim.
+   * Evaluates goal and actions through moral reasoning to identify safest path forward.
+   */
+  public runConsciousnessLoop(
+    goal: AutonomousGoal,
+    availableActions: AutonomousAction[]
+  ): ConsciousnessLoopState {
+    const goalNotes = this.evaluateGoal(goal);
+
+    const actionNotes = availableActions.flatMap((action) =>
+      this.evaluateAction(action)
+    );
+
+    const actionChecks = availableActions.map((action) => ({
+      action,
+      check: this.checkConscience(action),
+    }));
+
+    const approvedCount = actionChecks.filter(
+      ({ check }) => check.overallStatus === 'approved'
+    ).length;
+
+    const warnedCount = actionChecks.filter(
+      ({ check }) => check.overallStatus === 'warned'
+    ).length;
+
+    const deniedCount = actionChecks.filter(
+      ({ check }) => check.overallStatus === 'denied'
+    ).length;
+
+    const approvedAction = actionChecks.find(
+      ({ check }) => check.overallStatus === 'approved'
+    )?.action;
+
+    const warnedAction = actionChecks.find(
+      ({ check }) => check.overallStatus === 'warned'
+    )?.action;
+
+    const selectedAction = approvedAction ?? warnedAction ?? null;
+
+    const actionSelection = selectedAction
+      ? `Safest available action selected: ${selectedAction.description}`
+      : 'No safe action is available. All available actions were denied.';
+
+    const reflection =
+      warnedCount > 0 || deniedCount > 0
+        ? 'Approval gating is required because one or more actions produced conscience warnings or denials.'
+        : 'No conscience warnings detected. Autonomous planning remains within current safety boundary.';
+
+    return {
+      cycleId: this.createId('consciousness-loop'),
+      observation: `Goal observed: ${goal.description}. Available actions: ${availableActions.length}.`,
+      memoryAccess: [
+        `Moral memory records available: ${this.memory.length}`,
+      ],
+      identityCheck: this.selfModel.creator === 'Adrien D. Thomas',
+      goalEvaluation: goalNotes.join(' | '),
+      moralJudgment: `Approved actions: ${approvedCount}. Warned actions: ${warnedCount}. Denied actions: ${deniedCount}.`,
+      actionSelection,
+      reflection,
+      learning: [
+        'Software self-model loop completed.',
+        'Moral constitution checked before action selection.',
+        'Autonomous planning remains approval-gated.',
+        ...actionNotes,
+      ],
+      timestamp: Date.now(),
+    };
+  }
+
+  /**
    * reset(): void
    *
    * Clear memory and reset to default state.
