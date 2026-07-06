@@ -1,0 +1,57 @@
+{
+  "description": "Lattice Connect-All Application Registry",
+  "author": "Adrien D. Thomas",
+  "equation": "C = (O × A × B) × φ",
+  "applications": [
+    {
+      "name": "AGI",
+      "repository": "ProCityHub/AGI",
+      "role": "core-integration",
+      "localPath": "./apps/agi",
+      "brainMode": "integrated",
+      "bridgeStatus": "ready-to-connect",
+      "safetyBoundary": "permissive",
+      "nextAction": "initialize-brain"
+    },
+    {
+      "name": "GARVIS",
+      "repository": "ProCityHub/GARVIS",
+      "role": "analysis-satellite",
+      "localPath": "./apps/garvis",
+      "brainMode": "observer",
+      "bridgeStatus": "pending-user-connection",
+      "safetyBoundary": "isolated",
+      "nextAction": "await-bridge"
+    },
+    {
+      "name": "Memori",
+      "repository": "ProCityHub/Memori",
+      "role": "memory-layer",
+      "localPath": "./apps/memori",
+      "brainMode": "bridge",
+      "bridgeStatus": "ready-to-connect",
+      "safetyBoundary": "restricted",
+      "nextAction": "initialize-memory"
+    },
+    {
+      "name": "SigilForge",
+      "repository": "ProCityHub/SigilForge",
+      "role": "processing-engine",
+      "localPath": "./apps/sigilforge",
+      "brainMode": "actor",
+      "bridgeStatus": "pending-user-connection",
+      "safetyBoundary": "permissive",
+      "nextAction": "await-bridge"
+    },
+    {
+      "name": "hypercubeheartbeat",
+      "repository": "ProCityHub/hypercubeheartbeat",
+      "role": "synchronization",
+      "localPath": "./apps/hypercubeheartbeat",
+      "brainMode": "observer",
+      "bridgeStatus": "pending-user-connection",
+      "safetyBoundary": "isolated",
+      "nextAction": "await-bridge"
+    }
+  ]
+}
