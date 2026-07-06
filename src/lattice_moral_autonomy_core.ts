@@ -198,6 +198,7 @@ export interface MoralAutonomySnapshot {
   timestamp: number;
   selfModel: SelfModel;
   moralConstitution: MoralConstitution;
+  memory: MoralMemoryRecord[];
   memoryRecordCount: number;
   autonomyLevel: AutonomyLevel;
 }
@@ -352,6 +353,78 @@ export class LatticeMoralAutonomyCore {
   }
 
   /**
+   * evaluateGoal(goal: AutonomousGoal): string[]
+   *
+   * Evaluate a goal and return assessment notes.
+   */
+  public evaluateGoal(goal: AutonomousGoal): string[] {
+    const notes: string[] = [];
+
+    notes.push(`Goal: ${goal.description}`);
+    notes.push(`Purpose: ${goal.purpose}`);
+
+    if (goal.affectsRepository) {
+      notes.push('⚠️ This goal affects the repository');
+    }
+
+    if (goal.affectsCreator) {
+      notes.push('⚠️ This goal affects Adrien D. Thomas creator attribution');
+    }
+
+    if (!goal.reversible) {
+      notes.push('⚠️ This goal is not reversible');
+    }
+
+    const purposeMatch = this.selfModel.purpose.some(
+      (p) =>
+        goal.purpose.toLowerCase().includes(p.toLowerCase()) ||
+        p.toLowerCase().includes(goal.purpose.toLowerCase())
+    );
+
+    if (purposeMatch) {
+      notes.push('✓ Goal aligns with system purpose');
+    } else {
+      notes.push('⚠️ Goal may not align with system purpose');
+    }
+
+    if (goal.affectsRepository || goal.affectsCreator || !goal.reversible) {
+      notes.push('⚠️ Caution required');
+    }
+
+    return notes;
+  }
+
+  /**
+   * evaluateAction(action: AutonomousAction): string[]
+   *
+   * Evaluate an action and return assessment notes.
+   */
+  public evaluateAction(action: AutonomousAction): string[] {
+    const notes: string[] = [];
+
+    notes.push(`Action: ${action.description}`);
+    notes.push(`Type: ${action.actionType}`);
+    notes.push(`Risk: ${action.riskLevel}`);
+
+    const actionLevel = this.actionTypeToAutonomyLevel(action.actionType);
+    if (actionLevel > this.selfModel.autonomyLevel) {
+      notes.push(
+        `⚠️ Action requires autonomy level ${actionLevel}, current level is ${this.selfModel.autonomyLevel}`
+      );
+    }
+
+    if (!action.reversible) {
+      notes.push('⚠️ This action is not reversible');
+    }
+
+    if (action.requiresApproval) {
+      notes.push('⚠️ This action requires human approval');
+    }
+
+    return notes;
+  }
+
+  /**
    * reset(): void
    *
    * Clear memory and reset to default state.
@@ -359,6 +432,41 @@ export class LatticeMoralAutonomyCore {
   public reset(): void {
     this.memory = [];
     this.selfModel = this.createDefaultSelfModel(this.selfModel.autonomyLevel);
+  }
+
+  /**
+   * Private helper: actionTypeToAutonomyLevel()
+   *
+   * Map action types to required autonomy levels.
+   */
+  private actionTypeToAutonomyLevel(actionType: AutonomousAction['actionType']): AutonomyLevel {
+    switch (actionType) {
+      case 'observe':
+        return AutonomyLevel.OBSERVE_ONLY;
+      case 'recommend':
+        return AutonomyLevel.RECOMMEND;
+      case 'plan':
+        return AutonomyLevel.PLAN;
+      case 'draft':
+        return AutonomyLevel.DRAFT;
+      case 'propose-pr':
+        return AutonomyLevel.PROPOSE_PR;
+      case 'execute':
+      case 'delete':
+      case 'merge':
+        return AutonomyLevel.EXECUTE_APPROVED;
+      default:
+        return AutonomyLevel.OBSERVE_ONLY;
+    }
+  }
+
+  /**
+   * Private helper: createId()
+   *
+   * Generate a unique ID with prefix and timestamp.
+   */
+  private createId(prefix: string): string {
+    return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   }
 }
 
