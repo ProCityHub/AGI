@@ -11,6 +11,7 @@ import { LatticeGitHubBrain, latticeGitHubBrain } from './lattice_github_brain';
 import { LatticeEchoChamber, latticeEchoChamber } from './lattice_echo_chamber';
 import { LatticeCommandCenter, latticeCommandCenter } from './lattice_command_center';
 import { LatticeMoralAutonomyCore, latticeMoralAutonomyCore } from './lattice_moral_autonomy_core';
+import { LatticeCoherenceEngine, latticeCoherenceEngine } from './lattice_coherence_engine';
 import { latticeApplicationRegistry } from '../lattice_connect_all/registry';
 import { connectAllApplications } from '../lattice_connect_all/connect_all';
 
@@ -56,6 +57,13 @@ import type {
 } from './lattice_moral_autonomy_core';
 
 import type {
+  CoherenceInput,
+  CoherenceWeights,
+  CoherenceScore,
+  RankedCoherenceAction,
+} from './lattice_coherence_engine';
+
+import type {
   ConnectAllSnapshot,
   LatticeApplicationNode,
   LatticeApplicationRegistry,
@@ -70,6 +78,7 @@ export { LatticeGitHubBrain, latticeGitHubBrain } from './lattice_github_brain';
 export { LatticeEchoChamber, latticeEchoChamber } from './lattice_echo_chamber';
 export { LatticeCommandCenter, latticeCommandCenter } from './lattice_command_center';
 export { LatticeMoralAutonomyCore, latticeMoralAutonomyCore } from './lattice_moral_autonomy_core';
+export { LatticeCoherenceEngine, latticeCoherenceEngine } from './lattice_coherence_engine';
 
 // Re-export types
 export type {
@@ -113,6 +122,13 @@ export type {
 } from './lattice_moral_autonomy_core';
 
 export type {
+  CoherenceInput,
+  CoherenceWeights,
+  CoherenceScore,
+  RankedCoherenceAction,
+} from './lattice_coherence_engine';
+
+export type {
   ConnectAllSnapshot,
   LatticeApplicationNode,
   LatticeApplicationRegistry,
@@ -152,6 +168,7 @@ export interface LatticeSystem {
   echoChamber: LatticeEchoChamber;
   commandCenter: LatticeCommandCenter;
   moralAutonomyCore: LatticeMoralAutonomyCore;
+  coherenceEngine: LatticeCoherenceEngine;
   registry: typeof latticeApplicationRegistry;
   connectAll: typeof connectAllApplications;
   author: string;
@@ -169,6 +186,7 @@ export function createLatticeSystem(): LatticeSystem {
     echoChamber: new LatticeEchoChamber(),
     commandCenter: new LatticeCommandCenter(),
     moralAutonomyCore: new LatticeMoralAutonomyCore(),
+    coherenceEngine: new LatticeCoherenceEngine(),
     registry: latticeApplicationRegistry,
     connectAll: connectAllApplications,
     author: 'Adrien D. Thomas',
