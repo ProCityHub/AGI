@@ -1,0 +1,31 @@
+name: IBM Quantum Optional Validation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  optional-ibm-quantum-validation:
+    runs-on: ubuntu-latest
+
+    env:
+      IBM_QUANTUM_TOKEN: ${{ secrets.IBM_QUANTUM_TOKEN }}
+      RUN_IBM_QUANTUM: "true"
+
+    steps:
+      - name: Checkout Repository Source
+        uses: actions/checkout@v4
+
+      - name: Set up Python Runtime Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Quantum Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy qiskit
+
+      - name: Run Optional IBM Quantum Validation
+        run: |
+          python lattice_cube_engine/quantum/hardware_runner.py

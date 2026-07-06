@@ -1,0 +1,9 @@
+name: lattice-cube-engine
+
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - numpy
+      - scipy
+      - qiskit
