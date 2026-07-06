@@ -21,7 +21,8 @@ import {
   EchoLearningSnapshot,
 } from './lattice_echo_chamber';
 
-import { connectAllApplications, ConnectAllSnapshot } from '../lattice_connect_all/connect_all';
+import { connectAllApplications } from '../lattice_connect_all/connect_all';
+import type { ConnectAllSnapshot } from '../lattice_connect_all/types';
 
 export interface LatticeCommand {
   observationItems: string[];
