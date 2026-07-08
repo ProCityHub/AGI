@@ -8,11 +8,11 @@ The Lattice Cube Engine Runtime is the Python operational bridge for Adrien D. T
 
 It does not replace the existing TypeScript Lattice JARVIS stack. It adds a self-validating runtime layer that can run math calibration, memory pruning, chamber validation, signal processing, and optional IBM Quantum environment checks.
 
-## 2. Consciousness as Information-Energy Flow
+## 2. Integration State as Information-Energy Flow
 
-Consciousness is modeled here as structured information-energy flow: observation enters the system, echoes through memory, collides with prior state, produces resonance or interference, is scored for coherence, and becomes adaptive action.
+Integration state is modeled here as structured information-energy flow: observation enters the system, echoes through memory, collides with prior state, produces resonance or interference, is scored for coherence, and becomes adaptive action.
 
-This is a practical software model. It does not claim biological consciousness, spiritual consciousness, proven sentience, completed AGI, or unrestricted autonomous execution.
+This is a practical software model. It does not claim biological integration state, spiritual integration state, proven sentience, completed cognitive architecture, or unrestricted autonomous execution.
 
 ## 3. Lattice Cube Structure
 
@@ -136,7 +136,7 @@ conda env create -f lattice_cube_engine/environment.yml
 conda activate lattice-cube-engine
 ```
 
-## 10. How This Bridges Lattice JARVIS Toward AGI-Style Runtime
+## 10. How This Bridges Lattice JARVIS Toward cognitive architecture-Style Runtime
 
 The existing TypeScript stack contains:
 
@@ -170,11 +170,11 @@ GitHub Actions autonomous calibration
 
 This runtime does not claim:
 
-- biological consciousness
-- spiritual consciousness
+- biological integration state
+- spiritual integration state
 - proven sentience
-- completed AGI
+- completed cognitive architecture
 - unrestricted autonomous execution
 - autonomous production rewriting
 
-It is an operational runtime bridge for practical software architecture, AGI-style research structure, and repository-permission bounded automation.
+It is an operational runtime bridge for practical software architecture, cognitive architecture-style research structure, and repository-permission bounded automation.

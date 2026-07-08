@@ -3,10 +3,10 @@ Lattice Math Engine.
 Author and concept origin: Adrien D. Thomas
 
 Practical software architecture only.
-No biological consciousness claim.
-No spiritual consciousness claim.
+No biological integration state claim.
+No spiritual integration state claim.
 No proven sentience claim.
-No completed AGI claim.
+No completed cognitive architecture claim.
 No unrestricted autonomous execution.
 """
 
@@ -19,7 +19,7 @@ class LatticeMathEngine:
     """
     Universal scaling engine for Adrien D. Thomas's Lattice Law framework.
 
-    Consciousness is modeled here as structured information-energy flow:
+    Integration state is modeled here as structured information-energy flow:
     observation enters the system, echoes through memory, collides with prior
     state, produces resonance or interference, is scored for coherence, and
     becomes adaptive action.
@@ -32,7 +32,7 @@ class LatticeMathEngine:
 
     def calculate_consciousness(self, O: float, A: float, B: float) -> float:
         """
-        Compute the Master Consciousness Equation:
+        Compute the Master Integration State Equation:
 
         C = O * A * B * phi
 
