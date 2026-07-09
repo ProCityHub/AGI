@@ -421,7 +421,7 @@ export interface Block {
 export interface WindowInstance {
   id: string;
   title: string;
-  componentType: 'Dashboard' | 'EnterpriseWorkspace' | 'FileExplorer' | 'SystemAnatomy' | 'FormProcessor' | 'UserAccounts' | 'NewDirective' | 'NexusBrowser' | 'BitcoinMiner' | 'Codex' | 'AegisCommand';
+  componentType: 'Dashboard' | 'EnterpriseWorkspace' | 'FileExplorer' | 'SystemAnatomy' | 'FormProcessor' | 'UserAccounts' | 'NewDirective' | 'NexusBrowser' | 'BitcoinMiner' | 'Codex' | 'AegisCommand' | 'VoidCascade';
   props: any;
   x: number;
   y: number;

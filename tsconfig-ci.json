@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "dist",
+    "canadian-political-bridge/**/*",
+    "truth-social-bridge/**/*",
+    "bridge_safety_middleware.ts",
+    "gemini-integration/**/*",
+    "space-observatory-integration/**/*",
+    "orbital-resonance-designs/**/*",
+    "wii-ai-bridge/**/*",
+    "**/*.py"
+  ],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "noEmit": true
+  }
+}
