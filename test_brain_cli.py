@@ -77,7 +77,7 @@ def run_fresh(workdir):
                        cwd=workdir, capture_output=True, env=env, check=True)
     with open(os.path.join(workdir, "brain_state.json")) as f:
         state = json.load(f)
-    return json.dumps(state["stateHistory"], sort_keys=True)
+    return json.dumps(state, sort_keys=True)
 
 
 with tempfile.TemporaryDirectory() as d1, tempfile.TemporaryDirectory() as d2:
