@@ -1,0 +1,106 @@
+{
+ "tick": 1,
+ "corners": [
+  {
+   "bits": "000",
+   "charge": 0.23566133806464062,
+   "fires": 0
+  },
+  {
+   "bits": "001",
+   "charge": 0.3299258732904969,
+   "fires": 0
+  },
+  {
+   "bits": "010",
+   "charge": 0.1413968028387844,
+   "fires": 0
+  },
+  {
+   "bits": "011",
+   "charge": 0.23566133806464062,
+   "fires": 0
+  },
+  {
+   "bits": "100",
+   "charge": 0.3299258732904969,
+   "fires": 0
+  },
+  {
+   "bits": "101",
+   "charge": 0.42419040851635315,
+   "fires": 0
+  },
+  {
+   "bits": "110",
+   "charge": 0.23566133806464062,
+   "fires": 0
+  },
+  {
+   "bits": "111",
+   "charge": 0.3299258732904969,
+   "fires": 0
+  }
+ ],
+ "genome": {
+  "leak": 0.1,
+  "threshold": 1.0,
+  "input_gain": 1.0,
+  "coupling_gain": 1.0
+ },
+ "feature_mean": [
+  0.04642857142857143,
+  0.6923076923076923,
+  1.0,
+  0.5,
+  0.3352941176470588,
+  0.4166666666666667
+ ],
+ "feature_count": 1,
+ "stateHistory": [
+  {
+   "tick": 1,
+   "bits": "00000000",
+   "O": 0.7083,
+   "A": 0.3694,
+   "B": 0.4528,
+   "C": 0.2828,
+   "constraint": "Actor(A)",
+   "provenance": 0.6667,
+   "source": "text"
+  }
+ ],
+ "cornerHistory": [
+  {
+   "tick": 1,
+   "charges": [
+    0.2357,
+    0.3299,
+    0.1414,
+    0.2357,
+    0.3299,
+    0.4242,
+    0.2357,
+    0.3299
+   ],
+   "fired": []
+  }
+ ],
+ "firingSequence": [],
+ "last_input": {
+  "text": "hello lattice",
+  "detail": {
+   "timingCoherence": 0.5,
+   "informationCoupling": 0.5,
+   "integrationProxy": 0.05,
+   "consistency": 0.41,
+   "b_tags": [
+    "fallback",
+    "fallback",
+    "fallback"
+   ]
+  }
+ },
+ "last_proposal": null,
+ "mutation_ledger": []
+}
