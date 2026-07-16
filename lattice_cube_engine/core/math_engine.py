@@ -34,7 +34,7 @@ class LatticeMathEngine:
         """
         Compute the Master Integration State Equation:
 
-        C = O * A * B * phi
+        C = O * A^(1/phi) * B^(1/phi^2)
 
         O = observation strength
         A = action / activation strength
@@ -47,7 +47,11 @@ class LatticeMathEngine:
         dimensions = (self.clamp(O), self.clamp(A), self.clamp(B))
         if any(dimension < self.threshold for dimension in dimensions):
             return 0.0
-        return float(dimensions[0] * dimensions[1] * dimensions[2] * self.phi)
+        return float(
+            dimensions[0]
+            * dimensions[1] ** (1.0 / self.phi)
+            * dimensions[2] ** (1.0 / (self.phi ** 2))
+        )
 
     def calculate_echo_coherence(self, S: float, iterations: int) -> float:
         """

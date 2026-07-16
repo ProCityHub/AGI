@@ -47,7 +47,7 @@ It introduces a Python-based operational bridge for Adrien D. Thomas's Lattice L
 
 Adds:
 - LatticeMathEngine
-- Master Consciousness Equation calculation: C = O * A * B * phi
+- Master Consciousness Equation calculation: C = O * A^(1/phi) * B^(1/phi^2)
 - Echo coherence calculation
 - Resonant trapping decay model
 - FibonacciMemoryEngine
