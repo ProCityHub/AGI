@@ -31,7 +31,7 @@ The chamber acts as the structural container for reflection, resonance, and retu
 `LatticeMathEngine` implements:
 
 ```text
-C = O * A * B * phi
+C = O * A^(1/phi) * B^(1/phi^2)
 ```
 
 Where:
