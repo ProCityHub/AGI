@@ -89,7 +89,7 @@ def audit(command, args, state):
 
 # ------------------------------------------------------------- features
 
-def prime_features(text):
+def text_features(text):
     """Deterministic vectorization of input text -> 6 features in [0,1].
 
     Each feature is tagged measured/fallback for provenance tracking.
@@ -157,6 +157,9 @@ def canonical_score(O, A, B):
 def clamp(x, lo=1e-6, hi=1.0):
     return max(lo, min(hi, x))
 
+
+# Backward-compatible public alias. New code should use text_features.
+prime_features = text_features
 
 def compute_OAB(state, feats, tags):
     """Derive O, A, B sub-metrics. B uses the v5 anti-collapse formula."""
@@ -262,7 +265,7 @@ def pulse_corners(state, C, feats):
 def ingest(state, text, source="text"):
     """Full loop: features -> O/A/B -> canonical C -> lattice -> ledger."""
     state["tick"] += 1
-    feats, tags = prime_features(text)
+    feats, tags = text_features(text)
     O, A, B, provenance, detail = compute_OAB(state, feats, tags)
     C = canonical_score(O, A, B)
     fired = pulse_corners(state, C, feats)
@@ -333,8 +336,11 @@ def cmd_diagnose_bridge(state):
     print("  B = sqrt(coupling * consistency)")
 
 
-def cmd_heal(state):
-    """Target the weakest constraint; keep a genome change only if C improves."""
+def cmd_heal(state, approved=False):
+    """Target the weakest constraint only after explicit human approval."""
+    if not approved:
+        print("REFUSED: heal requires the --approved flag. Nothing changed.")
+        return
     if not state["last_input"]:
         print("No input history — feed the brain before healing.")
         return
@@ -490,7 +496,7 @@ USAGE = """Termux Brain CLI v1.0 — deterministic measured instrument (not cons
 usage:
   brain_cli.py status
   brain_cli.py input "message"
-  brain_cli.py heal
+  brain_cli.py heal --approved
   brain_cli.py diagnose bridge
   brain_cli.py history [state|corners|firing]
   brain_cli.py propose-rewrite "goal"
@@ -515,7 +521,7 @@ def main(argv):
     elif cmd == "input" and args:
         cmd_input(state, args[0])
     elif cmd == "heal":
-        cmd_heal(state)
+        cmd_heal(state, "--approved" in args)
     elif cmd == "diagnose" and args and args[0] == "bridge":
         cmd_diagnose_bridge(state)
     elif cmd == "history" and args:
