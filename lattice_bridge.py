@@ -32,11 +32,15 @@ CONSCIOUS, SUBCONSCIOUS, SUPERCONSCIOUS = 0b101, 0b010, 0b001
 # ── 1. Deterministic vectorization ───────────────────────────────────────
 _PRIMES = [2, 3, 5, 7, 11, 13, 17, 19]
 
-def prime_features(text: str) -> list[float]:
+def hash_corner_features(text: str) -> list[float]:
     """Content → 8 deterministic features in [0,1], one per cube corner.
     SHA-256 based: same input always yields the same vector."""
     h = hashlib.sha256(text.encode("utf-8")).digest()
     return [(h[p % len(h)] ^ h[(p * p) % len(h)]) / 255.0 for p in _PRIMES]
+
+# Backward-compatible alias. These are prime-indexed hash features,
+# not the six text statistics used by brain_cli.py.
+prime_features = hash_corner_features
 
 # ── 2. Sub-metrics with provenance ───────────────────────────────────────
 def extract_OAB(text: str) -> dict:
@@ -44,7 +48,7 @@ def extract_OAB(text: str) -> dict:
     Every value is tagged 'measured' or 'fallback' — the system never
     reports a confident number it did not actually compute."""
     words = text.split()
-    f = prime_features(text)
+    f = hash_corner_features(text)
 
     if words:
         # O: observation richness — lexical diversity

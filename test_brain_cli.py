@@ -23,6 +23,7 @@ PHI = (1 + math.sqrt(5)) / 2
 
 NEW_FILES = [
     "brain_cli.py",
+    "lattice_bridge.py",
     "termux_setup.sh",
     "test_brain_cli.py",
 ]
